@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		A2AD626A1A073D350057D8C8 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2AD62691A073D350057D8C8 /* main.cpp */; };
+		A2AD627B1A0742490057D8C8 /* functions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2AD62791A0742490057D8C8 /* functions.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +26,8 @@
 /* Begin PBXFileReference section */
 		A2AD62661A073D350057D8C8 /* ddm */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ddm; sourceTree = BUILT_PRODUCTS_DIR; };
 		A2AD62691A073D350057D8C8 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		A2AD62791A0742490057D8C8 /* functions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = functions.cpp; sourceTree = "<group>"; };
+		A2AD627A1A0742490057D8C8 /* functions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = functions.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +61,8 @@
 			isa = PBXGroup;
 			children = (
 				A2AD62691A073D350057D8C8 /* main.cpp */,
+				A2AD62791A0742490057D8C8 /* functions.cpp */,
+				A2AD627A1A0742490057D8C8 /* functions.h */,
 			);
 			path = ddm;
 			sourceTree = "<group>";
@@ -119,6 +124,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A2AD626A1A073D350057D8C8 /* main.cpp in Sources */,
+				A2AD627B1A0742490057D8C8 /* functions.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -202,6 +208,22 @@
 		A2AD626E1A073D350057D8C8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LIBRARY = "libc++";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_VERSION = "";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					/usr/local/include/,
+				);
+				LIBRARY_SEARCH_PATHS = /usr/local/lib/;
+				LLVM_LTO = NO;
+				OTHER_LDFLAGS = (
+					"-lm",
+					"-lfftw3",
+					"-lgslcblas",
+					"-lgsl",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -209,6 +231,23 @@
 		A2AD626F1A073D350057D8C8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LIBRARY = "libc++";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_OPTIMIZATION_LEVEL = fast;
+				GCC_VERSION = "";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					/usr/local/include/,
+				);
+				LIBRARY_SEARCH_PATHS = /usr/local/lib/;
+				LLVM_LTO = NO;
+				OTHER_LDFLAGS = (
+					"-lm",
+					"-lfftw3",
+					"-lgslcblas",
+					"-lgsl",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -232,6 +271,7 @@
 				A2AD626F1A073D350057D8C8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
