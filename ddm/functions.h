@@ -84,7 +84,7 @@ int find(const vector<int>& vec, const int value);
 int quickFind(const vector<int>& vec, const int value);
 //Find the position of a particular member in a sorted vector with increasing order, using dichotomy.
 
-const int dim = 512;    //Size of the image
+const int dim = 1024;    //Size of the image
 const int numOfSeq = 4500;  //Number of total time points in experiment
 const int numOfDiff = 4000; //Number of tau
 const double dx = 6.5 / 4.0; // 0.65;   //Pixel size
@@ -92,6 +92,7 @@ const double pi = 3.14159265358979323846264338327950288419716939937510;
 const int winDim = 5;   //Size of searching window. Used in aligning images.
 const int dimk = dim / 2 + 1;   //Number of wavenumber
 const double dq = 2 * pi / dx / dim;    //q step after FFT
+const double qmax=sqrt(dim*dim/2)*dq;   //Maximum possible value of q
 const double dt = 1.0 / 100;    //Time step
 const int numOfk = dim*dimk;    //Number of data points after FFT
 const int num_fit = numOfDiff;  //Number of data points used in fitting.
@@ -99,7 +100,7 @@ const double sqrtpi = sqrt(pi); //Constant for convenience
 const double precision = 1e-15; //Used in 2D R&T model. The precision of numerical evaluation.
 const int maxIter=20000;    //Maximum iteration number in fitting
 
-const double qstep=0.02;    //The width of cirque when averaging the direction of q.
+const double qstep=0.01;    //The width of cirque when averaging the direction of q.
 
 //Data stuct used in GSL fitting algorithm.
 typedef struct

@@ -764,13 +764,3 @@ int covar_rel_test(const gsl_matrix* J, const gsl_vector* x, double tol)
 	}
 	return GSL_SUCCESS;
 }
-
-double interpAve(double absq, gsl_matrix* matrix)
-{
-    double result=0;
-    
-    
-    
-    result/=2*pi;
-    return result;
-}
