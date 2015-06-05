@@ -13,7 +13,7 @@
 //Or, give "recover" can do the fit by reading datag.txt and q.txt directly, save doing time-consuming FFT and averaging.
 int main(int argc, const char * argv[])
 {
-    omp_set_num_threads(6);     //Number of threads
+    omp_set_num_threads(8);     //Number of threads
     stringstream arg;		//To read the argv
     arg << argv[1];
     
@@ -36,6 +36,11 @@ int main(int argc, const char * argv[])
         }
         qfile.close();
         qsize = (int)qabs.size();
+        if(qabs[qsize-1]==(double)'\n')
+        {
+            qabs.pop_back();
+            --qsize;
+        }
         datag = gsl_matrix_alloc(qsize, numOfDiff);		//Allocate memory for g(q,t) matrix.
         
         ifstream datagfile("datag.txt");
@@ -91,6 +96,7 @@ int main(int argc, const char * argv[])
         
         vector<gsl_matrix_complex*> imageSeqk(numOfSeq);	//Sequence for storing image after FFT.
         
+        omp_set_num_threads(2);     //Number of threads
 #pragma omp parallel
         {
             gsl_matrix* fftMatrix = gsl_matrix_alloc(dim, dim);
@@ -132,6 +138,8 @@ int main(int argc, const char * argv[])
             fftw_destroy_plan(fft2plan);
         }
         //		imageSeq.clear();
+        
+        omp_set_num_threads(8);     //Number of threads
         
         cout << "Calculating average of square module for different tau... 0% finished." << endl;
         vector<gsl_matrix*> imagekDiff(numOfDiff);		//For storing the time difference of the imageSeqk
@@ -430,7 +438,7 @@ int main(int argc, const char * argv[])
         {
             double tau=(itert+1)*dt;
             double s=exp(-1+0.001*iters);		//s is sampled in log scale
-            gsl_matrix_set(transM, itert, iters, 0.01*exp(-tau*s));		//\Delta t=0.01, numerical integration here.
+            gsl_matrix_set(transM, itert, iters, dt*exp(-tau*s));		//\Delta t=0.01, numerical integration here.
         }
     }
     
@@ -506,7 +514,11 @@ int main(int argc, const char * argv[])
     {
         for (int iterf = 0; iterf < num_fit; ++iterf)
         {
+#ifdef NeedLaplaceTrans
             gsl_matrix_set(datafit, iterq, iterf, log(gsl_matrix_get(temp, iterq, iterf)));		//Fitting in log scale.
+#else
+            gsl_matrix_set(datafit, iterq, iterf, log(gsl_matrix_get(datag, iterq, iterf)));		//Fitting in log scale.
+#endif
         }
     }
     int progress=0;		//Indicator of progress.
@@ -531,7 +543,7 @@ int main(int argc, const char * argv[])
         
         //Estimation of A(q) and B(q)
         inipara[5] = gsl_matrix_get(datag, iterq, 0);
-        inipara[4] = gsl_matrix_get(datag, iterq, 3000)-inipara[5];
+        inipara[4] = gsl_matrix_get(datag, iterq, numOfDiff-1)-inipara[5];
         
         //Initiallization of the solver
         gsl_vector_view para=gsl_vector_view_array(inipara, numOfPara);
@@ -575,6 +587,7 @@ int main(int argc, const char * argv[])
     ofstream fitparafile("fitparafile.txt");
     ofstream fiterrfile("fiterrfile.txt");
     ofstream statusfile("status.txt");
+    ofstream qstatusfile("statusq.txt");
     for (int iterq=0; iterq<qsize-1; ++iterq)
     {
         for (int iterpara=0; iterpara<numOfPara; ++iterpara)
@@ -585,13 +598,18 @@ int main(int argc, const char * argv[])
         fitparafile << endl;
         fiterrfile << endl;
         statusfile << iterq << ": q=" << qabs[iterq+1] << ", "<< gsl_strerror(status[iterq]) << endl;
+        qstatusfile << status[iterq] << endl;
     }
     
     fitparafile.close();
     fiterrfile.close();
+    statusfile.close();
+    qstatusfile.close();
     
     delete[] status;
+#ifdef NeedLaplaceTrans
     gsl_matrix_free(temp);
+#endif
     gsl_matrix_free(datag);
     gsl_matrix_free(fittedPara);
     gsl_matrix_free(fitErr);
