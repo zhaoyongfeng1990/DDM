@@ -12,9 +12,9 @@
 //If the platform is Windows, uncomment this line.
 //#define WINDOWS
 #ifdef WINDOWS
-//#pragma comment(lib,"libgsl.lib")
-//#pragma comment(lib, "libgslcblas.lib")
-//#pragma comment(lib, "libfftw3-3.lib")
+#pragma comment(lib,"libgsl.lib")
+#pragma comment(lib, "libgslcblas.lib")
+#pragma comment(lib, "libfftw3-3.lib")
 #endif
 
 ///////////////////
@@ -45,7 +45,7 @@
 #include <iomanip>
 #include <vector>
 #include <cmath>
-//#include <omp.h>	//OpenMP support
+#include <omp.h>	//OpenMP support
 
 #ifdef WINDOWS
 #include <cstdint>

@@ -14,7 +14,7 @@
 //Or, give "recover" can do the fit by reading datag.txt and q.txt directly, save doing time-consuming FFT and averaging.
 int main(int argc, const char * argv[])
 {
-    //omp_set_num_threads(8);     //Number of threads
+    omp_set_num_threads(6);     //Number of threads
     stringstream arg;		//To read the argv
     //arg << argv[1];
     
@@ -98,18 +98,18 @@ int main(int argc, const char * argv[])
         
         vector<gsl_matrix_complex*> imageSeqk(numOfSeq);	//Sequence for storing image after FFT.
         
-        //omp_set_num_threads(2);     //Number of threads
-//#pragma omp parallel
+        omp_set_num_threads(2);     //Number of threads
+#pragma omp parallel
         {
             gsl_matrix* fftMatrix = gsl_matrix_alloc(dim, dim);
             gsl_matrix_complex* resultMatrix = gsl_matrix_complex_alloc(dim, dimk);
             //dimk=dim/2+1, FFTW only return around half points for r2c FFT to save memory usage.
             
             fftw_plan fft2plan;		//FFT need to make a plan before reading data.
-//#pragma omp critical (make_plan)
+#pragma omp critical (make_plan)
             fft2plan = fftw_plan_dft_r2c_2d(dim, dim, fftMatrix->data, (fftw_complex *)resultMatrix->data, FFTW_MEASURE);
             
-//#pragma omp for
+#pragma omp for
             for (int iter = 0; iter < numOfSeq; ++iter)
             {
                 imageSeqk[iter] = gsl_matrix_complex_calloc(dim, dimk);
@@ -141,12 +141,12 @@ int main(int argc, const char * argv[])
         }
         //		imageSeq.clear();
         
-        //omp_set_num_threads(8);     //Number of threads
+        omp_set_num_threads(6);     //Number of threads
         
         cout << "Calculating average of square module for different tau... 0% finished." << endl;
         vector<gsl_matrix*> imagekDiff(numOfDiff);		//For storing the time difference of the imageSeqk
         int progress = 0;       //Indicator of the progess.
-//#pragma omp parallel for
+#pragma omp parallel for
         for (int iterdiff = 1; iterdiff <= numOfDiff; ++iterdiff)
         {
             gsl_matrix* temp = gsl_matrix_alloc(dim, dimk);
@@ -168,7 +168,7 @@ int main(int argc, const char * argv[])
             cout << "Calculating average of square module for different tau... " << 100.0*progress / numOfDiff << "% finished." << endl;
         }
         
-//#pragma omp parallel for
+#pragma omp parallel for
         for (int iter = 0; iter < numOfSeq; ++iter)		//Free the memory
             gsl_matrix_complex_free(imageSeqk[iter]);
         imageSeqk.clear();
@@ -238,7 +238,7 @@ int main(int argc, const char * argv[])
         //        gsl_matrix* count = gsl_matrix_alloc(qsize, numOfDiff);
         //        gsl_matrix_set_zero(datag);
         //        gsl_matrix_set_zero(count);
-        ////#pragma omp parallel for
+        //#pragma omp parallel for
         //        for (int itertau = 0; itertau < numOfDiff; ++itertau)
         //        {
         //            for (int iterrow = 0; iterrow < dim; ++iterrow)
@@ -278,7 +278,7 @@ int main(int argc, const char * argv[])
         gsl_matrix_set_zero(datag);
         gsl_matrix_set_zero(count);     //Number of elements
         //For average.
-        ////#pragma omp parallel for
+        //#pragma omp parallel for
         //        for (int itertau = 0; itertau < numOfDiff; ++itertau)
         //        {
         //            for (int iterrow = 0; iterrow < dim; ++iterrow)
@@ -310,7 +310,7 @@ int main(int argc, const char * argv[])
         //        gsl_matrix_div_elements(datag, count);		//Average
         
         //For interpolation
-//#pragma omp parallel for
+#pragma omp parallel for
         for (int itertau = 0; itertau < numOfDiff; ++itertau)
         {
             for (int iterrow = 0; iterrow < dimk-1; ++iterrow)
@@ -400,7 +400,7 @@ int main(int argc, const char * argv[])
         gsl_matrix_div_elements(datag, count);		//Average
         
         
-//#pragma omp parallel for
+#pragma omp parallel for
         for (int iter = 0; iter < numOfDiff; ++iter)
             gsl_matrix_free(imagekDiff[iter]);
         imagekDiff.clear();
@@ -494,7 +494,7 @@ int main(int argc, const char * argv[])
 #ifdef ISFSWIMMER
     double inipara[numOfPara]={0.7, 0.4, 5, 2, 2e12, 1e10};
 #endif
-#ifdef ISFSWIMMERSIMPLER
+#ifdef ISFSWIMMERSIMPLE
     double inipara[numOfPara]={0.5, 0.4, 10, 1, 1};
 #endif
 #ifdef ISFRUNANDTUMBLE
@@ -525,7 +525,7 @@ int main(int argc, const char * argv[])
     }
     int progress=0;		//Indicator of progress.
     //	ofstream debugfile("debug.txt");
-//#pragma omp parallel for
+#pragma omp parallel for
     for (int iterq=1; iterq<qsize; ++iterq)
     {
         gsl_multifit_function_fdf fitfun;		//Function point.

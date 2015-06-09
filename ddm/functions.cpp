@@ -120,7 +120,7 @@ gsl_matrix* readSim(const string fileName)	//Read simulation data from ASCII fil
 void shiftImage(gsl_matrix** img, const int drow, const int dcol)
 {
     gsl_matrix* shifted=gsl_matrix_alloc((*img)->size1, (*img)->size2);
-//#pragma omp parallel for
+#pragma omp parallel for
     for (int iterx=0; iterx<(*img)->size1; ++iterx)
     {
         for (int itery=0; itery<(*img)->size2; ++itery)
@@ -147,7 +147,7 @@ double shiftCorrelation2d(const gsl_matrix* img1, const gsl_matrix* img2, const 
     double moment=0;
     double normA=0;
     double normB=0;
-//#pragma omp parallel for reduction(+: moment, normA, normB)
+#pragma omp parallel for reduction(+: moment, normA, normB)
     for(int iterrow=0; iterrow<dim; ++iterrow)
         for (int itercol=0; itercol<dim; ++itercol)
         {
@@ -176,7 +176,7 @@ double correlation2d(const gsl_matrix* img1, const gsl_matrix* img2, const gsl_v
     double moment=0;
     double normA=0;
     double normB=0;
-//#pragma omp parallel for reduction(+: moment, normA, normB)
+#pragma omp parallel for reduction(+: moment, normA, normB)
     for(int iterrow=0; iterrow<dim; ++iterrow)
         for (int itercol=0; itercol<dim; ++itercol)
         {
