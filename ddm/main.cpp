@@ -8,16 +8,18 @@
 
 #include "functions.h"
 
+
 //The name prefix of the images should be given in bash as argv. (e.g.: IM_340_01_X)
 //Or, give "simulation" can deal with the simulation data.
 //Or, give "recover" can do the fit by reading datag.txt and q.txt directly, save doing time-consuming FFT and averaging.
 int main(int argc, const char * argv[])
 {
-    omp_set_num_threads(8);     //Number of threads
+    //omp_set_num_threads(8);     //Number of threads
     stringstream arg;		//To read the argv
-    arg << argv[1];
+    //arg << argv[1];
     
-    //    arg << "simulation";
+    
+        arg << "recover";
     gsl_matrix* datag;		//g(q,t) matrix. Need to claim at the beginning since we may need to deal with simulation data.
     vector<double> qabs;	//Absolute value of q array.
     qabs.reserve((dimk - 1)*(dimk - 1) / 2);	//the number of effective q will not exceed (dimk - 1)*(dimk - 1)/2.
@@ -96,18 +98,18 @@ int main(int argc, const char * argv[])
         
         vector<gsl_matrix_complex*> imageSeqk(numOfSeq);	//Sequence for storing image after FFT.
         
-        omp_set_num_threads(2);     //Number of threads
-#pragma omp parallel
+        //omp_set_num_threads(2);     //Number of threads
+//#pragma omp parallel
         {
             gsl_matrix* fftMatrix = gsl_matrix_alloc(dim, dim);
             gsl_matrix_complex* resultMatrix = gsl_matrix_complex_alloc(dim, dimk);
             //dimk=dim/2+1, FFTW only return around half points for r2c FFT to save memory usage.
             
             fftw_plan fft2plan;		//FFT need to make a plan before reading data.
-#pragma omp critical (make_plan)
+//#pragma omp critical (make_plan)
             fft2plan = fftw_plan_dft_r2c_2d(dim, dim, fftMatrix->data, (fftw_complex *)resultMatrix->data, FFTW_MEASURE);
             
-#pragma omp for
+//#pragma omp for
             for (int iter = 0; iter < numOfSeq; ++iter)
             {
                 imageSeqk[iter] = gsl_matrix_complex_calloc(dim, dimk);
@@ -139,12 +141,12 @@ int main(int argc, const char * argv[])
         }
         //		imageSeq.clear();
         
-        omp_set_num_threads(8);     //Number of threads
+        //omp_set_num_threads(8);     //Number of threads
         
         cout << "Calculating average of square module for different tau... 0% finished." << endl;
         vector<gsl_matrix*> imagekDiff(numOfDiff);		//For storing the time difference of the imageSeqk
         int progress = 0;       //Indicator of the progess.
-#pragma omp parallel for
+//#pragma omp parallel for
         for (int iterdiff = 1; iterdiff <= numOfDiff; ++iterdiff)
         {
             gsl_matrix* temp = gsl_matrix_alloc(dim, dimk);
@@ -166,7 +168,7 @@ int main(int argc, const char * argv[])
             cout << "Calculating average of square module for different tau... " << 100.0*progress / numOfDiff << "% finished." << endl;
         }
         
-#pragma omp parallel for
+//#pragma omp parallel for
         for (int iter = 0; iter < numOfSeq; ++iter)		//Free the memory
             gsl_matrix_complex_free(imageSeqk[iter]);
         imageSeqk.clear();
@@ -236,7 +238,7 @@ int main(int argc, const char * argv[])
         //        gsl_matrix* count = gsl_matrix_alloc(qsize, numOfDiff);
         //        gsl_matrix_set_zero(datag);
         //        gsl_matrix_set_zero(count);
-        //#pragma omp parallel for
+        ////#pragma omp parallel for
         //        for (int itertau = 0; itertau < numOfDiff; ++itertau)
         //        {
         //            for (int iterrow = 0; iterrow < dim; ++iterrow)
@@ -276,7 +278,7 @@ int main(int argc, const char * argv[])
         gsl_matrix_set_zero(datag);
         gsl_matrix_set_zero(count);     //Number of elements
         //For average.
-        //#pragma omp parallel for
+        ////#pragma omp parallel for
         //        for (int itertau = 0; itertau < numOfDiff; ++itertau)
         //        {
         //            for (int iterrow = 0; iterrow < dim; ++iterrow)
@@ -308,7 +310,7 @@ int main(int argc, const char * argv[])
         //        gsl_matrix_div_elements(datag, count);		//Average
         
         //For interpolation
-#pragma omp parallel for
+//#pragma omp parallel for
         for (int itertau = 0; itertau < numOfDiff; ++itertau)
         {
             for (int iterrow = 0; iterrow < dimk-1; ++iterrow)
@@ -398,7 +400,7 @@ int main(int argc, const char * argv[])
         gsl_matrix_div_elements(datag, count);		//Average
         
         
-#pragma omp parallel for
+//#pragma omp parallel for
         for (int iter = 0; iter < numOfDiff; ++iter)
             gsl_matrix_free(imagekDiff[iter]);
         imagekDiff.clear();
@@ -483,10 +485,7 @@ int main(int argc, const char * argv[])
     for (int itertau=0; itertau<num_fit; ++itertau)
     {
         tau[itertau]=(itertau+1)*dt;
-#ifdef ISFRUNANDTUMBLE_3D
-        tau[itertau]=exp(-1+0.001*itertau);
-#endif
-#ifdef ISFRunAndTumbleAndDiffusion
+#ifdef NeedLaplaceTrans
         tau[itertau]=exp(-1+0.001*itertau);
 #endif
     }
@@ -507,6 +506,9 @@ int main(int argc, const char * argv[])
 #ifdef ISFRunAndTumbleAndDiffusion
     double inipara[numOfPara] = {0.8, 10, 1, 0.4, 2e12, 1e10 };
 #endif
+#ifdef ISFRunAndTumbleAndDiffusionAndPv
+    double inipara[numOfPara] = {0.9, 10, 500, 1, 0.4, 2e12, 1e10 };
+#endif
     
     //Get the selected data for fitting
     gsl_matrix* datafit = gsl_matrix_alloc(qsize, num_fit);
@@ -523,7 +525,7 @@ int main(int argc, const char * argv[])
     }
     int progress=0;		//Indicator of progress.
     //	ofstream debugfile("debug.txt");
-#pragma omp parallel for
+//#pragma omp parallel for
     for (int iterq=1; iterq<qsize; ++iterq)
     {
         gsl_multifit_function_fdf fitfun;		//Function point.
@@ -542,8 +544,8 @@ int main(int argc, const char * argv[])
         fitfun.params=&sdata;
         
         //Estimation of A(q) and B(q)
-        inipara[5] = gsl_matrix_get(datag, iterq, 0);
-        inipara[4] = gsl_matrix_get(datag, iterq, numOfDiff-1)-inipara[5];
+        inipara[numOfPara-1] = gsl_matrix_get(datag, iterq, 0);
+        inipara[numOfPara-2] = gsl_matrix_get(datag, iterq, numOfDiff-1)-inipara[numOfPara-1];
         
         //Initiallization of the solver
         gsl_vector_view para=gsl_vector_view_array(inipara, numOfPara);
@@ -580,7 +582,11 @@ int main(int argc, const char * argv[])
         gsl_multifit_fdfsolver_free(solver);
         
         progress+=1;
-        cout << "Fitted q=" << qabs[iterq] << " at iter=" << iter << ", " << 100.0*progress / qsize << "% completed from core No." << omp_get_thread_num() << ", "<< gsl_strerror(status[iterq-1]) << "." << endl;
+        cout << "Fitted q=" << qabs[iterq] << " at iter=" << iter << ", " << 100.0*progress / qsize << "% completed from core No." << /*omp_get_thread_num()*/0 << ", "<< gsl_strerror(status[iterq-1]) << "." << endl;
+        for (int iterpara=0; iterpara<numOfPara; ++iterpara)
+        {
+            cout << gsl_matrix_get(fittedPara, iterq-1, iterpara) << endl;
+        }
     }
     
     //    cout << "Printing fit result..." << endl;
@@ -610,6 +616,7 @@ int main(int argc, const char * argv[])
 #ifdef NeedLaplaceTrans
     gsl_matrix_free(temp);
 #endif
+    
     gsl_matrix_free(datag);
     gsl_matrix_free(fittedPara);
     gsl_matrix_free(fitErr);

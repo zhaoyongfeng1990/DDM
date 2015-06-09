@@ -7,11 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A22382281B2729DD0070B7CD /* ISFSwimmerSimp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A22382271B2729DD0070B7CD /* ISFSwimmerSimp.cpp */; };
 		A26E72ED1B21B70D00CC4075 /* ISFSwimmer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A26E72EC1B21B70D00CC4075 /* ISFSwimmer.cpp */; };
 		A26E72EF1B21B74900CC4075 /* ISFRunAndTumble2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A26E72EE1B21B74900CC4075 /* ISFRunAndTumble2D.cpp */; };
 		A26E72F11B21B77E00CC4075 /* ISFRunAndTumble3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A26E72F01B21B77E00CC4075 /* ISFRunAndTumble3D.cpp */; };
 		A26E72F31B21B7D500CC4075 /* ISFRunAndTumbleAndDiffusion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A26E72F21B21B7D500CC4075 /* ISFRunAndTumbleAndDiffusion.cpp */; };
 		A26E72F51B21B7F600CC4075 /* makefile in Sources */ = {isa = PBXBuildFile; fileRef = A26E72F41B21B7F600CC4075 /* makefile */; };
+		A26E72F71B21B9F100CC4075 /* ISFRTDWithP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A26E72F61B21B9F100CC4075 /* ISFRTDWithP.cpp */; };
+		A26E72F91B21F77100CC4075 /* debugmain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A26E72F81B21F77100CC4075 /* debugmain.cpp */; };
 		A2AD626A1A073D350057D8C8 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2AD62691A073D350057D8C8 /* main.cpp */; };
 		A2AD627B1A0742490057D8C8 /* functions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2AD62791A0742490057D8C8 /* functions.cpp */; };
 /* End PBXBuildFile section */
@@ -29,11 +32,14 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		A22382271B2729DD0070B7CD /* ISFSwimmerSimp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ISFSwimmerSimp.cpp; sourceTree = "<group>"; };
 		A26E72EC1B21B70D00CC4075 /* ISFSwimmer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ISFSwimmer.cpp; sourceTree = "<group>"; };
 		A26E72EE1B21B74900CC4075 /* ISFRunAndTumble2D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ISFRunAndTumble2D.cpp; sourceTree = "<group>"; };
 		A26E72F01B21B77E00CC4075 /* ISFRunAndTumble3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ISFRunAndTumble3D.cpp; sourceTree = "<group>"; };
 		A26E72F21B21B7D500CC4075 /* ISFRunAndTumbleAndDiffusion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ISFRunAndTumbleAndDiffusion.cpp; sourceTree = "<group>"; };
 		A26E72F41B21B7F600CC4075 /* makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; name = makefile; path = ddm/makefile; sourceTree = "<group>"; };
+		A26E72F61B21B9F100CC4075 /* ISFRTDWithP.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ISFRTDWithP.cpp; sourceTree = "<group>"; };
+		A26E72F81B21F77100CC4075 /* debugmain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = debugmain.cpp; sourceTree = "<group>"; };
 		A2AD62661A073D350057D8C8 /* ddm */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ddm; sourceTree = BUILT_PRODUCTS_DIR; };
 		A2AD62691A073D350057D8C8 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		A2AD62791A0742490057D8C8 /* functions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = functions.cpp; sourceTree = "<group>"; };
@@ -78,6 +84,9 @@
 				A26E72EE1B21B74900CC4075 /* ISFRunAndTumble2D.cpp */,
 				A26E72F01B21B77E00CC4075 /* ISFRunAndTumble3D.cpp */,
 				A26E72F21B21B7D500CC4075 /* ISFRunAndTumbleAndDiffusion.cpp */,
+				A26E72F61B21B9F100CC4075 /* ISFRTDWithP.cpp */,
+				A26E72F81B21F77100CC4075 /* debugmain.cpp */,
+				A22382271B2729DD0070B7CD /* ISFSwimmerSimp.cpp */,
 			);
 			path = ddm;
 			sourceTree = "<group>";
@@ -138,12 +147,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A26E72F71B21B9F100CC4075 /* ISFRTDWithP.cpp in Sources */,
 				A26E72F11B21B77E00CC4075 /* ISFRunAndTumble3D.cpp in Sources */,
 				A26E72F51B21B7F600CC4075 /* makefile in Sources */,
 				A2AD626A1A073D350057D8C8 /* main.cpp in Sources */,
 				A26E72ED1B21B70D00CC4075 /* ISFSwimmer.cpp in Sources */,
 				A2AD627B1A0742490057D8C8 /* functions.cpp in Sources */,
+				A22382281B2729DD0070B7CD /* ISFSwimmerSimp.cpp in Sources */,
 				A26E72EF1B21B74900CC4075 /* ISFRunAndTumble2D.cpp in Sources */,
+				A26E72F91B21F77100CC4075 /* debugmain.cpp in Sources */,
 				A26E72F31B21B7D500CC4075 /* ISFRunAndTumbleAndDiffusion.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

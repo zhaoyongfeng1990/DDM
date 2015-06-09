@@ -12,9 +12,9 @@
 //If the platform is Windows, uncomment this line.
 //#define WINDOWS
 #ifdef WINDOWS
-#pragma comment(lib,"libgsl.lib")
-#pragma comment(lib, "libgslcblas.lib")
-#pragma comment(lib, "libfftw3-3.lib")
+//#pragma comment(lib,"libgsl.lib")
+//#pragma comment(lib, "libgslcblas.lib")
+//#pragma comment(lib, "libfftw3-3.lib")
 #endif
 
 ///////////////////
@@ -25,8 +25,10 @@
 //Switch of different models
 //#define ISFRUNANDTUMBLE
 //#define ISFSWIMMER
+//#define ISFSWIMMERSIMPLE
 //#define ISFRUNANDTUMBLE_3D
-#define ISFRunAndTumbleAndDiffusion
+//#define ISFRunAndTumbleAndDiffusion
+#define ISFRunAndTumbleAndDiffusionAndPv
 
 //GSL
 #include <gsl/gsl_matrix.h>
@@ -43,7 +45,7 @@
 #include <iomanip>
 #include <vector>
 #include <cmath>
-#include <omp.h>	//OpenMP support
+//#include <omp.h>	//OpenMP support
 
 #ifdef WINDOWS
 #include <cstdint>
@@ -84,7 +86,7 @@ int find(const vector<int>& vec, const int value);
 int quickFind(const vector<int>& vec, const int value);
 //Find the position of a particular member in a sorted vector with increasing order, using dichotomy.
 
-const int dim = 1024;    //Size of the image
+const int dim = 512;    //Size of the image
 const int numOfSeq = 4500;  //Number of total time points in experiment
 const int numOfDiff = 4000; //Number of tau
 const double dx = 6.5 / 4.0; // 0.65;   //Pixel size
@@ -98,8 +100,8 @@ const int numOfk = dim*dimk;    //Number of data points after FFT
 const int num_fit = numOfDiff;  //Number of data points used in fitting.
 const double sqrtpi = sqrt(pi); //Constant for convenience
 const double precision = 1e-15; //Used in 2D R&T model. The precision of numerical evaluation.
-const int maxIter=20000;    //Maximum iteration number in fitting
-
+const int maxIter=5000;    //Maximum iteration number in fitting
+const double s2pi=sqrt(2*pi);
 const double qstep=0.01;    //The width of cirque when averaging the direction of q.
 
 //Data stuct used in GSL fitting algorithm.
@@ -114,6 +116,9 @@ typedef struct
 #ifdef ISFSWIMMER
 const int numOfPara = 6;
 #endif
+#ifdef ISFSWIMMERSIMPLE
+const int numOfPara = 5;
+#endif
 #ifdef ISFRUNANDTUMBLE
 const int numOfPara = 4;
 #endif
@@ -122,7 +127,18 @@ const int numOfPara=4;
 #define NeedLaplaceTrans
 #endif
 #ifdef ISFRunAndTumbleAndDiffusion
-const int numOfPara=6; 
+const int numOfPara=6;
+#define NeedLaplaceTrans
+#endif
+#ifdef ISFRunAndTumbleAndDiffusionAndPv
+#include <gsl/gsl_integration.h>
+const int numOfPara=7;
+
+double integrandFun(double t, void* params);
+double dvbarFun(double t, void* params);
+double dZFun(double t, void* params);
+double dlambdaFun(double t, void* params);
+double dDFun(double t, void* params);
 #define NeedLaplaceTrans
 #endif
 
