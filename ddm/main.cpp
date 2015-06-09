@@ -16,10 +16,10 @@ int main(int argc, const char * argv[])
 {
     omp_set_num_threads(6);     //Number of threads
     stringstream arg;		//To read the argv
-    //arg << argv[1];
+    arg << argv[1];
     
     
-        arg << "recover";
+    //    arg << "recover";
     gsl_matrix* datag;		//g(q,t) matrix. Need to claim at the beginning since we may need to deal with simulation data.
     vector<double> qabs;	//Absolute value of q array.
     qabs.reserve((dimk - 1)*(dimk - 1) / 2);	//the number of effective q will not exceed (dimk - 1)*(dimk - 1)/2.

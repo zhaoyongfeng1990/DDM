@@ -100,7 +100,7 @@ const int numOfk = dim*dimk;    //Number of data points after FFT
 const int num_fit = numOfDiff;  //Number of data points used in fitting.
 const double sqrtpi = sqrt(pi); //Constant for convenience
 const double precision = 1e-15; //Used in 2D R&T model. The precision of numerical evaluation.
-const int maxIter=5000;    //Maximum iteration number in fitting
+const int maxIter=1000;    //Maximum iteration number in fitting
 const double s2pi=sqrt(2*pi);
 const double qstep=0.01;    //The width of cirque when averaging the direction of q.
 
