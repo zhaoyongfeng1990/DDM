@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		A22382281B2729DD0070B7CD /* ISFSwimmerSimp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A22382271B2729DD0070B7CD /* ISFSwimmerSimp.cpp */; };
+		A2339A9E1B32F17F0024CE52 /* ISFRunAndTumbleAndDiffusionNoLT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2339A9D1B32F17F0024CE52 /* ISFRunAndTumbleAndDiffusionNoLT.cpp */; };
 		A26E72ED1B21B70D00CC4075 /* ISFSwimmer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A26E72EC1B21B70D00CC4075 /* ISFSwimmer.cpp */; };
 		A26E72EF1B21B74900CC4075 /* ISFRunAndTumble2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A26E72EE1B21B74900CC4075 /* ISFRunAndTumble2D.cpp */; };
 		A26E72F11B21B77E00CC4075 /* ISFRunAndTumble3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A26E72F01B21B77E00CC4075 /* ISFRunAndTumble3D.cpp */; };
@@ -33,6 +34,7 @@
 
 /* Begin PBXFileReference section */
 		A22382271B2729DD0070B7CD /* ISFSwimmerSimp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ISFSwimmerSimp.cpp; sourceTree = "<group>"; };
+		A2339A9D1B32F17F0024CE52 /* ISFRunAndTumbleAndDiffusionNoLT.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ISFRunAndTumbleAndDiffusionNoLT.cpp; sourceTree = "<group>"; };
 		A26E72EC1B21B70D00CC4075 /* ISFSwimmer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ISFSwimmer.cpp; sourceTree = "<group>"; };
 		A26E72EE1B21B74900CC4075 /* ISFRunAndTumble2D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ISFRunAndTumble2D.cpp; sourceTree = "<group>"; };
 		A26E72F01B21B77E00CC4075 /* ISFRunAndTumble3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ISFRunAndTumble3D.cpp; sourceTree = "<group>"; };
@@ -87,6 +89,7 @@
 				A26E72F61B21B9F100CC4075 /* ISFRTDWithP.cpp */,
 				A26E72F81B21F77100CC4075 /* debugmain.cpp */,
 				A22382271B2729DD0070B7CD /* ISFSwimmerSimp.cpp */,
+				A2339A9D1B32F17F0024CE52 /* ISFRunAndTumbleAndDiffusionNoLT.cpp */,
 			);
 			path = ddm;
 			sourceTree = "<group>";
@@ -151,6 +154,7 @@
 				A26E72F11B21B77E00CC4075 /* ISFRunAndTumble3D.cpp in Sources */,
 				A26E72F51B21B7F600CC4075 /* makefile in Sources */,
 				A2AD626A1A073D350057D8C8 /* main.cpp in Sources */,
+				A2339A9E1B32F17F0024CE52 /* ISFRunAndTumbleAndDiffusionNoLT.cpp in Sources */,
 				A26E72ED1B21B70D00CC4075 /* ISFSwimmer.cpp in Sources */,
 				A2AD627B1A0742490057D8C8 /* functions.cpp in Sources */,
 				A22382281B2729DD0070B7CD /* ISFSwimmerSimp.cpp in Sources */,

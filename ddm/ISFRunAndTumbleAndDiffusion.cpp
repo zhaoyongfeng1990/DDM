@@ -17,12 +17,12 @@ int ISFfun(const gsl_vector* para, void* sdata, gsl_vector* y)
     double q=((dataStruct *)sdata)->q;
     
     //Get the parameters.
-    double alpha=gsl_vector_get(para, 0);
-    double v0=gsl_vector_get(para, 1);
+    double alpha=0.8;//gsl_vector_get(para, 0);
+    double v0=13;//gsl_vector_get(para, 1);
     double lambda=gsl_vector_get(para, 2);
-    double D=gsl_vector_get(para, 3);
-    double A=gsl_vector_get(para, 4);
-    double B=gsl_vector_get(para, 5);
+    double D=0.4;//gsl_vector_get(para, 3);
+    double A=1; //gsl_vector_get(para, 4);
+    double B=0; //gsl_vector_get(para, 5);
     
     double kv0=q*v0;
     double dq2=D*q*q;
@@ -71,12 +71,12 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
     double* tau=((dataStruct *)sdata)->tau;
     double q=((dataStruct *)sdata)->q;
     
-    double alpha=gsl_vector_get(para, 0);
-    double v0=gsl_vector_get(para, 1);
+    double alpha=0.8;//gsl_vector_get(para, 0);
+    double v0=13;//gsl_vector_get(para, 1);
     double lambda=gsl_vector_get(para, 2);
-    double D=gsl_vector_get(para, 3);
-    double A=gsl_vector_get(para, 4);
-    double B=gsl_vector_get(para, 5);
+    double D=0.4;//gsl_vector_get(para, 3);
+    double A=1; //gsl_vector_get(para, 4);
+    double B=0; //gsl_vector_get(para, 5);
     
     double kv0=q*v0;
     double dq2=D*q*q;
@@ -91,15 +91,15 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
         double denominator=lt2k2v02*denominator2*denominator2;
         double yi=A*(1.0/tau[iter]-(1.0-alpha)/tdq2-alpha*atanterm/denominator2)+B/tau[iter];
         
-        gsl_matrix_set(J, iter, 0, A*(1.0/tdq2-atanterm/denominator2)/yi );
-        gsl_matrix_set(J, iter, 1, A*q*alpha*(lt2k2v02*atanterm-lt*kv0)/denominator/yi );
+        gsl_matrix_set(J, iter, 0, 0/*A*(1.0/tdq2-atanterm/denominator2)/yi*/ );
+        gsl_matrix_set(J, iter, 1, 0/*A*q*alpha*(lt2k2v02*atanterm-lt*kv0)/denominator/yi*/ );
         
         gsl_matrix_set(J, iter, 2, A*alpha*(kv0*kv0-lt2k2v02*atanterm*atanterm)/denominator/yi );
         
-        gsl_matrix_set(J, iter, 3, A*q*q*((1.0-alpha)/tdq2/tdq2+alpha*kv0*kv0/denominator)/yi );
+        gsl_matrix_set(J, iter, 3, 0/*A*q*q*((1.0-alpha)/tdq2/tdq2+alpha*kv0*kv0/denominator)/yi*/ );
         
-        gsl_matrix_set(J, iter, 4, (1.0/tau[iter]-(1.0-alpha)/tdq2-alpha*atanterm/denominator2)/yi );
-        gsl_matrix_set(J, iter, 5, 1.0/tau[iter]/yi);
+        gsl_matrix_set(J, iter, 4, 0 /*(1.0/tau[iter]-(1.0-alpha)/tdq2-alpha*atanterm/denominator2)/yi */);
+        gsl_matrix_set(J, iter, 5, 0 /*1.0/tau[iter]/yi*/ );
         
         //Punishment terms
         if (alpha<0)

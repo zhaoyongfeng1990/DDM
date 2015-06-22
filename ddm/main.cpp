@@ -8,13 +8,16 @@
 
 #include "functions.h"
 
+#ifdef ISFRunAndTumbleAndDiffusionNoLT
+fftwStruct iLTStruct;
+#endif
 
 //The name prefix of the images should be given in bash as argv. (e.g.: IM_340_01_X)
 //Or, give "simulation" can deal with the simulation data.
 //Or, give "recover" can do the fit by reading datag.txt and q.txt directly, save doing time-consuming FFT and averaging.
 int main(int argc, const char * argv[])
 {
-    omp_set_num_threads(6);     //Number of threads
+    omp_set_num_threads(1);     //Number of threads
     stringstream arg;		//To read the argv
     arg << argv[1];
     
@@ -433,35 +436,35 @@ int main(int argc, const char * argv[])
     
 #ifdef NeedLaplaceTrans
     cout << "Numerical Laplace transforming..." << endl;
-    gsl_matrix* transM=gsl_matrix_alloc(numOfDiff, numOfDiff);		//Transformation matrix
+    gsl_matrix* transM=gsl_matrix_alloc(numOfDiff, num_fit);		//Transformation matrix
     for (int itert = 0; itert < numOfDiff; ++itert)
     {
-        for (int iters = 0; iters < numOfDiff; ++iters)
+        for (int iters = 0; iters < num_fit; ++iters)
         {
             double tau=(itert+1)*dt;
-            double s=exp(-1+0.001*iters);		//s is sampled in log scale
+            double s=exp(1+0.0005*iters);		//s is sampled in log scale
             gsl_matrix_set(transM, itert, iters, dt*exp(-tau*s));		//\Delta t=0.01, numerical integration here.
         }
     }
     
     ofstream sfile("s.txt");
-    for (int iters = 0; iters < numOfDiff; ++iters)
+    for (int iters = 0; iters < num_fit; ++iters)
     {
-        double s=exp(-1+0.001*iters);
+        double s=exp(1+0.0005*iters);
         sfile << s << endl;
         gsl_matrix_set(transM, numOfDiff-1, iters, 0.5*gsl_matrix_get(transM, numOfDiff-1, iters));
         gsl_matrix_set(transM, 0, iters, 1.5*gsl_matrix_get(transM, 0, iters));		//0.5+1. 1 is the estimation of the contribution in tau=(0,0.01], which is not computable since tau>0.
     }
     sfile.close();
     
-    gsl_matrix* temp=gsl_matrix_alloc(qsize, numOfDiff);
+    gsl_matrix* temp=gsl_matrix_alloc(qsize, num_fit);
     gsl_blas_dgemm(CblasNoTrans, CblasNoTrans, 1, datag, transM, 0, temp);		//LT is performed by matrix multiplication. Call BLAS to calculate matrix multiplication.
     gsl_matrix_free(transM);
     
     ofstream datagfile("ldatag.txt");		//Print Laplace transformed g(q,s)
     for (int iterq = 0; iterq < qsize; ++iterq)
     {
-        for (int itertau = 0; itertau < numOfDiff; ++itertau)
+        for (int itertau = 0; itertau < num_fit; ++itertau)
         {
             datagfile << gsl_matrix_get(temp, iterq, itertau) << " ";
         }
@@ -477,37 +480,52 @@ int main(int argc, const char * argv[])
     solverType = gsl_multifit_fdfsolver_lmsder;
     //Using Levenberg-Marquardt algorithm as implemented in the scaled lmder routine in minpack. Jacobian is given.
     
-    gsl_matrix* fittedPara=gsl_matrix_alloc(qsize-1, numOfPara);	//To store the fitting result and error.
-    gsl_matrix* fitErr=gsl_matrix_alloc(qsize-1, numOfPara);
-    int* status = new int[qsize-1];		//Record the status of fitting.
+    gsl_matrix* fittedPara=gsl_matrix_alloc(qsize, numOfPara);	//To store the fitting result and error.
+    gsl_matrix* fitErr=gsl_matrix_alloc(qsize, numOfPara);
+    int* status = new int[qsize];		//Record the status of fitting.
     
     double tau[num_fit];
     for (int itertau=0; itertau<num_fit; ++itertau)
     {
         tau[itertau]=(itertau+1)*dt;
 #ifdef NeedLaplaceTrans
-        tau[itertau]=exp(-1+0.001*itertau);
+        tau[itertau]=exp(1+0.0005*itertau);
 #endif
     }
     
     //Initial guess
 #ifdef ISFSWIMMER
-    double inipara[numOfPara]={0.7, 0.4, 5, 2, 2e12, 1e10};
+    double inipara[numOfPara]={0.4,  0.2, 6, 1, 2e12, 1e10};
+    //                         alpha D    v  Z  A     B
 #endif
 #ifdef ISFSWIMMERSIMPLE
-    double inipara[numOfPara]={0.5, 0.4, 10, 1, 1};
+    double inipara[numOfPara]={0.4,  0.2, 6, 1, 1};
+    //                         alpha D    v   A  B
 #endif
 #ifdef ISFRUNANDTUMBLE
-    double inipara[numOfPara] = {1, 10, 2e12, 1e10 };
+    double inipara[numOfPara] = {1,    10, 2e12, 1e10 };
+    //                           alpha v   A     B
 #endif
 #ifdef ISFRUNANDTUMBLE_3D
-    double inipara[numOfPara] = {5, 0.5, 2e12, 1e10 };
+    double inipara[numOfPara] = {5, 0.5,  2e12, 1e10 };
+    //                           v  alpha A     B
 #endif
 #ifdef ISFRunAndTumbleAndDiffusion
-    double inipara[numOfPara] = {0.8, 10, 1, 0.4, 2e12, 1e10 };
+    double inipara[numOfPara] = {0.4,  6,  0.5,   0.2, 2e12, 1e10 };
+    //                           alpha v   lambda D    A     B
 #endif
 #ifdef ISFRunAndTumbleAndDiffusionAndPv
-    double inipara[numOfPara] = {0.9, 10, 500, 1, 0.4, 2e12, 1e10 };
+    double inipara[numOfPara] = {0.4,  10, 500, 1,     0.4, 2e12, 1e10 };
+    //                           alpha v   Z    lambda D    A     B
+#endif
+    
+#ifdef ISFRunAndTumbleAndDiffusionNoLT
+    double inipara[numOfPara] = {0.4,  6,  0.5,   0.2, 2e12, 1e10 };
+    //                           alpha v   lambda D    A     B
+    iLTStruct.fftwIn=fftwl_alloc_complex(M);
+    iLTStruct.fftwOut=fftwl_alloc_complex(M);
+    iLTStruct.integration=fftwl_plan_dft_1d(M, iLTStruct.fftwIn, iLTStruct.fftwOut, FFTW_FORWARD, FFTW_MEASURE);
+    iLTStruct.CoeA.resize(M);
 #endif
     
     //Get the selected data for fitting
@@ -526,7 +544,7 @@ int main(int argc, const char * argv[])
     int progress=0;		//Indicator of progress.
     //	ofstream debugfile("debug.txt");
 #pragma omp parallel for
-    for (int iterq=1; iterq<qsize; ++iterq)
+    for (int iterq=0; iterq<qsize; ++iterq)
     {
         gsl_multifit_function_fdf fitfun;		//Function point.
         gsl_vector_view dataAry=gsl_matrix_row(datafit, iterq);
@@ -536,9 +554,15 @@ int main(int argc, const char * argv[])
         sdata.q=qabs[iterq];
         
         //API
+#ifdef ISFRunAndTumbleAndDiffusionNoLT
+        fitfun.f=&ISFfun;
+        fitfun.df=0;
+        fitfun.fdf=0;
+#else
         fitfun.f=&ISFfun;
         fitfun.df=&dISFfun;
         fitfun.fdf=&fdISFfun;
+#endif
         fitfun.n=num_fit;
         fitfun.p=numOfPara;
         fitfun.params=&sdata;
@@ -556,7 +580,7 @@ int main(int argc, const char * argv[])
         do
         {
             gsl_multifit_fdfsolver_iterate(solver);		//Iterate one step.
-            status[iterq-1] = norm0_rel_test(solver->dx, solver->x, 1e-10, 1e-10);		//Test the exiting condition
+            status[iterq] = norm0_rel_test(solver->dx, solver->x, 1e-10, 1e-10);		//Test the exiting condition
             
             //gsl_multifit_gradient(solver->J,solver->f, g);
             //status[iterq-1]=gsl_multifit_test_gradient(g, 1e-5);
@@ -565,9 +589,9 @@ int main(int argc, const char * argv[])
             ++iter;
             if (iter>maxIter)
             {
-                status[iterq-1]=GSL_EMAXITER;
+                status[iterq]=GSL_EMAXITER;
             }
-        } while (status[iterq-1] == GSL_CONTINUE);
+        } while (status[iterq] == GSL_CONTINUE);
         //gsl_vector_free(g);
         
         //Estimating the error.
@@ -575,17 +599,17 @@ int main(int argc, const char * argv[])
         gsl_multifit_covar(solver->J, 0.0, covar);
         for (int iterpara=0; iterpara<numOfPara; ++iterpara)	//Record result.
         {
-            gsl_matrix_set(fittedPara, iterq-1, iterpara, gsl_vector_get(solver->x, iterpara) );
-            gsl_matrix_set(fitErr, iterq-1, iterpara, sqrt(gsl_matrix_get(covar, iterpara, iterpara)) );    //Not presice in log scale
+            gsl_matrix_set(fittedPara, iterq, iterpara, gsl_vector_get(solver->x, iterpara) );
+            gsl_matrix_set(fitErr, iterq, iterpara, sqrt(gsl_matrix_get(covar, iterpara, iterpara)) );    //Not presice in log scale
         }
         gsl_matrix_free(covar);
         gsl_multifit_fdfsolver_free(solver);
         
         progress+=1;
-        cout << "Fitted q=" << qabs[iterq] << " at iter=" << iter << ", " << 100.0*progress / qsize << "% completed from core No." << /*omp_get_thread_num()*/0 << ", "<< gsl_strerror(status[iterq-1]) << "." << endl;
+        cout << "Fitted q=" << qabs[iterq] << " at iter=" << iter << ", " << 100.0*progress / qsize << "% completed from core No." << omp_get_thread_num() << ", "<< gsl_strerror(status[iterq]) << "." << endl;
         for (int iterpara=0; iterpara<numOfPara; ++iterpara)
         {
-            cout << gsl_matrix_get(fittedPara, iterq-1, iterpara) << endl;
+            cout << gsl_matrix_get(fittedPara, iterq, iterpara) << endl;
         }
     }
     
@@ -594,7 +618,7 @@ int main(int argc, const char * argv[])
     ofstream fiterrfile("fiterrfile.txt");
     ofstream statusfile("status.txt");
     ofstream qstatusfile("statusq.txt");
-    for (int iterq=0; iterq<qsize-1; ++iterq)
+    for (int iterq=0; iterq<qsize; ++iterq)
     {
         for (int iterpara=0; iterpara<numOfPara; ++iterpara)
         {
@@ -603,7 +627,7 @@ int main(int argc, const char * argv[])
         }
         fitparafile << endl;
         fiterrfile << endl;
-        statusfile << iterq << ": q=" << qabs[iterq+1] << ", "<< gsl_strerror(status[iterq]) << endl;
+        statusfile << iterq << ": q=" << qabs[iterq] << ", "<< gsl_strerror(status[iterq]) << endl;
         qstatusfile << status[iterq] << endl;
     }
     
@@ -615,6 +639,11 @@ int main(int argc, const char * argv[])
     delete[] status;
 #ifdef NeedLaplaceTrans
     gsl_matrix_free(temp);
+#endif
+    
+#ifdef ISFRunAndTumbleAndDiffusionNoLT
+    fftwl_free(iLTStruct.fftwIn);
+    fftwl_free(iLTStruct.fftwOut);
 #endif
     
     gsl_matrix_free(datag);

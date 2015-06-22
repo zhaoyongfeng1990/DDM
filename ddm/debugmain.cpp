@@ -7,56 +7,51 @@
 ////
 //
 //#include "functions.h"
-//#include <gsl/gsl_sf_gamma.h>
-//#include <gsl/gsl_sf_psi.h>
-//
-//gsl_integration_cquad_workspace* workspace;
+//#include <fstream>
+//#include <iomanip>
+//using namespace std;
+////#include <gsl/gsl_sf_gamma.h>
+////#include <gsl/gsl_sf_psi.h>
+////
+////gsl_integration_cquad_workspace* workspace;
+////
+//typedef complex<long double> cpx;
+//double clenshaw(long double t);
+//cpx ISFs(cpx s, long double* para);
+//void NiLT_weeks(cpx (*fun)(cpx, long double*), long double* para);
+//fftwStruct iLTStruct;
 //
 //int main()
 //{
-//#ifdef ISFRunAndTumbleAndDiffusionAndPv
-//    workspace=gsl_integration_cquad_workspace_alloc(100000);
-//#endif
-//    double IntPara[14];
-//    double vbar=10;
-//    double Z=500;
-//    double lambda=1;
-//    double D=0.4;
-//    double q=0.01;
-//    
-//    IntPara[0]=vbar;
-//    IntPara[1]=Z;
-//    IntPara[2]=lambda;
-//    
-//    double dq2=D*q*q;
-//    IntPara[3]=q;
-//    double Z1=Z+1;
-//    IntPara[5]=Z1/vbar;
-//    
-//    IntPara[6]=Z1*log(IntPara[5])-gsl_sf_lngamma(Z1);
-//    IntPara[7]=Z1/vbar/vbar;
-//    
-//    IntPara[8]=gsl_sf_psi(Z1);
-//    
-//    IntPara[9]=pow(q,4);
-//    gsl_function Fun;
-//    Fun.function=&integrandFun;
-//    Fun.params=IntPara;
-//    
-//    double tau=0.4;
-//    IntPara[4]=tau+lambda+dq2;
-//    IntPara[10]=IntPara[4]*IntPara[4];
-//    IntPara[13]=0;
-//    
-//    double pts[2]={0,1};
-//    double yi=0;
-//    double err=0;
-//    size_t nevals;
-//    gsl_integration_cquad(&Fun, 0, 1, 0, 1e-7, workspace, &yi, &err, &nevals);
-//    cout << yi << "+-" << err << endl;
-//    
-//#ifdef ISFRunAndTumbleAndDiffusionAndPv
-//        gsl_integration_cquad_workspace_free(workspace);
-//#endif
+//    iLTStruct.fftwIn=fftwl_alloc_complex(M);
+//    iLTStruct.fftwOut=fftwl_alloc_complex(M);
+//    iLTStruct.integration=fftwl_plan_dft_1d(M, iLTStruct.fftwIn, iLTStruct.fftwOut, FFTW_FORWARD, FFTW_MEASURE);
+//    iLTStruct.CoeA.resize(M);
+//	long double q=3.0l;
+//    long double v0=13.0l;//gsl_vector_get(para, 1);
+//    long double lambda=1.0l;
+//    long double D=0.4l;//gsl_vector_get(para, 3);\
+//
+//    long double kv0=q*v0;
+//    long double Dq2=D*q*q;
+//    long double paraISF[4]={kv0, lambda, Dq2, q};
+//    NiLT_weeks(ISFs, paraISF);
+//    ofstream debug("debug.txt");
+//  
+//    //for (int iter = 0; iter<M; ++iter)
+//    //{
+//    //  debug << setprecision(30) << iLTStruct.CoeA[iter] << endl;
+//    //  //Temperary variables used for acceleration.
+//    //}
+//    for (int iter = 0; iter<num_fit; ++iter)
+//    {
+//        long double t=(iter+1)*0.01l;
+//        double rtd=clenshaw(t);
+//        debug << setprecision(30) << rtd << endl;
+//        //Temperary variables used for acceleration.
+//    }
+//
+//    fftwl_free(iLTStruct.fftwIn);
+//    fftwl_free(iLTStruct.fftwOut);
 //    return 0;
 //}

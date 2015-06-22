@@ -232,6 +232,7 @@ int find(const vector<int>& vec, const int value)
 /////////////////////////////////Not in used functions ended////////////////////////
 
 //API for GSL solver.
+#ifndef ISFRunAndTumbleAndDiffusionNoLT
 int fdISFfun(const gsl_vector* para, void* sdata, gsl_vector* y, gsl_matrix* J)
 {
     ISFfun(para, sdata, y);
@@ -239,6 +240,7 @@ int fdISFfun(const gsl_vector* para, void* sdata, gsl_vector* y, gsl_matrix* J)
     
     return  GSL_SUCCESS;
 }
+#endif
 
 //Test fitting result using 0-norm (maximum absolute value) of the relative step size dx/x. tol is the relative tolerance of error, tole is the absolute tolerance of error.
 int norm0_rel_test(const gsl_vector * dx, const gsl_vector * x, double tol, double tole)
