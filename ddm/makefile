@@ -1,28 +1,20 @@
-ddm : functions.o main.o ISFSwimmer.o ISFRunAndTumbleAndDiffusion.o ISFRunAndTumble2D.o ISFRunAndTumble3D.o ISFRTDWithP.o ISFSwimmerSimp.o
-	g++-5 *.o -o ddm -O3 -lm -lfftw3 -lgslcblas -lgsl -fopenmp
-functions.o : functions.cpp functions.h
-	g++-5 -O3 -c functions.cpp -std=gnu++11
-main.o : main.cpp functions.h
-	g++-5 -O3 -c main.cpp -std=gnu++11
-ISFSwimmer.o : ISFSwimmer.cpp functions.h
-	g++-5 -O3 -c ISFSwimmer.cpp -std=gnu++11
-ISFRunAndTumbleAndDiffusion.o : ISFRunAndTumbleAndDiffusion.cpp functions.h
-	g++-5 -O3 -c ISFRunAndTumbleAndDiffusion.cpp -std=gnu++11
-ISFRunAndTumble2D.o : ISFRunAndTumble2D.cpp functions.h
-	g++-5 -O3 -c ISFRunAndTumble2D.cpp -std=gnu++11
-ISFRunAndTumble3D.o : ISFRunAndTumble3D.cpp functions.h
-	g++-5 -O3 -c ISFRunAndTumble3D.cpp -std=gnu++11
-ISFRTDWithP.o : ISFRTDWithP.cpp functions.h
-	g++-5 -O3 -c ISFRTDWithP.cpp -std=gnu++11
-ISFSwimmerSimp.o : ISFSwimmerSimp.cpp functions.h
-	g++-5 -O3 -c ISFSwimmerSimp.cpp -std=gnu++11
-debugmain.o : debugmain.cpp functions.h
-	g++-5 -O3 -c debugmain.cpp -std=gnu++11
+CXX = g++-5
+CXXFLAGS = -fopenmp -O3 -std=c++11 -DHAVE_INLINE
+Objects = ISFRTDWithP.o ISFRunAndTumble2D.o ISFRunAndTumble3D.o ISFRunAndTumbleAndDiffusion.o ISFRunAndTumbleAndDiffusionNoLT.o ISFSwimmer.o ISFSwimmerSimp.o LaplaceTrans.o aveQ.o averSqrModTau.o clean.o ddm.o fitting.o loadFiles.o main.o print.o shiftImage.o NILT.o
+debugObjects = debugmain.o ISFRTDWithP.o ISFRunAndTumble2D.o ISFRunAndTumble3D.o ISFRunAndTumbleAndDiffusion.o ISFRunAndTumbleAndDiffusionNoLT.o ISFSwimmer.o ISFSwimmerSimp.o LaplaceTrans.o aveQ.o averSqrModTau.o clean.o ddm.o fitting.o loadFiles.o main.o print.o shiftImage.o NILT.o
+LFLAGS = -lm -lgsl -lgslcblas -O3 -lfftw3 -lfftw3l -fopenmp
+
+
+ddm : $(Objects)
+	$(CXX) -o ddm $(LFLAGS) $(Objects)
+
+debug : $(debugObjects)
+	$(CXX) -o debug $(LFLAGS) $(debugObjects)
+
+$(Objects) : ddm.h parameters.h
+$(debugObjects) : ddm.h parameters.h
+NILT.o ISFRunAndTumbleAndDiffusionNoLT.o : NILT.h
+
+.PHONY : clean
 clean :
-	rm ./*.o
-recover :
-	make ddm
-	./ddm recover
-debug : debugmain.o functions.o ISFSwimmer.o ISFRunAndTumbleAndDiffusion.o ISFRunAndTumble2D.o ISFRunAndTumble3D.o ISFRTDWithP.o
-	g++-5 debugmain.o functions.o ISFSwimmer.o ISFRunAndTumbleAndDiffusion.o ISFRunAndTumble2D.o ISFRunAndTumble3D.o ISFRTDWithP.o -o debug -O3 -lm -lfftw3 -lgslcblas -lgsl -fopenmp
-	./debug
+	-rm $(Objects)

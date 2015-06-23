@@ -5,8 +5,7 @@
 //  Created by Zhao Yongfeng on 15/6/5.
 //  Copyright (c) 2015年 ZYF. All rights reserved.
 //
-
-#include "functions.h"
+#include "ddm.h"
 
 #ifdef ISFSWIMMERSIMPLE
 //The ISF is written to meet the API of GSL f function. sdata is the pointer to data structure defined by GSL. y is the return of the function.

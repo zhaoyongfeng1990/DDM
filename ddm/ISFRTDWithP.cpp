@@ -5,12 +5,19 @@
 //  Created by Zhao Yongfeng on 15/6/5.
 //  Copyright (c) 2015年 ZYF. All rights reserved.
 //
-
-#include "functions.h"
-#include <gsl/gsl_sf_gamma.h>
-#include <gsl/gsl_sf_psi.h>
+#include "ddm.h"
 
 #ifdef ISFRunAndTumbleAndDiffusionAndPv
+#include <gsl/gsl_sf_gamma.h>
+#include <gsl/gsl_sf_psi.h>
+#include <gsl/gsl_integration.h>
+
+double integrandFun(double t, void* params);
+double dvbarFun(double t, void* params);
+double dZFun(double t, void* params);
+double dlambdaFun(double t, void* params);
+double dDFun(double t, void* params);
+
 //The ISF is written to meet the API of GSL f function. sdata is the pointer to data structure defined by GSL. y is the return of the function.
 double integrandFun(double t, void* params)
 {

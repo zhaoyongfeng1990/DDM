@@ -5,10 +5,10 @@
 //  Created by Zhao Yongfeng on 15/6/5.
 //  Copyright (c) 2015年 ZYF. All rights reserved.
 //
-
-#include "functions.h"
+#include "ddm.h"
 
 #ifdef ISFRUNANDTUMBLE
+
 int ISFfun(const gsl_vector* para, void* sdata, gsl_vector* y)
 {
     double* dataAry=((dataStruct *)sdata)->data;
