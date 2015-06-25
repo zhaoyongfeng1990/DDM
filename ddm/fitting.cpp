@@ -42,7 +42,7 @@ void ddm::fitting()
 #ifdef NeedLaplaceTrans
             gsl_matrix_set(datafit, iterq, iterf, log(gsl_matrix_get(ldatag, iterq, iterf)));		//Fitting in log scale.
 #else
-            gsl_matrix_set(datafit, iterq, iterf, (gsl_matrix_get(datag, iterq, iterf)));		//Fitting in log scale.
+            gsl_matrix_set(datafit, iterq, iterf, log(gsl_matrix_get(datag, iterq, iterf)));		//Fitting in log scale.
 #endif
         }
     }

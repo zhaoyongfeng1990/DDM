@@ -19,9 +19,6 @@
 #endif
 ///////////////////
 
-//Macro for speeding up GSL
-//#define HAVE_INLINE
-
 //Switch of different models
 //#define ISFRUNANDTUMBLE
 //#define ISFSWIMMER
@@ -31,15 +28,6 @@
 //#define ISFRunAndTumbleAndDiffusionAndPv
 #define ISFRunAndTumbleAndDiffusionNoLT
 
-//GSL
-//#include <complex>
-//#include <gsl/gsl_matrix.h>
-//#include <gsl/gsl_vector.h>
-//#include <gsl/gsl_blas.h>
-//#include <gsl/gsl_sf_gamma.h>
-//#include <gsl/gsl_sf_bessel.h>
-//#include <fftw3.h>	//FFTW
-//#include <iomanip>
 #include <cmath>
 
 using namespace std;
@@ -54,8 +42,8 @@ const int dimy = 512;    //Size of the image
 const int dimx = 512;
 const int dimkx = dimx / 2 + 1;   //Number of wavenumber
 const int dimky = dimy / 2 + 1;   //Number of wavenumber
-const int numOfSeq = 4501;  //Number of total time points in experiment
-const int numOfDiff = 4500; //Number of tau
+const int numOfSeq = 4500;  //Number of total time points in experiment
+const int numOfDiff = 4000; //Number of tau
 const int numOfk = dimy*dimkx;    //Number of data points after FFT
 const int num_fit = numOfDiff;  //Number of data points used in fitting.
 
@@ -106,7 +94,7 @@ const int numOfPara=6;
 
 #ifdef ISFRunAndTumbleAndDiffusionNoLT
 const int numOfPara=6;
-//#define NoJacobian
+#define NoJacobian
 #endif
 
 #ifdef ISFRunAndTumbleAndDiffusionAndPv

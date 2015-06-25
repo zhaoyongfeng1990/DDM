@@ -6,6 +6,7 @@
 //  Copyright (c) 2015年 ZYF. All rights reserved.
 //
 #include "ddm.h"
+#include <iostream>
 
 #ifdef ISFRunAndTumbleAndDiffusionNoLT
 
@@ -67,66 +68,6 @@ cpx dlambdaISFs(cpx s, long double* para)
     return ((qv2+Dq2lambdas*Dq2lambdas)*atanterm*atanterm-qv2)/(qv2+Dq2lambdas*Dq2lambdas)/(qv-lambda*atanterm)/(qv-lambda*atanterm);
 }
 
-void NILT::NiLT_weeks(cpx (*fun)(cpx, long double*), long double* para)
-{
-    int tid=omp_get_thread_num();
-    fftwl_complex* cfftwIn=fftwIn[tid];
-    fftwl_complex* cfftwOut=fftwOut[tid];
-    fftwl_plan& cPlan=integration[tid];
-    vector<long double>& cCoeA=CoeA[tid];
-    long double& csigma=sigma[tid];
-    long double& cb=b[tid];
-    long double& cb2=b2[tid];
-    
-    for (int iter=0; iter<M; ++iter)
-    {
-        cpx itheta={0.0l,pi*(2.0l*iter+1.0l)/M};
-        cpx expterm=exp(itheta)-1.0l;
-        cpx s=csigma-cb*(expterm+2.0l)/expterm;
-        cpx r=-cb2*fun(s,para)/expterm;
-        cfftwIn[iter][0]=real(r);
-        cfftwIn[iter][1]=imag(r);
-    }
-    fftwl_execute(cPlan);
-    for (int iter=0; iter<M; ++iter)
-    {
-        cpx temp={cfftwOut[iter][0], cfftwOut[iter][1]};
-        cpx itheta={0,-iter*pi/M};
-        temp*=exp(itheta);
-        cCoeA[iter]=real(temp)/M;
-    }
-}
-
-double NILT::clenshaw(long double t)
-{
-    int tid=omp_get_thread_num();
-    vector<long double>& cCoeA=CoeA[tid];
-    
-    long double& cb2=b2[tid];
-    long double& csigmab=sigmab[tid];
-    
-    int idx=M-1;
-    for (int iter=0; iter<M; ++iter)
-    {
-        if (abs(cCoeA[iter])<1e-16)
-        {
-            idx=iter;
-            break;
-        }
-    }
-    long double y2=0.0l;
-    long double y1=cCoeA[idx];
-    long double y0=0.0l;
-    for (int k=idx; k>0; --k)
-    {
-        long double lk=(long double)k;
-        y0=(2.0l*lk-1.0l-cb2*t)/lk*y1-lk/(lk+1.0l)*y2+cCoeA[k-1];
-        y2=y1;
-        y1=y0;
-    }
-    return exp(csigmab*t)*y0;
-}
-
 //The ISF is written to meet the API of GSL f function. sdata is the pointer to data structure defined by GSL. y is the return of the function.
 int ISFfun(const gsl_vector* para, void* sdata, gsl_vector* y)
 {
@@ -160,17 +101,16 @@ int ISFfun(const gsl_vector* para, void* sdata, gsl_vector* y)
     
     if (qvlambda>(pi/2))
     {
-        csigma=-Dq2-lambda+0.01l;
-        long double temp=(csigma+Dq2lambda);
-        cb=sqrt(kv0*kv0-temp*temp);
+        csigma=-Dq2lambda+0.01l;
+        cb=sqrt(kv0*kv0+0.01l*0.01l);
     }
     else
     {
         long double alpha21=kv0/tan(qvlambda);
-        csigma=alpha21-Dq2lambda+0.01l;
         long double alpha1=-Dq2lambda;
         long double alpha2=alpha21+alpha1;
-        cb=sqrt(csigma*csigma-((csigma-alpha1)*alpha2*alpha2-(csigma-alpha2)*(alpha1*alpha1+kv0*kv0))/alpha21);
+        csigma=alpha2+0.01l;
+        cb=sqrt(csigma*csigma-((csigma-alpha1)*alpha2*alpha2-0.01l*(alpha1*alpha1+kv0*kv0))/alpha21);
     }
     cb2=cb*2;
     csigmab=csigma-cb;
@@ -182,7 +122,9 @@ int ISFfun(const gsl_vector* para, void* sdata, gsl_vector* y)
         long double t=tau[iter];
         double rtd=ILT->clenshaw(t);
         //Temperary variables used for acceleration.
-        double yi=(A*(1.0-(1.0-alpha)*exp(-Dq2*t)-alpha*rtd)+B);
+        double yi=log(A*(1.0-(1.0-alpha)*exp(-Dq2*t)-alpha*rtd)+B);
+        
+        
         
         double result = yi - dataAry[iter];
         //Punishment terms, to make constrains in parameter space.
@@ -251,17 +193,16 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
     
     if (qvlambda>(pi/2))
     {
-        csigma=-Dq2-lambda+0.01l;
-        long double temp=(csigma+Dq2lambda);
-        cb=sqrt(kv0*kv0-temp*temp);
+        csigma=-Dq2lambda+0.01l;
+        cb=sqrt(kv0*kv0+0.01l*0.01l);
     }
     else
     {
         long double alpha21=kv0/tan(qvlambda);
-        csigma=alpha21-Dq2lambda+0.01l;
         long double alpha1=-Dq2lambda;
         long double alpha2=alpha21+alpha1;
-        cb=sqrt(csigma*csigma-((csigma-alpha1)*alpha2*alpha2-(csigma-alpha2)*(alpha1*alpha1+kv0*kv0))/alpha21);
+        csigma=alpha2+0.01l;
+        cb=sqrt(csigma*csigma-((csigma-alpha1)*alpha2*alpha2-0.01l*(alpha1*alpha1+kv0*kv0))/alpha21);
     }
     cb2=cb*2;
     csigmab=csigma-cb;
@@ -299,15 +240,15 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
         double dA=(1.0-(1.0-alpha)*exp(-Dq2*t)-alpha*rtd);
         double yi=A*dA+B;
         
-        gsl_matrix_set(J, iter, 0, A*(exp(-Dq2*t)-rtd) );
-        gsl_matrix_set(J, iter, 1, -A*alpha*dvrtd );
+        gsl_matrix_set(J, iter, 0, A*(exp(-Dq2*t)-rtd)/yi );
+        gsl_matrix_set(J, iter, 1, -A*alpha*dvrtd/yi );
         
-        gsl_matrix_set(J, iter, 2, -A*alpha*dlambdartd );
+        gsl_matrix_set(J, iter, 2, -A*alpha*dlambdartd/yi );
         
-        gsl_matrix_set(J, iter, 3, A*((alpha-1.0)*exp(-Dq2*t)*q*q*t-alpha*dDrtd) );
+        gsl_matrix_set(J, iter, 3, A*((alpha-1.0)*exp(-Dq2*t)*q*q*t-alpha*dDrtd)/yi );
         
-        gsl_matrix_set(J, iter, 4, dA);
-        gsl_matrix_set(J, iter, 5, 1.0 );
+        gsl_matrix_set(J, iter, 4, dA/yi );
+        gsl_matrix_set(J, iter, 5, 1.0/yi );
         
         //Punishment terms
         if (alpha<0)
