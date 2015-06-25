@@ -13,9 +13,10 @@
 //int quickFind(const vector<int>& vec, const int value);
 ////Find the position of a particular member in a sorted vector with increasing order, using dichotomy.
 
+//Average all directions of q by bilinear interpolation. This is done by integrating the bilinear interpolation function in every lattice, and then dividing by the length of arc.
 void ddm::aveQBilinear()
 {
-    qsize=ceil(qmax/qstep);
+    qsize=ceil(qmax/qstep); //qsize is the number of different q value samples.
     qabs.resize(qsize);     //qabs is the absolute value of q
     for (int iter=0; iter<qsize; ++iter)
     {

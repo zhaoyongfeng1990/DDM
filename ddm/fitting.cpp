@@ -95,11 +95,22 @@ void ddm::fitting()
         gsl_multifit_fdfsolver_set(solver, &fitfun, &para.vector);
         int iter=0;
         //gsl_vector* g=gsl_vector_alloc(numOfPara);
+//        for (int iterpara=0; iterpara<numOfPara; ++iterpara)
+//        {
+//            cout << gsl_vector_get(solver->x, iterpara) << endl;
+//        }
+//        cout << endl;
+        
         do
         {
             gsl_multifit_fdfsolver_iterate(solver);		//Iterate one step.
-            status[iterq] = norm0_rel_test(solver->dx, solver->x, 1e-10, 1e-10);		//Test the exiting condition
+            status[iterq] = norm0_rel_test(solver->dx, solver->x, 1e-10, 1e-10);  //Test the exiting condition
             
+//            for (int iterpara=0; iterpara<numOfPara; ++iterpara)
+//            {
+//                cout << gsl_vector_get(solver->x, iterpara) << endl;
+//            }
+//            cout << endl;
             //gsl_multifit_gradient(solver->J,solver->f, g);
             //status[iterq-1]=gsl_multifit_test_gradient(g, 1e-5);
             //			status[iterq - 1] = covar_rel_test(solver->J, solver->x, 1e-4);
@@ -124,7 +135,7 @@ void ddm::fitting()
         gsl_multifit_fdfsolver_free(solver);
         
         progress+=1;
-        cout << "Fitted q=" << qabs[iterq] << " at iter=" << iter << ", " << 100.0*progress / qsize << "% completed from core No." << omp_get_thread_num() << ", "<< gsl_strerror(status[iterq]) << "." << endl;
+        cout << "Fitted q=" << qabs[iterq] << " at iter=" << iter << ", " << 100.0*progress / qsize << "% completed from thread No." << omp_get_thread_num() << ", "<< gsl_strerror(status[iterq]) << "." << endl;
         for (int iterpara=0; iterpara<numOfPara; ++iterpara)
         {
             cout << gsl_matrix_get(fittedPara, iterq, iterpara) << endl;

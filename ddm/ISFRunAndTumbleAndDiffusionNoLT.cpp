@@ -20,6 +20,7 @@ cpx dlambdaISFs(cpx s, long double* para);
 
 cpx ISFs(cpx s, long double* para)
 {
+    //Temperary variables used for acceleration.
     long double qv=para[0];
     long double lambda=para[1];
     long double Dq2=para[2];
@@ -31,6 +32,7 @@ cpx ISFs(cpx s, long double* para)
 
 cpx dvISFs(cpx s, long double* para)
 {
+    //Temperary variables used for acceleration.
     long double qv=para[0];
     long double lambda=para[1];
     long double Dq2=para[2];
@@ -44,6 +46,7 @@ cpx dvISFs(cpx s, long double* para)
 
 cpx dDISFs(cpx s, long double* para)
 {
+    //Temperary variables used for acceleration.
     long double qv=para[0];
     long double lambda=para[1];
     long double Dq2=para[2];
@@ -57,6 +60,7 @@ cpx dDISFs(cpx s, long double* para)
 
 cpx dlambdaISFs(cpx s, long double* para)
 {
+    //Temperary variables used for acceleration.
     long double qv=para[0];
     long double lambda=para[1];
     long double Dq2=para[2];
@@ -85,7 +89,8 @@ int ISFfun(const gsl_vector* para, void* sdata, gsl_vector* y)
     long double B=gsl_vector_get(para, 5);
     
     //cout << lambda << endl;
-
+    
+    //Temperary variables used for acceleration.
     long double kv0=q*v0;
     long double Dq2=D*q*q;
     long double Dq2lambda=Dq2+lambda;
@@ -93,35 +98,39 @@ int ISFfun(const gsl_vector* para, void* sdata, gsl_vector* y)
     
     long double qvlambda=kv0/lambda;
     
+    //Initialization of numerical inverse Laplace transformation solver
     int tid=omp_get_thread_num();
     long double& csigma=ILT->sigma[tid];
     long double& cb=ILT->b[tid];
     long double& cb2=ILT->b2[tid];
     long double& csigmab=ILT->sigmab[tid];
     
+    //Set sigma and b in iLT solver
     if (qvlambda>(pi/2))
     {
-        csigma=-Dq2lambda+0.01l;
-        cb=sqrt(kv0*kv0+0.01l*0.01l);
+        csigma=-Dq2lambda+1.0l;
+        cb=sqrt(kv0*kv0+1.0l*1.0l);
     }
     else
     {
         long double alpha21=kv0/tan(qvlambda);
         long double alpha1=-Dq2lambda;
         long double alpha2=alpha21+alpha1;
-        csigma=alpha2+0.01l;
-        cb=sqrt(csigma*csigma-((csigma-alpha1)*alpha2*alpha2-0.01l*(alpha1*alpha1+kv0*kv0))/alpha21);
+        csigma=alpha2+0.1l;
+        cb=sqrt(csigma*csigma-((csigma-alpha1)*alpha2*alpha2-0.1l*(alpha1*alpha1+kv0*kv0))/alpha21);
     }
+    //Temperary variables used for acceleration.
     cb2=cb*2;
     csigmab=csigma-cb;
     
+    //Calculate the coefficients of Laguerre polynomial series expansion.
     ILT->NiLT_weeks(ISFs, paraISF);
     
     for (int iter = 0; iter<num_fit; ++iter)
     {
         long double t=tau[iter];
+        //Evaluate ISF at time t, the coefficients has been calculated.
         double rtd=ILT->clenshaw(t);
-        //Temperary variables used for acceleration.
         double yi=log(A*(1.0-(1.0-alpha)*exp(-Dq2*t)-alpha*rtd)+B);
         
         
@@ -172,6 +181,7 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
     long double A=gsl_vector_get(para, 4);
     long double B=gsl_vector_get(para, 5);
     
+    //Temperary variables used for acceleration.
     long double kv0=q*v0;
     long double Dq2=D*q*q;
     long double Dq2lambda=Dq2+lambda;
@@ -193,16 +203,16 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
     
     if (qvlambda>(pi/2))
     {
-        csigma=-Dq2lambda+0.01l;
-        cb=sqrt(kv0*kv0+0.01l*0.01l);
+        csigma=-Dq2lambda+1.0l;
+        cb=sqrt(kv0*kv0+1.0l*1.0l);
     }
     else
     {
         long double alpha21=kv0/tan(qvlambda);
         long double alpha1=-Dq2lambda;
         long double alpha2=alpha21+alpha1;
-        csigma=alpha2+0.01l;
-        cb=sqrt(csigma*csigma-((csigma-alpha1)*alpha2*alpha2-0.01l*(alpha1*alpha1+kv0*kv0))/alpha21);
+        csigma=alpha2+0.1l;
+        cb=sqrt(csigma*csigma-((csigma-alpha1)*alpha2*alpha2-0.1l*(alpha1*alpha1+kv0*kv0))/alpha21);
     }
     cb2=cb*2;
     csigmab=csigma-cb;
@@ -237,15 +247,16 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
         double dlambdartd=dlambdaILT->clenshaw(t);
         double dDrtd=dDILT->clenshaw(t);
         
-        double dA=(1.0-(1.0-alpha)*exp(-Dq2*t)-alpha*rtd);
+        double expterm=exp(-Dq2*t);
+        double dA=(1.0-(1.0-alpha)*expterm-alpha*rtd);
         double yi=A*dA+B;
         
-        gsl_matrix_set(J, iter, 0, A*(exp(-Dq2*t)-rtd)/yi );
+        gsl_matrix_set(J, iter, 0, A*(expterm-rtd)/yi );
         gsl_matrix_set(J, iter, 1, -A*alpha*dvrtd/yi );
         
         gsl_matrix_set(J, iter, 2, -A*alpha*dlambdartd/yi );
         
-        gsl_matrix_set(J, iter, 3, A*((alpha-1.0)*exp(-Dq2*t)*q*q*t-alpha*dDrtd)/yi );
+        gsl_matrix_set(J, iter, 3, A*((1.0-alpha)*expterm*q*q*t-alpha*dDrtd)/yi );
         
         gsl_matrix_set(J, iter, 4, dA/yi );
         gsl_matrix_set(J, iter, 5, 1.0/yi );

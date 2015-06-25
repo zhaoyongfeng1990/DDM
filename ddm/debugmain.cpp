@@ -29,10 +29,10 @@ int main()
     NILT dvILT;
     NILT dlambdaILT;
     NILT dDILT;
-    long double q=3.00l;
-    long double v0=20.0l;//gsl_vector_get(para, 1);
-    long double lambda=100.0l;
-    long double D=0.2l;//gsl_vector_get(para, 3);\
+    long double q=0.02l;
+    long double v0=11.2917l;//gsl_vector_get(para, 1);
+    long double lambda=0.829098l;
+    long double D=9.0517l;//gsl_vector_get(para, 3);\
 
     long double kv0=q*v0;
     long double Dq2=D*q*q;
@@ -40,25 +40,47 @@ int main()
     long double qv2=kv0*kv0;
     long double paraISF[6]={kv0, lambda, Dq2, q, Dq2lambda, qv2};
     
-    int tid=omp_get_thread_num();
-    
     long double qvlambda=kv0/lambda;
     long double incre=0.01l;
     
+    int tid=omp_get_thread_num();
+    long double& csigma=ILT.sigma[tid];
+    long double& cb=ILT.b[tid];
+    long double& cb2=ILT.b2[tid];
+    long double& csigmab=ILT.sigmab[tid];
+    
     if (qvlambda>(pi/2))
     {
-        ILT.weideman(-Dq2lambda, kv0, incre);
-        dvILT.weideman(-Dq2lambda, kv0, incre);
-        dlambdaILT.weideman(-Dq2lambda, kv0, incre);
-        dDILT.weideman(-Dq2lambda, kv0, incre);
+        csigma=-Dq2lambda+1.0l;
+        cb=sqrt(kv0*kv0+1.0l*1.0l);
     }
     else
     {
-        ILT.weideman(-Dq2lambda, kv0, -Dq2lambda+kv0/tan(qvlambda),0, incre);
-        dvILT.weideman(-Dq2lambda, kv0, -Dq2lambda+kv0/tan(qvlambda),0, incre);
-        dlambdaILT.weideman(-Dq2lambda, -Dq2lambda+kv0/tan(qvlambda),0, kv0, incre);
-        dDILT.weideman(-Dq2lambda, kv0, -Dq2lambda+kv0/tan(qvlambda),0, incre);
+        long double alpha21=kv0/tan(qvlambda);
+        long double alpha1=-Dq2lambda;
+        long double alpha2=alpha21+alpha1;
+        csigma=alpha2+0.001l;
+        cb=sqrt(csigma*csigma-((csigma-alpha1)*alpha2*alpha2-0.001l*(alpha1*alpha1+kv0*kv0))/alpha21);
     }
+    cb2=cb*2;
+    csigmab=csigma-cb;
+    
+    dvILT.sigma[tid]=csigma;
+    dlambdaILT.sigma[tid]=csigma;
+    dDILT.sigma[tid]=csigma;
+    
+    dvILT.b[tid]=cb;
+    dlambdaILT.b[tid]=cb;
+    dDILT.b[tid]=cb;
+    
+    dvILT.b2[tid]=cb2;
+    dlambdaILT.b2[tid]=cb2;
+    dDILT.b2[tid]=cb2;
+    
+    dvILT.sigmab[tid]=csigmab;
+    dlambdaILT.sigmab[tid]=csigmab;
+    dDILT.sigmab[tid]=csigmab;
+
 //    cb2=cb*2;
 //    csigmab=csigma-cb;
     
