@@ -1,7 +1,7 @@
 CXX = g++-5
 CXXFLAGS = -fopenmp -O3 -std=c++11 -DHAVE_INLINE
-Objects = ISFRTDWithP.o ISFRunAndTumble2D.o ISFRunAndTumble3D.o ISFRunAndTumbleAndDiffusion.o ISFRunAndTumbleAndDiffusionNoLT.o ISFSwimmer.o ISFSwimmerSimp.o LaplaceTrans.o aveQ.o averSqrModTau.o clean.o ddm.o fitting.o loadFiles.o main.o print.o shiftImage.o NILT.o
-debugObjects = debugmain.o ISFRTDWithP.o ISFRunAndTumble2D.o ISFRunAndTumble3D.o ISFRunAndTumbleAndDiffusion.o ISFRunAndTumbleAndDiffusionNoLT.o ISFSwimmer.o ISFSwimmerSimp.o LaplaceTrans.o aveQ.o averSqrModTau.o clean.o ddm.o fitting.o loadFiles.o print.o shiftImage.o NILT.o
+Objects = ISFRTDWithP.o ISFRunAndTumble2D.o ISFRunAndTumble3D.o ISFRunAndTumbleAndDiffusion.o ISFRunAndTumbleAndDiffusionNoLT.o ISFSwimmer.o ISFSwimmerSimp.o LaplaceTrans.o aveQ.o averSqrModTau.o clean.o ddm.o fitting.o loadFiles.o main.o print.o shiftImage.o NILT.o NILT_RTDP.o ISFRTDP_NoLT.o
+debugObjects = debugmain.o ISFRTDWithP.o ISFRunAndTumble2D.o ISFRunAndTumble3D.o ISFRunAndTumbleAndDiffusion.o ISFRunAndTumbleAndDiffusionNoLT.o ISFSwimmer.o ISFSwimmerSimp.o LaplaceTrans.o aveQ.o averSqrModTau.o clean.o ddm.o fitting.o loadFiles.o print.o shiftImage.o NILT.o NILT_RTDP.o ISFRTDP_NoLT.o
 LFLAGS = -lm -lgsl -lgslcblas -O3 -lfftw3 -lfftw3l -fopenmp
 
 
@@ -14,7 +14,7 @@ debug : $(debugObjects)
 
 $(Objects) : ddm.h parameters.h
 $(debugObjects) : ddm.h parameters.h
-debugmain.o NILT.o ISFRunAndTumbleAndDiffusionNoLT.o : NILT.h
+debugmain.o NILT.o NILT_RTDP.o ISFRunAndTumbleAndDiffusionNoLT.o ISFRTDP_NoLT.o : NILT.h
 
 .PHONY : clean
 clean :

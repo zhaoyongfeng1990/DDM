@@ -18,6 +18,14 @@ NILT::NILT()
         fftwOut[iter]=fftwl_alloc_complex(M);
         integration[iter]=fftwl_plan_dft_1d(M, fftwIn[iter], fftwOut[iter], FFTW_FORWARD, FFTW_MEASURE);
         CoeA[iter].resize(M);
+        
+#ifdef ISFRTDPNoLT
+        workspace[iter]=gsl_integration_workspace_alloc(10000);
+        pRe[iter].params=&cfun[iter];
+        pIm[iter].params=&cfun[iter];
+        pRe[iter].function=Re;
+        pIm[iter].function=Im;
+#endif
     }
 }
 
@@ -29,6 +37,10 @@ NILT::~NILT()
         fftwl_free(fftwOut[iter]);
         fftwl_destroy_plan(integration[iter]);
         CoeA[iter].clear();
+        
+#ifdef ISFRTDPNoLT
+        gsl_integration_workspace_free(workspace[iter]);
+#endif
     }
     delete [] CoeA;
 }

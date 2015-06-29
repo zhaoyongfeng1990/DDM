@@ -52,8 +52,12 @@ void ddm::fitting()
     NILT NILT1, NILT2, NILT3, NILT4;
 #endif
     
+#ifdef ISFRTDPNoLT
+    NILT NILT1, NILT2, NILT3, NILT4, NILT5;
+#endif
+    
 #pragma omp parallel for
-    for (int iterq=1; iterq<qsize; ++iterq)
+    for (int iterq=13; iterq<qsize; ++iterq)
     {
         gsl_multifit_function_fdf fitfun;		//Function point.
         gsl_vector_view dataAry=gsl_matrix_row(datafit, iterq);
@@ -72,6 +76,15 @@ void ddm::fitting()
         sdata.dDISFILT=&NILT3;
         sdata.dlambdaISFILT=&NILT4;
 #endif
+        
+#ifdef ISFRTDPNoLT
+        sdata.ISFILT=&NILT1;
+        sdata.dvbarISFILT=&NILT2;
+        sdata.dZISFILT=&NILT3;
+        sdata.dDISFILT=&NILT4;
+        sdata.dlambdaISFILT=&NILT5;
+#endif
+        
         //API
         fitfun.f=&ISFfun;
 #ifdef NoJacobian

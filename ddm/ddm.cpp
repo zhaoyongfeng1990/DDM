@@ -74,6 +74,13 @@ ddm::ddm() : imageSeqk(numOfSeq), imagekDiff(numOfDiff), qabs()
     inipara[3]=DGuess;
 #endif
     
+#ifdef ISFRTDPNoLT
+    inipara[0]=alphaGuess;
+    inipara[1]=vbarGuess;
+    inipara[2]=ZGuess;
+    inipara[3]=lambdaGuess;
+    inipara[4]=DGuess;
+#endif
     //aveVec = gsl_vector_alloc(dim);
     //gsl_vector_set_all(aveVec, 1.0 / dim);			//Vecter used in calculating average. I hope BLAS can help speed up the average.
     

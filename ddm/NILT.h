@@ -13,12 +13,29 @@
 #include <fftw3.h>
 #include <vector>
 #include <complex>
+
 using namespace std;
 
 const int M=1024;
 //The number of points in evaluating numerical integration in Weeks method. This also gives the number of terms in series expansion. But not all the terms in expansion is necessary.
 
 typedef complex<long double> cpx;
+
+#ifdef IfComplexIntegration
+
+#include <gsl/gsl_integration.h>
+
+struct warper
+{
+    long double* parameters;
+    cpx z;
+    cpx (*fun)(cpx z, long double* para, long double x);
+};
+
+const double epsabs=1e-12;
+const double epsrel=1e-12;
+const int workspaceSize=10000;
+#endif
 
 //Class for numerical inverse Laplace transformation.
 class NILT
@@ -52,6 +69,22 @@ public:
     //b2 is b*2
     long double sigmab[OMP_NUM_THREADS];
     //sigmab is sigma-b
+    
+#ifdef IfComplexIntegration
+    void NiLT_weeks(long double* para);
+    cpx invfun(cpx x, long double* para);
+    
+    gsl_function pRe[OMP_NUM_THREADS];
+    gsl_function pIm[OMP_NUM_THREADS];
+    
+    gsl_integration_workspace* workspace[OMP_NUM_THREADS];
+    warper cfun[OMP_NUM_THREADS];
+#endif
 };
+
+#ifdef ISFRTDPNoLT
+double Re(double x, void* params);
+double Im(double x, void* params);
+#endif
 
 #endif

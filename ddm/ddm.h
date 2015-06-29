@@ -19,6 +19,10 @@
 #include "NILT.h"
 #endif
 
+#ifdef ISFRTDPNoLT
+#include "NILT.h"
+#endif
+
 class ddm
 {
 public:
@@ -80,12 +84,22 @@ typedef struct
     double* data;
     double* tau;
     double q;
+    
 #ifdef ISFRunAndTumbleAndDiffusionNoLT
     NILT* ISFILT;
     NILT* dvISFILT;
     NILT* dDISFILT;
     NILT* dlambdaISFILT;
 #endif
+    
+#ifdef ISFRTDPNoLT
+    NILT* ISFILT;
+    NILT* dvbarISFILT;
+    NILT* dZISFILT;
+    NILT* dDISFILT;
+    NILT* dlambdaISFILT;
+#endif
+    
 } dataStruct;
 
 //ISF and its Jacobian. Used in GSL fitting algorithm.

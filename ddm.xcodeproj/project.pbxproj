@@ -28,6 +28,7 @@
 		A2A69D6B1B38682500BE49E0 /* NILT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2A69D6A1B38682500BE49E0 /* NILT.cpp */; };
 		A2AD626A1A073D350057D8C8 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2AD62691A073D350057D8C8 /* main.cpp */; };
 		A2B28CAE1B3D8E330000AC77 /* ISFRTDP_NoLT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2B28CAC1B3D8E330000AC77 /* ISFRTDP_NoLT.cpp */; };
+		A2B28CB01B419A7F0000AC77 /* NILT_RTDP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2B28CAF1B419A7F0000AC77 /* NILT_RTDP.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -68,6 +69,7 @@
 		A2AD62691A073D350057D8C8 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		A2AD627A1A0742490057D8C8 /* parameters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = parameters.h; sourceTree = "<group>"; };
 		A2B28CAC1B3D8E330000AC77 /* ISFRTDP_NoLT.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ISFRTDP_NoLT.cpp; sourceTree = "<group>"; };
+		A2B28CAF1B419A7F0000AC77 /* NILT_RTDP.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NILT_RTDP.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -123,6 +125,7 @@
 				A2A69D671B3845CC00BE49E0 /* clean.cpp */,
 				A2A69D691B3867EA00BE49E0 /* NILT.h */,
 				A2A69D6A1B38682500BE49E0 /* NILT.cpp */,
+				A2B28CAF1B419A7F0000AC77 /* NILT_RTDP.cpp */,
 				A2B28CAC1B3D8E330000AC77 /* ISFRTDP_NoLT.cpp */,
 			);
 			path = ddm;
@@ -186,6 +189,7 @@
 			files = (
 				A2B28CAE1B3D8E330000AC77 /* ISFRTDP_NoLT.cpp in Sources */,
 				A26E72F71B21B9F100CC4075 /* ISFRTDWithP.cpp in Sources */,
+				A2B28CB01B419A7F0000AC77 /* NILT_RTDP.cpp in Sources */,
 				A26E72F11B21B77E00CC4075 /* ISFRunAndTumble3D.cpp in Sources */,
 				A26E72F51B21B7F600CC4075 /* makefile in Sources */,
 				A2AD626A1A073D350057D8C8 /* main.cpp in Sources */,

@@ -164,10 +164,32 @@ int ISFfun(const gsl_vector* para, void* sdata, gsl_vector* y)
     double dq2=D*q*q;
     IntPara[3]=q;
     double Z1=Z+1;
-    if (Z1<0)
-        return 1e6*Z1*Z1;
+    
+    if (Z<0)
+    {
+        for (int iter = 0; iter<num_fit; ++iter)
+        {
+            gsl_vector_set(y, iter, 1e5*Z*Z - dataAry[iter]);
+        }
+        return GSL_SUCCESS;
+    }
     if (vbar<0)
-        return 1e6*vbar*vbar;
+    {
+        for (int iter = 0; iter<num_fit; ++iter)
+        {
+            gsl_vector_set(y, iter, 1e5*vbar*vbar - dataAry[iter]);
+        }
+        return GSL_SUCCESS;
+    }
+    if (lambda<-dq2)
+    {
+        for (int iter = 0; iter<num_fit; ++iter)
+        {
+            gsl_vector_set(y, iter, 1e5*lambda*lambda - dataAry[iter]);
+        }
+        return GSL_SUCCESS;
+    }
+    
     IntPara[5]=Z1/vbar;
     
     IntPara[6]=Z1*log(IntPara[5])-gsl_sf_lngamma(Z1);
@@ -258,10 +280,49 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
     double dq2=D*q*q;
     IntPara[3]=q;
     double Z1=Z+1;
-    if (Z1<0)
-        return 2e6*Z;
+    if (Z<0)
+    {
+        for (int iter=0; iter<num_fit; ++iter)
+        {
+            gsl_matrix_set(J, iter, 0, 0);
+            gsl_matrix_set(J, iter, 1, 0);
+            gsl_matrix_set(J, iter, 2, 2e5 *Z);
+            gsl_matrix_set(J, iter, 3, 0);
+            gsl_matrix_set(J, iter, 4, 0);
+            gsl_matrix_set(J, iter, 5, 0);
+            gsl_matrix_set(J, iter, 6, 0);
+        }
+        return GSL_SUCCESS;
+    }
     if (vbar<0)
-        return 2e6*vbar;
+    {
+        for (int iter=0; iter<num_fit; ++iter)
+        {
+            gsl_matrix_set(J, iter, 0, 0);
+            gsl_matrix_set(J, iter, 1, 2e5 *vbar);
+            gsl_matrix_set(J, iter, 2, 0);
+            gsl_matrix_set(J, iter, 3, 0);
+            gsl_matrix_set(J, iter, 4, 0);
+            gsl_matrix_set(J, iter, 5, 0);
+            gsl_matrix_set(J, iter, 6, 0);
+        }
+        return GSL_SUCCESS;
+    }
+    if (lambda<-dq2)
+    {
+        for (int iter=0; iter<num_fit; ++iter)
+        {
+            gsl_matrix_set(J, iter, 0, 0);
+            gsl_matrix_set(J, iter, 1, 0);
+            gsl_matrix_set(J, iter, 2, 0);
+            gsl_matrix_set(J, iter, 3, 2e5*lambda);
+            gsl_matrix_set(J, iter, 4, 0);
+            gsl_matrix_set(J, iter, 5, 0);
+            gsl_matrix_set(J, iter, 6, 0);
+        }
+        return GSL_SUCCESS;
+    }
+    
     IntPara[5]=Z1/vbar;
     
     IntPara[6]=Z1*log(IntPara[5])-gsl_sf_lngamma(Z1);
