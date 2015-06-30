@@ -26,14 +26,14 @@
 //#define ISFRUNANDTUMBLE_3D
 //#define ISFRunAndTumbleAndDiffusion
 //#define ISFRunAndTumbleAndDiffusionAndPv
-//#define ISFRunAndTumbleAndDiffusionNoLT
-#define ISFRTDPNoLT
+#define ISFRunAndTumbleAndDiffusionNoLT
+//#define ISFRTDPNoLT
 
 #include <cmath>
 
 using namespace std;
 
-const int OMP_NUM_THREADS=8;
+const int OMP_NUM_THREADS=6;
 
 const long double pi = 3.141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342117068l;
 const double sqrtpi = sqrt(pi); //Constant for convenience
@@ -43,8 +43,8 @@ const int dimy = 512;    //Size of the image
 const int dimx = 512;
 const int dimkx = dimx / 2 + 1;   //Number of wavenumber
 const int dimky = dimy / 2 + 1;   //Number of wavenumber
-const int numOfSeq = 4501;  //Number of total time points in experiment
-const int numOfDiff = 4500; //Number of tau
+const int numOfSeq = 4500;  //Number of total time points in experiment
+const int numOfDiff = 4000; //Number of tau
 const int numOfk = dimy*dimkx;    //Number of data points after FFT
 const int num_fit = numOfDiff;  //Number of data points used in fitting.
 
@@ -61,17 +61,18 @@ const double smin=0.01;
 
 const int maxIter=1000;    //Maximum iteration number in fitting
 
-const double alphaGuess=0.8;
-const double DGuess=0.4;//0.2;
+const double alphaGuess=0.5;
+const double DGuess=0.3;//0.2;
 const double vbarGuess=13;
 const double lambdaGuess=1;
-const double ZGuess=15;
+const double ZGuess=5;
 
 //const int winDim = 5;   //Size of searching window. Used in aligning images.
 
 //Number of model parameters
 #ifdef ISFSWIMMER
 const int numOfPara = 6;
+//#define NoJacobian
 #endif
 
 #ifdef ISFSWIMMERSIMPLE

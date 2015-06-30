@@ -81,10 +81,10 @@ int ISFfun(const gsl_vector* para, void* sdata, gsl_vector* y)
     NILT* ILT=((dataStruct *)sdata)->ISFILT;
     
     //Get the parameters.
-    long double alpha=0.7940;//gsl_vector_get(para, 0);
-    long double v0=13.2660;//gsl_vector_get(para, 1);
+    long double alpha=gsl_vector_get(para, 0);
+    long double v0=gsl_vector_get(para, 1);
     long double lambda=gsl_vector_get(para, 2);
-    long double D=0.3841;//gsl_vector_get(para, 3);
+    long double D=gsl_vector_get(para, 3);
     long double A=gsl_vector_get(para, 4);
     long double B=gsl_vector_get(para, 5);
     
@@ -174,10 +174,10 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
     double* tau=((dataStruct *)sdata)->tau;
     long double q=((dataStruct *)sdata)->q;
     
-    long double alpha=0.7940;//gsl_vector_get(para, 0);
-    long double v0=13.2660;//gsl_vector_get(para, 1);
+    long double alpha=gsl_vector_get(para, 0);
+    long double v0=gsl_vector_get(para, 1);
     long double lambda=gsl_vector_get(para, 2);
-    long double D=0.3841;//gsl_vector_get(para, 3);
+    long double D=gsl_vector_get(para, 3);
     long double A=gsl_vector_get(para, 4);
     long double B=gsl_vector_get(para, 5);
     
@@ -251,12 +251,12 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
         double dA=(1.0-(1.0-alpha)*expterm-alpha*rtd);
         double yi=A*dA+B;
         
-        gsl_matrix_set(J, iter, 0, /*A*(expterm-rtd)/yi*/0 );
-        gsl_matrix_set(J, iter, 1, /*-A*alpha*dvrtd/yi*/0 );
+        gsl_matrix_set(J, iter, 0, A*(expterm-rtd)/yi );
+        gsl_matrix_set(J, iter, 1, -A*alpha*dvrtd/yi );
         
         gsl_matrix_set(J, iter, 2, -A*alpha*dlambdartd/yi );
         
-        gsl_matrix_set(J, iter, 3, /*A*((1.0-alpha)*expterm*q*q*t-alpha*dDrtd)/yi*/0 );
+        gsl_matrix_set(J, iter, 3, A*((1.0-alpha)*expterm*q*q*t-alpha*dDrtd)/yi );
         
         gsl_matrix_set(J, iter, 4, dA/yi );
         gsl_matrix_set(J, iter, 5, 1.0/yi );
