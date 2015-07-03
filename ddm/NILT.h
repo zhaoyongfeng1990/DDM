@@ -32,9 +32,9 @@ struct warper
     cpx (*fun)(cpx z, long double* para, long double x);
 };
 
-const double epsabs=1e-12;
-const double epsrel=1e-12;
-const int workspaceSize=10000;
+const double epsabs=1e-10;
+const double epsrel=1e-10;
+const int workspaceSize=100000;
 #endif
 
 //Class for numerical inverse Laplace transformation.
@@ -77,7 +77,9 @@ public:
     gsl_function pRe[OMP_NUM_THREADS];
     gsl_function pIm[OMP_NUM_THREADS];
     
-    gsl_integration_workspace* workspace[OMP_NUM_THREADS];
+    //gsl_integration_workspace* workspace[OMP_NUM_THREADS];
+    gsl_integration_cquad_workspace* workspace[OMP_NUM_THREADS];
+    
     warper cfun[OMP_NUM_THREADS];
 #endif
 };

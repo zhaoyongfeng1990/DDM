@@ -154,7 +154,7 @@ int ISFfun(const gsl_vector* para, void* sdata, gsl_vector* y)
         }
         return GSL_SUCCESS;
     }
-    if (lambda<-Dq2)
+    if (lambda<0)
     {
         for (int iter = 0; iter<num_fit; ++iter)
         {
@@ -163,13 +163,14 @@ int ISFfun(const gsl_vector* para, void* sdata, gsl_vector* y)
         return GSL_SUCCESS;
     }
     
-    //for (int iterpara=0; iterpara<numOfPara; ++iterpara)
-    //{
-    //    cout << gsl_vector_get(para, iterpara) << endl;
-    //}
+    //cout << q << endl;
+    for (int iterpara=0; iterpara<numOfPara; ++iterpara)
+    {
+        //cout << gsl_vector_get(para, iterpara) << endl;
+    }
     //cout << endl;
     
-    //cout << lambda << endl;
+    ////cout << lambda << endl;
     
     //Temperary variables used for acceleration.
     long double Dq2lambda=Dq2+lambda;
@@ -197,7 +198,10 @@ int ISFfun(const gsl_vector* para, void* sdata, gsl_vector* y)
     csigmab=csigma-cb;
     
     //Calculate the coefficients of Laguerre polynomial series expansion.
+    
+    //cout << "isf" << endl;
     ILT->NiLT_weeks(paraISF);
+    //cout << "ok" << endl;
     
     for (int iter = 0; iter<num_fit; ++iter)
     {
@@ -287,7 +291,7 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
         }
         return GSL_SUCCESS;
     }
-    if (lambda<-Dq2)
+    if (lambda<0)
     {
         for (int iter=0; iter<num_fit; ++iter)
         {
@@ -301,6 +305,13 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
         }
         return GSL_SUCCESS;
     }
+    
+    //cout << q << endl;
+    for (int iterpara=0; iterpara<numOfPara; ++iterpara)
+    {
+        //cout << gsl_vector_get(para, iterpara) << endl;
+    }
+    //cout << endl;
     
     //Temperary variables used for acceleration.
     long double Dq2lambda=Dq2+lambda;
@@ -356,11 +367,17 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
     dlambdaILT->sigmab[tid]=csigmab;
     dDILT->sigmab[tid]=csigmab;
     
+    //cout << "isf" << endl;
     ILT->NiLT_weeks(paraISF);
+    //cout << "dvisf" << endl;
     dvbarILT->NiLT_weeks(paraISF);
+    //cout << "dzisf" << endl;
     dZILT->NiLT_weeks(paraISF);
+    //cout << "ddisf" << endl;
     dDILT->NiLT_weeks(paraISF);
+    //cout << "dlisf" << endl;
     dlambdaILT->NiLT_weeks(paraISF);
+    //cout << "ok" << endl;
     
     for (int iter=0; iter<num_fit; ++iter)
     {

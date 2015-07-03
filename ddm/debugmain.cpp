@@ -33,11 +33,11 @@ int main()
     NILT dZILT;
     NILT dlambdaILT;
     NILT dDILT;
-    long double q=0.01l;
-    long double vbar=13.0l;//gsl_vector_get(para, 1);
-    long double Z=15.0l;
-    long double lambda=1.0l;
-    long double D=0.4l;//gsl_vector_get(para, 3);\
+    long double q=0.52l;
+    long double vbar=13.0541l;//gsl_vector_get(para, 1);
+    long double Z=380.255l;
+    long double lambda=1.07861l;
+    long double D=0.399742l;//gsl_vector_get(para, 3);\
     
     long double Dq2=D*q*q;
     long double Dq2lambda=Dq2+lambda;
@@ -87,10 +87,10 @@ int main()
     dlambdaILT.sigmab[tid]=csigmab;
     dDILT.sigmab[tid]=csigmab;
     
-    ILT.NiLT_weeks(paraISF);
-    dvbarILT.NiLT_weeks(paraISF);
-    dZILT.NiLT_weeks(paraISF);
-    dDILT.NiLT_weeks(paraISF);
+    //ILT.NiLT_weeks(paraISF);
+    //dvbarILT.NiLT_weeks(paraISF);
+    //dZILT.NiLT_weeks(paraISF);
+    //dDILT.NiLT_weeks(paraISF);
     dlambdaILT.NiLT_weeks(paraISF);
 
 //    cb2=cb*2;

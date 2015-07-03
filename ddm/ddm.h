@@ -71,10 +71,10 @@ public:
     double s[num_fit];
     
     double inipara[numOfPara];
+    gsl_matrix* datafit;
     gsl_matrix* fittedPara;	//To store the fitting result and error.
     gsl_matrix* fitErr;
     int* status;		//Record the status of fitting.
-    gsl_matrix* datafit;
     //gsl_vector* aveVec;
 };
 

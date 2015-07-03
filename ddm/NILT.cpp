@@ -20,7 +20,8 @@ NILT::NILT()
         CoeA[iter].resize(M);
         
 #ifdef ISFRTDPNoLT
-        workspace[iter]=gsl_integration_workspace_alloc(10000);
+        //workspace[iter]=gsl_integration_workspace_alloc(workspaceSize);
+        workspace[iter]=gsl_integration_cquad_workspace_alloc(workspaceSize);
         pRe[iter].params=&cfun[iter];
         pIm[iter].params=&cfun[iter];
         pRe[iter].function=Re;
@@ -39,7 +40,8 @@ NILT::~NILT()
         CoeA[iter].clear();
         
 #ifdef ISFRTDPNoLT
-        gsl_integration_workspace_free(workspace[iter]);
+        //gsl_integration_workspace_free(workspace[iter]);
+        gsl_integration_cquad_workspace_free(workspace[iter]);
 #endif
     }
     delete [] CoeA;
@@ -52,9 +54,9 @@ void NILT::NiLT_weeks(cpx (*fun)(cpx, long double*), long double* para)
     fftwl_complex* cfftwOut=fftwOut[tid];
     fftwl_plan& cPlan=integration[tid];
     vector<long double>& cCoeA=CoeA[tid];
-    long double& csigma=sigma[tid];
-    long double& cb=b[tid];
-    long double& cb2=b2[tid];
+    long double csigma=sigma[tid];
+    long double cb=b[tid];
+    long double cb2=b2[tid];
     
     for (int iter=0; iter<M; ++iter)
     {
