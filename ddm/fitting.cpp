@@ -57,7 +57,7 @@ void ddm::fitting()
 #endif
     
 #pragma omp parallel for
-    for (int iterq=1; iterq<qsize; ++iterq)
+    for (int iterq=0; iterq<qsize; ++iterq)
     {
         gsl_multifit_function_fdf fitfun;		//Function point.
         gsl_vector_view dataAry=gsl_matrix_row(datafit, iterq);
