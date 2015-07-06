@@ -35,7 +35,7 @@ int main()
     NILT dDILT;
     long double q=0.52l;
     long double vbar=13.0541l;//gsl_vector_get(para, 1);
-    long double Z=380.255l;
+    long double Z=127;
     long double lambda=1.07861l;
     long double D=0.399742l;//gsl_vector_get(para, 3);\
     

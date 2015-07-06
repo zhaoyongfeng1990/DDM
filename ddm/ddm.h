@@ -39,8 +39,13 @@ public:
     
     void LaplaceTrans();
     
+#ifndef MultiQFit
     void fitting();
     void fitting_estRange();
+#else
+    void fitting_DoubQ();
+    void fitting_MultiQ();
+#endif
     
     void printG();
     void printGs();
@@ -82,8 +87,13 @@ typedef struct
 {
     double* data;
     double* tau;
+#ifndef MultiQFit
     double q;
     int num_fit;
+#else
+    double* q;
+    int* num_fit;
+#endif
     
 #ifdef ISFRunAndTumbleAndDiffusionNoLT
     NILT* ISFILT;
