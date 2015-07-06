@@ -165,12 +165,12 @@ int ISFfun(const gsl_vector* para, void* sdata, gsl_vector* y)
         return GSL_SUCCESS;
     }
     
-    //cout << q << endl;
-    for (int iterpara=0; iterpara<numOfPara; ++iterpara)
-    {
-        //cout << gsl_vector_get(para, iterpara) << endl;
-    }
-    //cout << endl;
+//    cout << q << endl;
+//    for (int iterpara=0; iterpara<numOfPara; ++iterpara)
+//    {
+//        cout << gsl_vector_get(para, iterpara) << endl;
+//    }
+//    cout << endl;
     
     ////cout << lambda << endl;
     
@@ -310,12 +310,12 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
         return GSL_SUCCESS;
     }
     
-    //cout << q << endl;
-    for (int iterpara=0; iterpara<numOfPara; ++iterpara)
-    {
-        //cout << gsl_vector_get(para, iterpara) << endl;
-    }
-    //cout << endl;
+//    cout << q << endl;
+//    for (int iterpara=0; iterpara<numOfPara; ++iterpara)
+//    {
+//        cout << gsl_vector_get(para, iterpara) << endl;
+//    }
+//    cout << endl;
     
     //Temperary variables used for acceleration.
     long double Dq2lambda=Dq2+lambda;

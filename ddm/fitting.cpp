@@ -199,30 +199,30 @@ void ddm::fitting_estRange()
 #endif
     
 #pragma omp parallel for
-    for (int iterq=1; iterq<qsize; ++iterq)
+    for (int iterq=100; iterq<qsize; ++iterq)
     {
         double B = gsl_matrix_get(datag, iterq, 0);
         double A = gsl_matrix_get(datag, iterq, numOfDiff-1)-B;
-        iniTime=-1;
+        int ciniTime=-1;
         for (int itert=0; itert<numOfDiff; ++itert)
         {
             if (gsl_matrix_get(datag, iterq, itert)>B+0.5*A)
             {
-                iniTime=itert-1;
+                ciniTime=itert-1;
                 break;
             }
         }
-        if (iniTime==-1)
+        if (ciniTime==-1)
         {
             progress+=1;
             cout << "Skipping q=" << qabs[iterq] << ", " << 100.0*progress / qsize << "% completed from thread No." << omp_get_thread_num() << "." << endl;
             continue;
         }
-        finalTime=10*iniTime;
-        finalTime=(finalTime>numOfDiff) ? numOfDiff : finalTime;
-        num_fit=finalTime-iniTime;
+        int cfinalTime=10*ciniTime;
+        cfinalTime=(cfinalTime>numOfDiff) ? numOfDiff : cfinalTime;
+        int tempnum_fit=cfinalTime-ciniTime;
         double data[numOfDiff];
-        for (int iterf = 0; iterf < num_fit; ++iterf)
+        for (int iterf = 0; iterf < tempnum_fit; ++iterf)
         {
             data[iterf]=log(gsl_matrix_get(datag, iterq, iterf+iniTime));		//Fitting in log scale.
             tau[iterf]=(iterf+1+iniTime)*dt;
@@ -233,7 +233,7 @@ void ddm::fitting_estRange()
         sdata.data=data;
         sdata.tau=tau;
         sdata.q=qabs[iterq];
-        sdata.num_fit=num_fit;
+        sdata.num_fit=tempnum_fit;
         
 #ifdef ISFRunAndTumbleAndDiffusionNoLT
         sdata.ISFILT=&NILT1;
@@ -267,7 +267,7 @@ void ddm::fitting_estRange()
         fitfun.df=&dISFfun;
         fitfun.fdf=&fdISFfun;
 #endif
-        fitfun.n=num_fit;
+        fitfun.n=tempnum_fit;
         fitfun.p=numOfPara;
         fitfun.params=&sdata;
         
@@ -277,7 +277,7 @@ void ddm::fitting_estRange()
         
         //Initiallization of the solver
         gsl_vector_view para=gsl_vector_view_array(inipara, numOfPara);
-        gsl_multifit_fdfsolver* solver = gsl_multifit_fdfsolver_alloc(solverType, num_fit, numOfPara);
+        gsl_multifit_fdfsolver* solver = gsl_multifit_fdfsolver_alloc(solverType, tempnum_fit, numOfPara);
         gsl_multifit_fdfsolver_set(solver, &fitfun, &para.vector);
         int iter=0;
         //gsl_vector* g=gsl_vector_alloc(numOfPara);
