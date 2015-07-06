@@ -422,7 +422,7 @@ void ddm::fitting_DoubQ()
         for (int iterf = num_fit1; iterf < num_fit; ++iterf)
         {
             data[iterf]=log(gsl_matrix_get(datag, iterq*2, iterf-num_fit1+iniTime2));		//Fitting in log scale.
-            tau[iterf]=(iterf-num_fit1+1+iniTime2)*dt;
+            tempt[iterf]=(iterf-num_fit1+1+iniTime2)*dt;
         }
         
         gsl_multifit_function_fdf fitfun;		//Function point.
