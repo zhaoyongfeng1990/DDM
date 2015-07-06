@@ -408,6 +408,7 @@ void ddm::fitting_DoubQ()
         int num_fit1=finalTime1-iniTime1;
         int num_fit2=finalTime2-iniTime2;
         int tempnum_fit[2]={num_fit1, num_fit2};
+        num_fit=num_fit1+num_fit2;
         
         double data[numOfDiff*2];
         double tempq[2]={qabs[iterq],qabs[iterq*2]};
