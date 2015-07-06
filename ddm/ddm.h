@@ -83,6 +83,7 @@ typedef struct
     double* data;
     double* tau;
     double q;
+    int num_fit;
     
 #ifdef ISFRunAndTumbleAndDiffusionNoLT
     NILT* ISFILT;

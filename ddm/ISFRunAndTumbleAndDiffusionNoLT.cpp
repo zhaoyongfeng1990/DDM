@@ -79,6 +79,7 @@ int ISFfun(const gsl_vector* para, void* sdata, gsl_vector* y)
     double* tau=((dataStruct *)sdata)->tau;
     long double q=((dataStruct *)sdata)->q;
     NILT* ILT=((dataStruct *)sdata)->ISFILT;
+    int num_fit=((dataStruct *)sdata)->num_fit;
     
     //Get the parameters.
     long double alpha=gsl_vector_get(para, 0);
@@ -173,6 +174,7 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
 {
     double* tau=((dataStruct *)sdata)->tau;
     long double q=((dataStruct *)sdata)->q;
+    int num_fit=((dataStruct *)sdata)->num_fit;
     
     long double alpha=gsl_vector_get(para, 0);
     long double v0=gsl_vector_get(para, 1);

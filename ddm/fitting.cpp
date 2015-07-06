@@ -75,6 +75,7 @@ void ddm::fitting()
         sdata.tau=tau;
 #endif
         sdata.q=qabs[iterq];
+        sdata.num_fit=num_fit;
         
 #ifdef ISFRunAndTumbleAndDiffusionNoLT
         sdata.ISFILT=&NILT1;
@@ -247,6 +248,7 @@ void ddm::fitting_estRange()
         sdata.data=data;
         sdata.tau=tau;
         sdata.q=qabs[iterq];
+        sdata.num_fit=num_fit;
         
 #ifdef ISFRunAndTumbleAndDiffusionNoLT
         sdata.ISFILT=&NILT1;
