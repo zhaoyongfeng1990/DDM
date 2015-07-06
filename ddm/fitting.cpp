@@ -199,7 +199,7 @@ void ddm::fitting_estRange()
 #endif
     
 #pragma omp parallel for
-    for (int iterq=100; iterq<qsize; ++iterq)
+    for (int iterq=1; iterq<qsize; ++iterq)
     {
         double B = gsl_matrix_get(datag, iterq, 0);
         double A = gsl_matrix_get(datag, iterq, numOfDiff-1)-B;
@@ -408,7 +408,7 @@ void ddm::fitting_DoubQ()
         int num_fit1=finalTime1-iniTime1;
         int num_fit2=finalTime2-iniTime2;
         int tempnum_fit[2]={num_fit1, num_fit2};
-        num_fit=num_fit1+num_fit2;
+        int num_fitt=num_fit1+num_fit2;
         
         double data[numOfDiff*2];
         double tempq[2]={qabs[iterq],qabs[iterq*2]};
@@ -419,7 +419,7 @@ void ddm::fitting_DoubQ()
             data[iterf]=log(gsl_matrix_get(datag, iterq, iterf+iniTime1));		//Fitting in log scale.
             tempt[iterf]=(iterf+1+iniTime1)*dt;
         }
-        for (int iterf = num_fit1; iterf < num_fit; ++iterf)
+        for (int iterf = num_fit1; iterf < num_fitt; ++iterf)
         {
             data[iterf]=log(gsl_matrix_get(datag, iterq*2, iterf-num_fit1+iniTime2));		//Fitting in log scale.
             tempt[iterf]=(iterf-num_fit1+1+iniTime2)*dt;
@@ -464,7 +464,7 @@ void ddm::fitting_DoubQ()
         fitfun.df=&dISFfun;
         fitfun.fdf=&fdISFfun;
 #endif
-        fitfun.n=num_fit;
+        fitfun.n=num_fitt;
         fitfun.p=numOfPara+2;
         fitfun.params=&sdata;
         
@@ -477,7 +477,7 @@ void ddm::fitting_DoubQ()
         
         //Initiallization of the solver
         gsl_vector_view para=gsl_vector_view_array(tempinipara, numOfPara+2);
-        gsl_multifit_fdfsolver* solver = gsl_multifit_fdfsolver_alloc(solverType, num_fit, numOfPara+2);
+        gsl_multifit_fdfsolver* solver = gsl_multifit_fdfsolver_alloc(solverType, num_fitt, numOfPara+2);
         gsl_multifit_fdfsolver_set(solver, &fitfun, &para.vector);
         int iter=0;
         //gsl_vector* g=gsl_vector_alloc(numOfPara);
