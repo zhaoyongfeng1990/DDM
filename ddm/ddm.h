@@ -15,11 +15,7 @@
 #include <string>
 #include "parameters.h"
 
-#ifdef ISFRunAndTumbleAndDiffusionNoLT
-#include "NILT.h"
-#endif
-
-#ifdef ISFRTDPNoLT
+#ifdef NeedNumericalInverseLaplaceTransformation
 #include "NILT.h"
 #endif
 
@@ -44,6 +40,7 @@ public:
     void LaplaceTrans();
     
     void fitting();
+    void fitting_estRange();
     
     void printG();
     void printGs();
@@ -60,21 +57,23 @@ public:
     vector<gsl_matrix_complex*> imageSeqk;
     //Sequence for storing image after FFT.
     vector<gsl_matrix*> imagekDiff;
+    vector<double> qabs;	//Absolute value of q array.
     //For storing the time difference of the imageSeqk
     gsl_matrix* datag;      //g(q,t) matrix.
     gsl_matrix* ldatag;      //g(q,t) matrix.
-    
-    int qsize;				//Element number of q array.
-    vector<double> qabs;	//Absolute value of q array.
-    
-    double tau[num_fit];
-    double s[num_fit];
-    
-    double inipara[numOfPara];
     gsl_matrix* datafit;
     gsl_matrix* fittedPara;	//To store the fitting result and error.
     gsl_matrix* fitErr;
     int* status;		//Record the status of fitting.
+    double tau[num_fit];
+    double s[num_fit];
+    double inipara[numOfPara];
+    
+    int qsize;				//Element number of q array.
+    
+    int iniTime;
+    int finalTime;
+    int num_fit;
     //gsl_vector* aveVec;
 };
 
@@ -96,6 +95,14 @@ typedef struct
     NILT* ISFILT;
     NILT* dvbarISFILT;
     NILT* dZISFILT;
+    NILT* dDISFILT;
+    NILT* dlambdaISFILT;
+#endif
+    
+#ifdef ISFRTDPNoLT_sigma
+    NILT* ISFILT;
+    NILT* dvbarISFILT;
+    NILT* dsigmaISFILT;
     NILT* dDISFILT;
     NILT* dlambdaISFILT;
 #endif

@@ -84,7 +84,7 @@ public:
 #endif
 };
 
-#ifdef ISFRTDPNoLT
+#ifdef IfComplexIntegration
 double Re(double x, void* params);
 double Im(double x, void* params);
 #endif

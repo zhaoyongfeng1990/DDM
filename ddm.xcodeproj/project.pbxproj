@@ -16,6 +16,7 @@
 		A26E72F51B21B7F600CC4075 /* makefile in Sources */ = {isa = PBXBuildFile; fileRef = A26E72F41B21B7F600CC4075 /* makefile */; };
 		A26E72F71B21B9F100CC4075 /* ISFRTDWithP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A26E72F61B21B9F100CC4075 /* ISFRTDWithP.cpp */; };
 		A26E72F91B21F77100CC4075 /* debugmain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A26E72F81B21F77100CC4075 /* debugmain.cpp */; };
+		A275AEE71B4A8F3300EC7F86 /* ISFRTDP_NoLT_sigma.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A275AEE61B4A8F3300EC7F86 /* ISFRTDP_NoLT_sigma.cpp */; };
 		A2A69D571B3815C600BE49E0 /* ddm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2A69D561B3815C600BE49E0 /* ddm.cpp */; };
 		A2A69D591B3815DA00BE49E0 /* loadFiles.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2A69D581B3815DA00BE49E0 /* loadFiles.cpp */; };
 		A2A69D5C1B381E0500BE49E0 /* shiftImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2A69D5B1B381E0500BE49E0 /* shiftImage.cpp */; };
@@ -53,6 +54,7 @@
 		A26E72F41B21B7F600CC4075 /* makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; name = makefile; path = ddm/makefile; sourceTree = "<group>"; };
 		A26E72F61B21B9F100CC4075 /* ISFRTDWithP.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ISFRTDWithP.cpp; sourceTree = "<group>"; };
 		A26E72F81B21F77100CC4075 /* debugmain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = debugmain.cpp; sourceTree = "<group>"; };
+		A275AEE61B4A8F3300EC7F86 /* ISFRTDP_NoLT_sigma.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ISFRTDP_NoLT_sigma.cpp; sourceTree = "<group>"; };
 		A2A69D551B38136600BE49E0 /* ddm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ddm.h; sourceTree = "<group>"; };
 		A2A69D561B3815C600BE49E0 /* ddm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ddm.cpp; sourceTree = "<group>"; };
 		A2A69D581B3815DA00BE49E0 /* loadFiles.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = loadFiles.cpp; sourceTree = "<group>"; };
@@ -127,6 +129,7 @@
 				A2A69D6A1B38682500BE49E0 /* NILT.cpp */,
 				A2B28CAF1B419A7F0000AC77 /* NILT_RTDP.cpp */,
 				A2B28CAC1B3D8E330000AC77 /* ISFRTDP_NoLT.cpp */,
+				A275AEE61B4A8F3300EC7F86 /* ISFRTDP_NoLT_sigma.cpp */,
 			);
 			path = ddm;
 			sourceTree = "<group>";
@@ -209,6 +212,7 @@
 				A2A69D5E1B381F7B00BE49E0 /* averSqrModTau.cpp in Sources */,
 				A2A69D5C1B381E0500BE49E0 /* shiftImage.cpp in Sources */,
 				A26E72F31B21B7D500CC4075 /* ISFRunAndTumbleAndDiffusion.cpp in Sources */,
+				A275AEE71B4A8F3300EC7F86 /* ISFRTDP_NoLT_sigma.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

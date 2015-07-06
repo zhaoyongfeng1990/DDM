@@ -19,7 +19,7 @@ NILT::NILT()
         integration[iter]=fftwl_plan_dft_1d(M, fftwIn[iter], fftwOut[iter], FFTW_FORWARD, FFTW_MEASURE);
         CoeA[iter].resize(M);
         
-#ifdef ISFRTDPNoLT
+#ifdef IfComplexIntegration
         //workspace[iter]=gsl_integration_workspace_alloc(workspaceSize);
         workspace[iter]=gsl_integration_cquad_workspace_alloc(workspaceSize);
         pRe[iter].params=&cfun[iter];
@@ -39,7 +39,7 @@ NILT::~NILT()
         fftwl_destroy_plan(integration[iter]);
         CoeA[iter].clear();
         
-#ifdef ISFRTDPNoLT
+#ifdef IfComplexIntegration
         //gsl_integration_workspace_free(workspace[iter]);
         gsl_integration_cquad_workspace_free(workspace[iter]);
 #endif

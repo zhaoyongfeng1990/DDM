@@ -19,7 +19,7 @@
 #endif
 ///////////////////
 
-//Switch of different models
+//Switches of different models
 //#define ISFRUNANDTUMBLE
 //#define ISFSWIMMER
 //#define ISFSWIMMERSIMPLE
@@ -27,7 +27,8 @@
 //#define ISFRunAndTumbleAndDiffusion
 //#define ISFRunAndTumbleAndDiffusionAndPv
 //#define ISFRunAndTumbleAndDiffusionNoLT
-#define ISFRTDPNoLT
+//#define ISFRTDPNoLT
+#define ISFRTDPNoLT_sigma
 
 #include <cmath>
 
@@ -45,8 +46,7 @@ const int dimkx = dimx / 2 + 1;   //Number of wavenumber
 const int dimky = dimy / 2 + 1;   //Number of wavenumber
 const int numOfSeq = 4501;  //Number of total time points in experiment
 const int numOfDiff = 4500; //Number of tau
-const int numOfk = dimy*dimkx;    //Number of data points after FFT
-const int num_fit = numOfDiff;  //Number of data points used in fitting.
+const int numOfk = dimy*dimkx;    //Number of data points after FFTpoints used in fitting.
 
 const double dx = 6.5 / 4.0; // 0.65;   //Pixel size
 const double dqx = 2 * pi / dx / dimx;    //q step after FFT
@@ -66,6 +66,7 @@ const double DGuess=0.4;//0.2;
 const double vbarGuess=13;
 const double lambdaGuess=1;
 const double ZGuess=15;
+const double sigmaGuess=vbarGuess/2;
 
 //const int winDim = 5;   //Size of searching window. Used in aligning images.
 
@@ -97,6 +98,7 @@ const int numOfPara=6;
 #ifdef ISFRunAndTumbleAndDiffusionNoLT
 const int numOfPara=6;
 //#define NoJacobian
+#define NeedNumericalInverseLaplaceTransformation
 #endif
 
 #ifdef ISFRunAndTumbleAndDiffusionAndPv
@@ -107,6 +109,14 @@ const int numOfPara=7;
 #ifdef ISFRTDPNoLT
 const int numOfPara=7;
 //#define NoJacobian
+#define NeedNumericalInverseLaplaceTransformation
+#define IfComplexIntegration
+#endif
+
+#ifdef ISFRTDPNoLT_sigma
+const int numOfPara=7;
+//#define NoJacobian
+#define NeedNumericalInverseLaplaceTransformation
 #define IfComplexIntegration
 #endif
 

@@ -19,13 +19,18 @@ ddm::ddm() : imageSeqk(numOfSeq), imagekDiff(numOfDiff), qabs()
     datafit=nullptr;
     qsize=0;
     
+    iniTime=0;//floor(exp(-0.5)/dt);
+    finalTime=numOfDiff; //ceil(exp(0.5)/dt);
+    num_fit = finalTime-iniTime; //numOfDiff;  //Number of data
+
+    
     for (int itertau=0; itertau<num_fit; ++itertau)
     {
 #ifdef NeedLaplaceTrans
         //s[itertau]=exp(smin+ds*itertau);
         s[itertau]=smin+ds*itertau;
 #else
-        tau[itertau]=(itertau+1)*dt;
+        tau[itertau]=(itertau+1+iniTime)*dt;
 #endif
     }
     
@@ -78,6 +83,14 @@ ddm::ddm() : imageSeqk(numOfSeq), imagekDiff(numOfDiff), qabs()
     inipara[0]=alphaGuess;
     inipara[1]=vbarGuess;
     inipara[2]=ZGuess;
+    inipara[3]=lambdaGuess;
+    inipara[4]=DGuess;
+#endif
+    
+#ifdef ISFRTDPNoLT_sigma
+    inipara[0]=alphaGuess;
+    inipara[1]=vbarGuess;
+    inipara[2]=sigmaGuess;
     inipara[3]=lambdaGuess;
     inipara[4]=DGuess;
 #endif
