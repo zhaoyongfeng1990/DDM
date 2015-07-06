@@ -66,7 +66,7 @@ const double DGuess=0.4;//0.2;
 const double vbarGuess=13;
 const double lambdaGuess=1;
 const double ZGuess=3;
-const double sigmaGuess=vbarGuess/2;
+const double sigmaGuess=vbarGuess/4;
 
 //const int winDim = 5;   //Size of searching window. Used in aligning images.
 
