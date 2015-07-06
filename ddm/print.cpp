@@ -58,7 +58,8 @@ void ddm::printFit()
     ofstream fiterrfile("fiterrfile.txt");
     ofstream statusfile("status.txt");
     ofstream qstatusfile("statusq.txt");
-    for (int iterq=1; iterq<qsize; ++iterq)
+#ifndef MultiQFit
+    for (int iterq=0; iterq<qsize; ++iterq)
     {
         for (int iterpara=0; iterpara<numOfPara; ++iterpara)
         {
@@ -70,6 +71,21 @@ void ddm::printFit()
         statusfile << iterq << ": q=" << qabs[iterq] << ", "<< gsl_strerror(status[iterq]) << endl;
         qstatusfile << status[iterq] << endl;
     }
+#else
+    int fqsize=floor(qsize/2);
+    for (int iterq=0; iterq<fqsize; ++iterq)
+    {
+        for (int iterpara=0; iterpara<numOfPara; ++iterpara)
+        {
+            fitparafile << gsl_matrix_get(fittedPara, iterq, iterpara) << " ";
+            fiterrfile << gsl_matrix_get(fitErr, iterq, iterpara) << " ";
+        }
+        fitparafile << endl;
+        fiterrfile << endl;
+        statusfile << iterq << ": q=" << qabs[iterq] << ", "<< gsl_strerror(status[iterq]) << endl;
+        qstatusfile << status[iterq] << endl;
+    }
+#endif
     fitparafile.close();
     fiterrfile.close();
     statusfile.close();

@@ -333,10 +333,11 @@ void ddm::fitting_estRange()
 #ifdef MultiQFit
 void ddm::fitting_DoubQ()
 {
-    fittedPara=gsl_matrix_alloc(qsize/2, numOfPara+2);
+    int fqsize=floor(qsize/2);
+    fittedPara=gsl_matrix_alloc(fqsize, numOfPara+2);
     //To store the fitting result and error.
-    fitErr=gsl_matrix_alloc(qsize/2, numOfPara+2);
-    status = new int[qsize/2];		//Record the status of fitting.
+    fitErr=gsl_matrix_alloc(fqsize, numOfPara+2);
+    status = new int[fqsize];		//Record the status of fitting.
     //datafit = gsl_matrix_alloc(qsize, num_fit);
     double tempinipara[numOfPara+2];
     for (int iter=0; iter<numOfPara-2; ++iter)
@@ -363,7 +364,7 @@ void ddm::fitting_DoubQ()
 #endif
     
 #pragma omp parallel for
-    for (int iterq=1; iterq<qsize/2; ++iterq)
+    for (int iterq=0; iterq<fqsize; ++iterq)
     {
         double B1 = gsl_matrix_get(datag, iterq, 0);
         double A1 = gsl_matrix_get(datag, iterq, numOfDiff-1)-B1;
