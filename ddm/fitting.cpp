@@ -182,23 +182,6 @@ void ddm::fitting_estRange()
     const gsl_multifit_fdfsolver_type *solverType;	//GSL solver
     solverType = gsl_multifit_fdfsolver_lmsder;
     //Using Levenberg-Marquardt algorithm as implemented in the scaled lmder routine in minpack. Jacobian is given.
-    
-    //Initial guess
-    
-    //Get the selected data for fitting
-    //for (int iterq = 0; iterq < qsize; ++iterq)
-    //{
-        //int inif=floor(exp(-0.5)/dt);
-        //int finalf=ceil(exp(0.5)/dt);
-//        for (int iterf = 0; iterf < num_fit; ++iterf)
-//        {
-//#ifdef NeedLaplaceTrans
-//            gsl_matrix_set(datafit, iterq, iterf, log(gsl_matrix_get(ldatag, iterq, iterf)));		//Fitting in log scale.
-//#else
-//            gsl_matrix_set(datafit, iterq, iterf, log(gsl_matrix_get(datag, iterq, iterf+iniTime)));		//Fitting in log scale.
-//#endif
-//        }
-//    }
         
     int progress=0;		//Indicator of progress.
     
@@ -218,7 +201,7 @@ void ddm::fitting_estRange()
     for (int iterq=0; iterq<qsize; ++iterq)
     {
         double B = gsl_matrix_get(datag, iterq, 0);
-        double A = gsl_matrix_get(datag, iterq, numOfDiff-1)-inipara[numOfPara-1];
+        double A = gsl_matrix_get(datag, iterq, numOfDiff-1)-B;
         iniTime=-1;
         for (int itert=0; itert<numOfDiff; ++itert)
         {
