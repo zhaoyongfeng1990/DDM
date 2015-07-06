@@ -22,6 +22,11 @@ ddm::ddm() : imageSeqk(numOfSeq), imagekDiff(numOfDiff), qabs()
     iniTime=0;//floor(exp(-0.5)/dt);
     finalTime=numOfDiff; //ceil(exp(0.5)/dt);
     num_fit = finalTime-iniTime; //numOfDiff;  //Number of data
+#ifdef NeedLaplaceTrans
+    s=new double[num_fit];
+#else
+    tau=new double[num_fit];
+#endif
 
     
     for (int itertau=0; itertau<num_fit; ++itertau)
@@ -124,5 +129,8 @@ ddm::~ddm()
 #ifdef NeedLaplaceTrans
     if (ldatag!=nullptr)
         gsl_matrix_free(ldatag);
+    delete [] s;
+#else
+    delete [] tau;
 #endif
 }

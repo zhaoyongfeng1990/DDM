@@ -239,6 +239,7 @@ void ddm::fitting_estRange()
         for (int iterf = 0; iterf < num_fit; ++iterf)
         {
             data[iterf]=log(gsl_matrix_get(datag, iterq, iterf+iniTime));		//Fitting in log scale.
+            tau[iterf]=(iterf+1+iniTime)*dt;
         }
         
         gsl_multifit_function_fdf fitfun;		//Function point.

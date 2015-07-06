@@ -65,8 +65,8 @@ public:
     gsl_matrix* fittedPara;	//To store the fitting result and error.
     gsl_matrix* fitErr;
     int* status;		//Record the status of fitting.
-    double tau[num_fit];
-    double s[num_fit];
+    double* tau;
+    double* s;
     double inipara[numOfPara];
     
     int qsize;				//Element number of q array.
