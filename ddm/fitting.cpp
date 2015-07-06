@@ -177,7 +177,7 @@ void ddm::fitting_estRange()
     //To store the fitting result and error.
     fitErr=gsl_matrix_alloc(qsize, numOfPara);
     status = new int[qsize];		//Record the status of fitting.
-    datafit = gsl_matrix_alloc(qsize, num_fit);
+    //datafit = gsl_matrix_alloc(qsize, num_fit);
     
     const gsl_multifit_fdfsolver_type *solverType;	//GSL solver
     solverType = gsl_multifit_fdfsolver_lmsder;
@@ -198,7 +198,7 @@ void ddm::fitting_estRange()
 #endif
     
 #pragma omp parallel for
-    for (int iterq=0; iterq<qsize; ++iterq)
+    for (int iterq=1; iterq<qsize; ++iterq)
     {
         double B = gsl_matrix_get(datag, iterq, 0);
         double A = gsl_matrix_get(datag, iterq, numOfDiff-1)-B;
@@ -213,6 +213,7 @@ void ddm::fitting_estRange()
         }
         if (iniTime==-1)
         {
+            progress+=1;
             cout << "Skipping q=" << qabs[iterq] << ", " << 100.0*progress / qsize << "% completed from thread No." << omp_get_thread_num() << "." << endl;
             continue;
         }

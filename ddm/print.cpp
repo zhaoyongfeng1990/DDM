@@ -58,7 +58,7 @@ void ddm::printFit()
     ofstream fiterrfile("fiterrfile.txt");
     ofstream statusfile("status.txt");
     ofstream qstatusfile("statusq.txt");
-    for (int iterq=0; iterq<qsize; ++iterq)
+    for (int iterq=1; iterq<qsize; ++iterq)
     {
         for (int iterpara=0; iterpara<numOfPara; ++iterpara)
         {

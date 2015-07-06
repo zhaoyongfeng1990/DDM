@@ -44,8 +44,8 @@ const int dimy = 512;    //Size of the image
 const int dimx = 512;
 const int dimkx = dimx / 2 + 1;   //Number of wavenumber
 const int dimky = dimy / 2 + 1;   //Number of wavenumber
-const int numOfSeq = 4501;  //Number of total time points in experiment
-const int numOfDiff = 4500; //Number of tau
+const int numOfSeq = 4500;  //Number of total time points in experiment
+const int numOfDiff = 4000; //Number of tau
 const int numOfk = dimy*dimkx;    //Number of data points after FFTpoints used in fitting.
 
 const double dx = 6.5 / 4.0; // 0.65;   //Pixel size
