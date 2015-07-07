@@ -346,7 +346,7 @@ void ddm::fitting_estRange()
 #ifdef MultiQFit
 void ddm::fitting_DoubQ()
 {
-    int fqsize=(qsize-10);
+    int fqsize=(qsize-20);
     fittedPara=gsl_matrix_alloc(fqsize, numOfPara+2);
     //To store the fitting result and error.
     fitErr=gsl_matrix_alloc(fqsize, numOfPara+2);
@@ -380,7 +380,7 @@ void ddm::fitting_DoubQ()
     for (int iterq=0; iterq<fqsize; ++iterq)
     {
         double q1=qabs[iterq];
-        double q2=qabs[iterq+10];
+        double q2=qabs[iterq+20];
         
         double B1 = gsl_matrix_get(datag, iterq, 0);
         double A1 = gsl_matrix_get(datag, iterq, numOfDiff-1)-B1;
@@ -403,12 +403,12 @@ void ddm::fitting_DoubQ()
         finalTime1=(finalTime1>numOfDiff) ? numOfDiff : finalTime1;
         iniTime1=0;
         
-        double B2 = gsl_matrix_get(datag, iterq+10, 0);
-        double A2 = gsl_matrix_get(datag, iterq+10, numOfDiff-1)-B2;
+        double B2 = gsl_matrix_get(datag, iterq+20, 0);
+        double A2 = gsl_matrix_get(datag, iterq+20, numOfDiff-1)-B2;
         int iniTime2=-1;
         for (int itert=0; itert<numOfDiff; ++itert)
         {
-            if (gsl_matrix_get(datag, iterq+10, itert)>B2+0.5*A2)
+            if (gsl_matrix_get(datag, iterq+20, itert)>B2+0.5*A2)
             {
                 iniTime2=itert-1;
                 break;
@@ -440,7 +440,7 @@ void ddm::fitting_DoubQ()
         }
         for (int iterf = num_fit1; iterf < num_fitt; ++iterf)
         {
-            data[iterf]=log(gsl_matrix_get(datag, iterq+10, iterf-num_fit1+iniTime2));		//Fitting in log scale.
+            data[iterf]=log(gsl_matrix_get(datag, iterq+20, iterf-num_fit1+iniTime2));		//Fitting in log scale.
             tempt[iterf]=(iterf-num_fit1+1+iniTime2)*dt;
         }
         
