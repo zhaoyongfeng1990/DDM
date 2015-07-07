@@ -220,6 +220,7 @@ void ddm::fitting_estRange()
         }
         int cfinalTime=10*ciniTime;
         cfinalTime=(cfinalTime>numOfDiff) ? numOfDiff : cfinalTime;
+        ciniTime=0;
         int tempnum_fit=cfinalTime-ciniTime;
         double data[numOfDiff];
         double temptau[numOfDiff];
