@@ -199,7 +199,7 @@ void ddm::fitting_estRange()
 #endif
     
 #pragma omp parallel for
-    for (int iterq=1; iterq<qsize; ++iterq)
+    for (int iterq=0; iterq<qsize; ++iterq)
     {
         double B = gsl_matrix_get(datag, iterq, 0);
         double A = gsl_matrix_get(datag, iterq, numOfDiff-1)-B;
@@ -225,7 +225,7 @@ void ddm::fitting_estRange()
         for (int iterf = 0; iterf < tempnum_fit; ++iterf)
         {
             data[iterf]=log(gsl_matrix_get(datag, iterq, iterf+iniTime));		//Fitting in log scale.
-            tau[iterf]=(iterf+1+iniTime)*dt;
+            tau[iterf]=(iterf+1+ciniTime)*dt;
         }
         
         gsl_multifit_function_fdf fitfun;		//Function point.
