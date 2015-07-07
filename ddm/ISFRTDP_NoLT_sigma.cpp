@@ -169,13 +169,7 @@ int ISFfun(const gsl_vector* para, void* sdata, gsl_vector* y)
         }
         return GSL_SUCCESS;
     }
-    
-//    cout << q << endl;
-//    for (int iterpara=0; iterpara<numOfPara; ++iterpara)
-//    {
-//        cout << gsl_vector_get(para, iterpara) << endl;
-//    }
-//    cout << endl;
+
     
     ////cout << lambda << endl;
     
@@ -189,6 +183,19 @@ int ISFfun(const gsl_vector* para, void* sdata, gsl_vector* y)
     
     //Initialization of numerical inverse Laplace transformation solver
     int tid=omp_get_thread_num();
+    
+//    if (tid==0)
+//    {
+//        cout << "debug debug \n";
+//        cout << q << endl;
+//        for (int iterpara=0; iterpara<numOfPara; ++iterpara)
+//        {
+//            cout << gsl_vector_get(para, iterpara) << '\n';
+//        }
+//        cout << '\n';
+//        cout << "debug debug \n";
+//    }
+    
     ILT->cfun[tid].fun=ISFs;
     
     long double& csigma=ILT->sigma[tid];

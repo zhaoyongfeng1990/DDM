@@ -114,12 +114,17 @@ void ddm::fitting()
         fitfun.p=numOfPara;
         fitfun.params=&sdata;
         
+        double localinipara[numOfPara];
+        for (int iterp=0; iterp<numOfPara-2; ++iterp)
+        {
+            localinipara[iterp]=inipara[iterp];
+        }
         //Estimation of A(q) and B(q)
-        inipara[numOfPara-1] = gsl_matrix_get(datag, iterq, 0);
-        inipara[numOfPara-2] = gsl_matrix_get(datag, iterq, numOfDiff-1)-inipara[numOfPara-1];
+        localinipara[numOfPara-1] = gsl_matrix_get(datag, iterq, 0);
+        localinipara[numOfPara-2] = gsl_matrix_get(datag, iterq, numOfDiff-1)-localinipara[numOfPara-1];
         
         //Initiallization of the solver
-        gsl_vector_view para=gsl_vector_view_array(inipara, numOfPara);
+        gsl_vector_view para=gsl_vector_view_array(localinipara, numOfPara);
         gsl_multifit_fdfsolver* solver = gsl_multifit_fdfsolver_alloc(solverType, num_fit, numOfPara);
         gsl_multifit_fdfsolver_set(solver, &fitfun, &para.vector);
         int iter=0;
@@ -274,11 +279,17 @@ void ddm::fitting_estRange()
         fitfun.params=&sdata;
         
         //Estimation of A(q) and B(q)
-        inipara[numOfPara-1] = B;
-        inipara[numOfPara-2] = A;
+        double localinipara[numOfPara];
+        for (int iterp=0; iterp<numOfPara-2; ++iterp)
+        {
+            localinipara[iterp]=inipara[iterp];
+        }
+        //Estimation of A(q) and B(q)
+        localinipara[numOfPara-1] = B;
+        localinipara[numOfPara-2] = A;
         
         //Initiallization of the solver
-        gsl_vector_view para=gsl_vector_view_array(inipara, numOfPara);
+        gsl_vector_view para=gsl_vector_view_array(localinipara, numOfPara);
         gsl_multifit_fdfsolver* solver = gsl_multifit_fdfsolver_alloc(solverType, tempnum_fit, numOfPara);
         gsl_multifit_fdfsolver_set(solver, &fitfun, &para.vector);
         int iter=0;
@@ -387,6 +398,7 @@ void ddm::fitting_DoubQ()
         }
         int finalTime1=10*iniTime1;
         finalTime1=(finalTime1>numOfDiff) ? numOfDiff : finalTime1;
+        iniTime1=0;
         
         double B2 = gsl_matrix_get(datag, iterq*2, 0);
         double A2 = gsl_matrix_get(datag, iterq*2, numOfDiff-1)-B2;
@@ -407,6 +419,7 @@ void ddm::fitting_DoubQ()
         }
         int finalTime2=10*iniTime2;
         finalTime2=(finalTime2>numOfDiff) ? numOfDiff : finalTime2;
+        iniTime2=0;
         
         int num_fit1=finalTime1-iniTime1;
         int num_fit2=finalTime2-iniTime2;
