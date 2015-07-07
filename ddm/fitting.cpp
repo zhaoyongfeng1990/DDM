@@ -222,16 +222,17 @@ void ddm::fitting_estRange()
         cfinalTime=(cfinalTime>numOfDiff) ? numOfDiff : cfinalTime;
         int tempnum_fit=cfinalTime-ciniTime;
         double data[numOfDiff];
+        double temptau[numOfDiff];
         for (int iterf = 0; iterf < tempnum_fit; ++iterf)
         {
             data[iterf]=log(gsl_matrix_get(datag, iterq, iterf+iniTime));		//Fitting in log scale.
-            tau[iterf]=(iterf+1+ciniTime)*dt;
+            temptau[iterf]=(iterf+1+ciniTime)*dt;
         }
         
         gsl_multifit_function_fdf fitfun;		//Function point.
         dataStruct sdata;		//GSL data structure
         sdata.data=data;
-        sdata.tau=tau;
+        sdata.tau=temptau;
         sdata.q=qabs[iterq];
         sdata.num_fit=tempnum_fit;
         
