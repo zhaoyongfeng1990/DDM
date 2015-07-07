@@ -346,7 +346,7 @@ void ddm::fitting_estRange()
 #ifdef MultiQFit
 void ddm::fitting_DoubQ()
 {
-    int fqsize=floor(qsize/2);
+    int fqsize=floor(qsize-10);
     fittedPara=gsl_matrix_alloc(fqsize, numOfPara+2);
     //To store the fitting result and error.
     fitErr=gsl_matrix_alloc(fqsize, numOfPara+2);
@@ -379,6 +379,9 @@ void ddm::fitting_DoubQ()
 #pragma omp parallel for
     for (int iterq=0; iterq<fqsize; ++iterq)
     {
+        double q1=qabs[iterq];
+        double q2=qabs[iterq+10];
+        
         double B1 = gsl_matrix_get(datag, iterq, 0);
         double A1 = gsl_matrix_get(datag, iterq, numOfDiff-1)-B1;
         int iniTime1=-1;
@@ -393,19 +396,19 @@ void ddm::fitting_DoubQ()
         if (iniTime1==-1)
         {
             progress+=1;
-            cout << "Skipping q=" << qabs[iterq] << " and " << qabs[iterq*2] << ", " << 200.0*progress / qsize << "% completed from thread No." << omp_get_thread_num() << "." << endl;
+            cout << "Skipping q=" << q1 << " and " << q2 << ", " << 200.0*progress / qsize << "% completed from thread No." << omp_get_thread_num() << "." << endl;
             continue;
         }
         int finalTime1=10*iniTime1;
         finalTime1=(finalTime1>numOfDiff) ? numOfDiff : finalTime1;
         iniTime1=0;
         
-        double B2 = gsl_matrix_get(datag, iterq*2, 0);
-        double A2 = gsl_matrix_get(datag, iterq*2, numOfDiff-1)-B2;
+        double B2 = gsl_matrix_get(datag, iterq+10, 0);
+        double A2 = gsl_matrix_get(datag, iterq+10, numOfDiff-1)-B2;
         int iniTime2=-1;
         for (int itert=0; itert<numOfDiff; ++itert)
         {
-            if (gsl_matrix_get(datag, iterq*2, itert)>B2+0.5*A2)
+            if (gsl_matrix_get(datag, iterq+10, itert)>B2+0.5*A2)
             {
                 iniTime2=itert-1;
                 break;
@@ -414,7 +417,7 @@ void ddm::fitting_DoubQ()
         if (iniTime2==-1)
         {
             progress+=1;
-            cout << "Skipping q=" << qabs[iterq] << " and " << qabs[iterq*2] << ", " << 200.0*progress / qsize << "% completed from thread No." << omp_get_thread_num() << "." << endl;
+            cout << "Skipping q=" << q2 << " and " << q1 << ", " << 200.0*progress / qsize << "% completed from thread No." << omp_get_thread_num() << "." << endl;
             continue;
         }
         int finalTime2=10*iniTime2;
@@ -427,7 +430,7 @@ void ddm::fitting_DoubQ()
         int num_fitt=num_fit1+num_fit2;
         
         double data[numOfDiff*2];
-        double tempq[2]={qabs[iterq],qabs[iterq*2]};
+        double tempq[2]={q1,q2};
         double tempt[numOfDiff*2];
         
         for (int iterf = 0; iterf < num_fit1; ++iterf)
@@ -537,7 +540,7 @@ void ddm::fitting_DoubQ()
         gsl_multifit_fdfsolver_free(solver);
         
         progress+=1;
-        cout << "Fitted q=" << qabs[iterq] << " at iter=" << iter << ", " << 100.0*progress / qsize << "% completed from thread No." << omp_get_thread_num() << ", "<< gsl_strerror(status[iterq]) << "." << endl;
+        cout << "Fitted q=" << q1 << " at iter=" << iter << ", " << 100.0*progress / qsize << "% completed from thread No." << omp_get_thread_num() << ", "<< gsl_strerror(status[iterq]) << "." << endl;
         for (int iterpara=0; iterpara<numOfPara+2; ++iterpara)
         {
             cout << gsl_matrix_get(fittedPara, iterq, iterpara) << endl;

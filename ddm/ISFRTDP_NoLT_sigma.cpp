@@ -481,12 +481,12 @@ int ISFfun(const gsl_vector* para, void* sdata, gsl_vector* y)
         return GSL_SUCCESS;
     }
     
-    //cout << q << endl;
-    //for (int iterpara=0; iterpara<numOfPara; ++iterpara)
-    //{
-        //cout << gsl_vector_get(para, iterpara) << endl;
-    //}
-    //cout << endl;
+//    cout << q << endl;
+//    for (int iterpara=0; iterpara<numOfPara+2; ++iterpara)
+//    {
+//        cout << gsl_vector_get(para, iterpara) << endl;
+//    }
+//    cout << endl;
     
     ////cout << lambda << endl;
     
@@ -652,6 +652,8 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
             gsl_matrix_set(J, iter, 4, 0);
             gsl_matrix_set(J, iter, 5, 0);
             gsl_matrix_set(J, iter, 6, 0);
+            gsl_matrix_set(J, iter, 7, 0);
+            gsl_matrix_set(J, iter, 8, 0);
         }
         return GSL_SUCCESS;
     }
@@ -666,6 +668,8 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
             gsl_matrix_set(J, iter, 4, 0);
             gsl_matrix_set(J, iter, 5, 0);
             gsl_matrix_set(J, iter, 6, 0);
+            gsl_matrix_set(J, iter, 7, 0);
+            gsl_matrix_set(J, iter, 8, 0);
         }
         return GSL_SUCCESS;
     }
@@ -680,6 +684,8 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
             gsl_matrix_set(J, iter, 4, 0);
             gsl_matrix_set(J, iter, 5, 0);
             gsl_matrix_set(J, iter, 6, 0);
+            gsl_matrix_set(J, iter, 7, 0);
+            gsl_matrix_set(J, iter, 8, 0);
         }
         return GSL_SUCCESS;
     }
@@ -782,6 +788,8 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
         
         gsl_matrix_set(J, iter, 5, dA/yi );
         gsl_matrix_set(J, iter, 6, 1.0/yi );
+        gsl_matrix_set(J, iter, 7, 0 );
+        gsl_matrix_set(J, iter, 8, 0 );
         
         //Punishment terms
         if (alpha<0)
@@ -871,8 +879,10 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
         
         gsl_matrix_set(J, iter, 4, A*((1.0-alpha)*expterm*q*q*t-alpha*dDrtd)/yi );
         
-        gsl_matrix_set(J, iter, 5, dA/yi );
-        gsl_matrix_set(J, iter, 6, 1.0/yi );
+        gsl_matrix_set(J, iter, 5, 0 );
+        gsl_matrix_set(J, iter, 6, 0 );
+        gsl_matrix_set(J, iter, 7, dA/yi );
+        gsl_matrix_set(J, iter, 8, 1.0/yi );
         
         //Punishment terms
         if (alpha<0)
@@ -889,7 +899,7 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
         }
         if (A<0)
         {
-            gsl_matrix_set(J, iter, 5, gsl_matrix_get(J, iter, 5) + 2e5 *A);
+            gsl_matrix_set(J, iter, 7, gsl_matrix_get(J, iter, 7) + 2e5 *A);
         }
     }
     
