@@ -61,10 +61,10 @@ const double smin=0.01;
 
 const int maxIter=200;    //Maximum iteration number in fitting
 
-const double alphaGuess=0.8;
-const double DGuess=0.4;//0.2;
-const double vbarGuess=13;
-const double lambdaGuess=1;
+const double alphaGuess=0.4;
+const double DGuess=0.2;//0.2;
+const double vbarGuess=7;
+const double lambdaGuess=0.5;
 const double ZGuess=3;
 const double sigmaGuess=vbarGuess/4;
 
@@ -118,7 +118,7 @@ const int numOfPara=7;
 //#define NoJacobian
 #define NeedNumericalInverseLaplaceTransformation
 #define IfComplexIntegration
-//#define MultiQFit
+#define MultiQFit
 #endif
 
 #endif /* defined(__ddm__parameters__) */
