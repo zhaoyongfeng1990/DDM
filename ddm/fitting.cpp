@@ -346,7 +346,7 @@ void ddm::fitting_estRange()
 #ifdef MultiQFit
 void ddm::fitting_DoubQ()
 {
-    int fqsize=(qsize-30);
+    int fqsize=qsize-30;
     fittedPara=gsl_matrix_alloc(fqsize, numOfPara+2);
     //To store the fitting result and error.
     fitErr=gsl_matrix_alloc(fqsize, numOfPara+2);

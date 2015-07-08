@@ -72,7 +72,7 @@ void ddm::printFit()
         qstatusfile << status[iterq] << endl;
     }
 #else
-    int fqsize=floor(qsize/2);
+    int fqsize=qsize-30;
     for (int iterq=0; iterq<fqsize; ++iterq)
     {
         for (int iterpara=0; iterpara<numOfPara; ++iterpara)
