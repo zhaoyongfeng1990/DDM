@@ -204,7 +204,7 @@ void ddm::fitting_estRange()
 #endif
     
 #pragma omp parallel for
-    for (int iterq=0; iterq<qsize; ++iterq)
+    for (int iterq=1; iterq<qsize; ++iterq)
     {
         double B = gsl_matrix_get(datag, iterq, 0);
         double A = gsl_matrix_get(datag, iterq, numOfDiff-1)-B;
@@ -500,22 +500,22 @@ void ddm::fitting_DoubQ()
         gsl_multifit_fdfsolver_set(solver, &fitfun, &para.vector);
         int iter=0;
         //gsl_vector* g=gsl_vector_alloc(numOfPara);
-        //        for (int iterpara=0; iterpara<numOfPara; ++iterpara)
-        //        {
-        //            cout << gsl_vector_get(solver->x, iterpara) << endl;
-        //        }
-        //        cout << endl;
+//        for (int iterpara=0; iterpara<numOfPara+2; ++iterpara)
+//        {
+//            cout << gsl_vector_get(solver->x, iterpara) << endl;
+//        }
+//        cout << endl;
         
         do
         {
             gsl_multifit_fdfsolver_iterate(solver);		//Iterate one step.
             status[iterq] = norm0_rel_test(solver->dx, solver->x, 1e-10, 1e-10);  //Test the exiting condition
             
-            //            for (int iterpara=0; iterpara<numOfPara; ++iterpara)
-            //            {
-            //                cout << gsl_vector_get(solver->x, iterpara) << endl;
-            //            }
-            //            cout << endl;
+//            for (int iterpara=0; iterpara<numOfPara+2; ++iterpara)
+//            {
+//                cout << gsl_vector_get(solver->x, iterpara) << endl;
+//            }
+//            cout << endl;
             //gsl_multifit_gradient(solver->J,solver->f, g);
             //status[iterq-1]=gsl_multifit_test_gradient(g, 1e-5);
             //			status[iterq - 1] = covar_rel_test(solver->J, solver->x, 1e-4);

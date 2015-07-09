@@ -145,27 +145,65 @@ int ISFfun(const gsl_vector* para, void* sdata, gsl_vector* y)
     
     long double Dq2=D*q*q;
     
-    if (sigma<0)
-    {
-        for (int iter = 0; iter<num_fit; ++iter)
-        {
-            gsl_vector_set(y, iter, 1e5*sigma*sigma - dataAry[iter]);
-        }
-        return GSL_SUCCESS;
-    }
+//    cout << q << endl;
+//    for (int iterpara=0; iterpara<numOfPara; ++iterpara)
+//    {
+//        cout << gsl_vector_get(para, iterpara) << '\n';
+//    }
+//    cout << '\n';
+    
+    bool breakFlag=false;
+    double punishment=0;
     if (vbar<0)
     {
-        for (int iter = 0; iter<num_fit; ++iter)
-        {
-            gsl_vector_set(y, iter, 1e5*vbar*vbar - dataAry[iter]);
-        }
-        return GSL_SUCCESS;
+        punishment+=1e5*vbar*vbar;
+        breakFlag=true;
+    }
+    if (sigma<0)
+    {
+        punishment+=1e5*sigma*sigma;
+        breakFlag=true;
+    }
+    if (sigma>vbar)
+    {
+        punishment+=1e5*(sigma-vbar)*(sigma-vbar);
+        breakFlag=true;
     }
     if (lambda<0)
     {
+        punishment+=1e5*lambda*lambda;
+        breakFlag=true;
+    }
+    if (D<0)
+    {
+        punishment+=1e5*D*D;
+        breakFlag=true;
+    }
+    if (D>10)
+    {
+        punishment+=1e5*(D-10)*(D-10);
+        breakFlag=true;
+    }
+    if (alpha<0)
+    {
+        punishment+=1e5*alpha*alpha;
+        breakFlag=true;
+    }
+    if (alpha>1)
+    {
+        punishment+=1e5*(alpha-1)*(alpha-1);
+        breakFlag=true;
+    }
+    if (A<0)
+    {
+        punishment+=1e5*A*A;
+        breakFlag=true;
+    }
+    if (breakFlag)
+    {
         for (int iter = 0; iter<num_fit; ++iter)
         {
-            gsl_vector_set(y, iter, 1e5*lambda*lambda - dataAry[iter]);
+            gsl_vector_set(y, iter, punishment - dataAry[iter]);
         }
         return GSL_SUCCESS;
     }
@@ -184,17 +222,11 @@ int ISFfun(const gsl_vector* para, void* sdata, gsl_vector* y)
     //Initialization of numerical inverse Laplace transformation solver
     int tid=omp_get_thread_num();
     
-//    if (tid==0)
-//    {
-//        cout << "debug debug \n";
-//        cout << q << endl;
-//        for (int iterpara=0; iterpara<numOfPara; ++iterpara)
-//        {
-//            cout << gsl_vector_get(para, iterpara) << '\n';
-//        }
-//        cout << '\n';
-//        cout << "debug debug \n";
-//    }
+    //if (tid==0)
+    //{
+        //cout << "debug debug \n";
+        //cout << "debug debug \n";
+    //}
     
     ILT->cfun[tid].fun=ISFs;
     
@@ -226,22 +258,6 @@ int ISFfun(const gsl_vector* para, void* sdata, gsl_vector* y)
         
         double result = yi - dataAry[iter];
         //Punishment terms, to make constrains in parameter space.
-        if (D<0)
-        {
-            result += 1e5*D*D;
-        }
-        if (alpha<0)
-        {
-            result += 1e5*alpha*alpha;
-        }
-        if (alpha>1)
-        {
-            result += 1e5*(alpha-1)*(alpha-1);
-        }
-        if (A<0)
-        {
-            result += 1e5*A*A;
-        }
         
         gsl_vector_set(y, iter, result);
     }
@@ -267,55 +283,92 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
     
     long double Dq2=D*q*q;
     
-    if (sigma<0)
-    {
-        for (int iter=0; iter<num_fit; ++iter)
-        {
-            gsl_matrix_set(J, iter, 0, 0);
-            gsl_matrix_set(J, iter, 1, 0);
-            gsl_matrix_set(J, iter, 2, 2e5 *sigma);
-            gsl_matrix_set(J, iter, 3, 0);
-            gsl_matrix_set(J, iter, 4, 0);
-            gsl_matrix_set(J, iter, 5, 0);
-            gsl_matrix_set(J, iter, 6, 0);
-        }
-        return GSL_SUCCESS;
-    }
-    if (vbar<0)
-    {
-        for (int iter=0; iter<num_fit; ++iter)
-        {
-            gsl_matrix_set(J, iter, 0, 0);
-            gsl_matrix_set(J, iter, 1, 2e5 *vbar);
-            gsl_matrix_set(J, iter, 2, 0);
-            gsl_matrix_set(J, iter, 3, 0);
-            gsl_matrix_set(J, iter, 4, 0);
-            gsl_matrix_set(J, iter, 5, 0);
-            gsl_matrix_set(J, iter, 6, 0);
-        }
-        return GSL_SUCCESS;
-    }
-    if (lambda<0)
-    {
-        for (int iter=0; iter<num_fit; ++iter)
-        {
-            gsl_matrix_set(J, iter, 0, 0);
-            gsl_matrix_set(J, iter, 1, 0);
-            gsl_matrix_set(J, iter, 2, 0);
-            gsl_matrix_set(J, iter, 3, 2e5*lambda);
-            gsl_matrix_set(J, iter, 4, 0);
-            gsl_matrix_set(J, iter, 5, 0);
-            gsl_matrix_set(J, iter, 6, 0);
-        }
-        return GSL_SUCCESS;
-    }
-    
 //    cout << q << endl;
 //    for (int iterpara=0; iterpara<numOfPara; ++iterpara)
 //    {
 //        cout << gsl_vector_get(para, iterpara) << endl;
 //    }
 //    cout << endl;
+    
+    //Punishment terms
+    bool breakFlag=false;
+    if (vbar<0)
+    {
+        for (int iter=0; iter<num_fit; ++iter)
+        {
+            gsl_matrix_set(J, iter, 1, 2e5 *vbar);
+        }
+        breakFlag=true;
+    }
+    if (sigma<0)
+    {
+        for (int iter=0; iter<num_fit; ++iter)
+        {
+            gsl_matrix_set(J, iter, 2, 2e5 *sigma);
+        }
+        breakFlag=true;
+    }
+    if (sigma>vbar)
+    {
+        for (int iter=0; iter<num_fit; ++iter)
+        {
+            gsl_matrix_set(J, iter, 2, 2e5 *(sigma-vbar) );
+            gsl_matrix_set(J, iter, 1, gsl_matrix_get(J,iter,1) - 2e5 *(sigma-vbar) );
+        }
+        breakFlag=true;
+    }
+    if (lambda<0)
+    {
+        for (int iter=0; iter<num_fit; ++iter)
+        {
+            gsl_matrix_set(J, iter, 3, 2e5*lambda);
+        }
+        breakFlag=true;
+    }
+    if (alpha<0)
+    {
+        for (int iter=0; iter<num_fit; ++iter)
+        {
+            gsl_matrix_set(J, iter, 0, 2e5*alpha);
+        }
+        breakFlag=true;
+    }
+    if (alpha>1)
+    {
+        for (int iter=0; iter<num_fit; ++iter)
+        {
+            gsl_matrix_set(J, iter, 0, 2e5*(alpha-1));
+        }
+        breakFlag=true;
+    }
+    if (D<0)
+    {
+        for (int iter=0; iter<num_fit; ++iter)
+        {
+            gsl_matrix_set(J, iter, 4, 2e5*D);
+        }
+        breakFlag=true;
+    }
+    if (D>10)
+    {
+        for (int iter=0; iter<num_fit; ++iter)
+        {
+            gsl_matrix_set(J, iter, 4, 2e5*(D-10));
+        }
+        breakFlag=true;
+    }
+    if (A<0)
+    {
+        for (int iter=0; iter<num_fit; ++iter)
+        {
+            gsl_matrix_set(J, iter, 5, 2e5*A);
+        }
+        breakFlag=true;
+    }
+    if (breakFlag)
+    {
+        return GSL_SUCCESS;
+    }
     
     //Temperary variables used for acceleration.
     long double Dq2lambda=Dq2+lambda;
@@ -408,24 +461,6 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
         
         gsl_matrix_set(J, iter, 5, dA/yi );
         gsl_matrix_set(J, iter, 6, 1.0/yi );
-        
-        //Punishment terms
-        if (alpha<0)
-        {
-            gsl_matrix_set(J, iter, 0, gsl_matrix_get(J, iter, 0) + 2e5 *alpha);
-        }
-        if (alpha>1)
-        {
-            gsl_matrix_set(J, iter, 0, gsl_matrix_get(J, iter, 0) + 2e5 *(alpha-1));
-        }
-        if (D<0)
-        {
-            gsl_matrix_set(J, iter, 4, gsl_matrix_get(J, iter, 4) + 2e5 *D);
-        }
-        if (A<0)
-        {
-            gsl_matrix_set(J, iter, 5, gsl_matrix_get(J, iter, 5) + 2e5 *A);
-        }
     }
     
     return GSL_SUCCESS;
@@ -453,30 +488,76 @@ int ISFfun(const gsl_vector* para, void* sdata, gsl_vector* y)
     long double D=gsl_vector_get(para, 4);
     long double A=gsl_vector_get(para, 5);
     long double B=gsl_vector_get(para, 6);
+    long double A2=gsl_vector_get(para, 7);
+    long double B2=gsl_vector_get(para, 8);
+    
+//    cout << q << endl;
+//    for (int iterpara=0; iterpara<numOfPara; ++iterpara)
+//    {
+//        cout << gsl_vector_get(para, iterpara) << '\n';
+//    }
+//    cout << '\n';
     
     long double Dq2=D*q*q;
     
-    if (sigma<0)
-    {
-        for (int iter = 0; iter<num_fit2; ++iter)
-        {
-            gsl_vector_set(y, iter, 1e5*sigma*sigma - dataAry[iter]);
-        }
-        return GSL_SUCCESS;
-    }
+    //Punishment terms
+    bool breakFlag=false;
+    double punishment=0;
     if (vbar<0)
     {
-        for (int iter = 0; iter<num_fit2; ++iter)
-        {
-            gsl_vector_set(y, iter, 1e5*vbar*vbar - dataAry[iter]);
-        }
-        return GSL_SUCCESS;
+        punishment+=1e5*vbar*vbar;
+        breakFlag=true;
+    }
+    if (sigma<0)
+    {
+        punishment+=1e5*sigma*sigma;
+        breakFlag=true;
+    }
+    if (sigma>vbar)
+    {
+        punishment+=1e5*(sigma-vbar)*(sigma-vbar);
+        breakFlag=true;
     }
     if (lambda<0)
     {
+        punishment+=1e5*lambda*lambda;
+        breakFlag=true;
+    }
+    if (D<0)
+    {
+        punishment+=1e5*D*D;
+        breakFlag=true;
+    }
+    if (D>10)
+    {
+        punishment+=1e5*(D-10)*(D-10);
+        breakFlag=true;
+    }
+    if (alpha<0)
+    {
+        punishment+=1e5*alpha*alpha;
+        breakFlag=true;
+    }
+    if (alpha>1)
+    {
+        punishment+=1e5*(alpha-1)*(alpha-1);
+        breakFlag=true;
+    }
+    if (A<0)
+    {
+        punishment+=1e5*A*A;
+        breakFlag=true;
+    }
+    if (A2<0)
+    {
+        punishment+=1e5*A2*A2;
+        breakFlag=true;
+    }
+    if (breakFlag)
+    {
         for (int iter = 0; iter<num_fit2; ++iter)
         {
-            gsl_vector_set(y, iter, 1e5*lambda*lambda - dataAry[iter]);
+            gsl_vector_set(y, iter, punishment - dataAry[iter]);
         }
         return GSL_SUCCESS;
     }
@@ -529,45 +610,13 @@ int ISFfun(const gsl_vector* para, void* sdata, gsl_vector* y)
         double yi=log(A*(1.0-(1.0-alpha)*exp(-Dq2*t)-alpha*rtd)+B);
         
         double result = yi - dataAry[iter];
-        //Punishment terms, to make constrains in parameter space.
-        if (D<0)
-        {
-            result += 1e5*D*D;
-        }
-        if (alpha<0)
-        {
-            result += 1e5*alpha*alpha;
-        }
-        if (alpha>1)
-        {
-            result += 1e5*(alpha-1)*(alpha-1);
-        }
-        if (A<0)
-        {
-            result += 1e5*A*A;
-        }
         
         gsl_vector_set(y, iter, result);
     }
     
-    q=qArray[1];
-    
-    //Get the parameters.
-    A=gsl_vector_get(para, 7);
-    B=gsl_vector_get(para, 8);
-    
-    Dq2=D*q*q;
-    
-    //cout << q << endl;
-    //for (int iterpara=0; iterpara<numOfPara; ++iterpara)
-    //{
-        //cout << gsl_vector_get(para, iterpara) << endl;
-    //}
-    //cout << endl;
-    
-    ////cout << lambda << endl;
-    
     //Temperary variables used for acceleration.
+    q=qArray[1];
+    Dq2=D*q*q;
     Dq2lambda=Dq2+lambda;
     
     paraISF[1]=q;
@@ -592,26 +641,9 @@ int ISFfun(const gsl_vector* para, void* sdata, gsl_vector* y)
         long double t=tau[iter];
         //Evaluate ISF at time t, the coefficients has been calculated.
         double rtd=ILT->clenshaw(t);
-        double yi=log(A*(1.0-(1.0-alpha)*exp(-Dq2*t)-alpha*rtd)+B);
+        double yi=log(A2*(1.0-(1.0-alpha)*exp(-Dq2*t)-alpha*rtd)+B2);
         
         double result = yi - dataAry[iter];
-        //Punishment terms, to make constrains in parameter space.
-        if (D<0)
-        {
-            result += 1e5*D*D;
-        }
-        if (alpha<0)
-        {
-            result += 1e5*alpha*alpha;
-        }
-        if (alpha>1)
-        {
-            result += 1e5*(alpha-1)*(alpha-1);
-        }
-        if (A<0)
-        {
-            result += 1e5*A*A;
-        }
         
         gsl_vector_set(y, iter, result);
     }
@@ -622,12 +654,7 @@ int ISFfun(const gsl_vector* para, void* sdata, gsl_vector* y)
 //The function is written to meet the API of GSL df function. sdata is the pointer to data structure defined by GSL. J is the Jacobian, which is the return of the function.
 int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
 {
-    double* tau=((dataStruct *)sdata)->tau;
-    double* qArray=((dataStruct *)sdata)->q;
-    
     int* num_fitArray=((dataStruct *)sdata)->num_fit;
-    
-    long double q=qArray[0];
     int num_fit1=num_fitArray[0];
     int num_fit2=num_fit1+num_fitArray[1];
     
@@ -638,55 +665,99 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
     long double D=gsl_vector_get(para, 4);
     long double A=gsl_vector_get(para, 5);
     long double B=gsl_vector_get(para, 6);
+    long double A2=gsl_vector_get(para, 7);
+    long double B2=gsl_vector_get(para, 8);
     
-    long double Dq2=D*q*q;
+//    for (int iterpara=0; iterpara<numOfPara; ++iterpara)
+//    {
+//        cout << gsl_vector_get(para, iterpara) << '\n';
+//    }
+//    cout << '\n';
     
-    if (sigma<0)
-    {
-        for (int iter=0; iter<num_fit2; ++iter)
-        {
-            gsl_matrix_set(J, iter, 0, 0);
-            gsl_matrix_set(J, iter, 1, 0);
-            gsl_matrix_set(J, iter, 2, 2e5 *sigma);
-            gsl_matrix_set(J, iter, 3, 0);
-            gsl_matrix_set(J, iter, 4, 0);
-            gsl_matrix_set(J, iter, 5, 0);
-            gsl_matrix_set(J, iter, 6, 0);
-            gsl_matrix_set(J, iter, 7, 0);
-            gsl_matrix_set(J, iter, 8, 0);
-        }
-        return GSL_SUCCESS;
-    }
+    bool breakFlag=false;
     if (vbar<0)
     {
         for (int iter=0; iter<num_fit2; ++iter)
         {
-            gsl_matrix_set(J, iter, 0, 0);
             gsl_matrix_set(J, iter, 1, 2e5 *vbar);
-            gsl_matrix_set(J, iter, 2, 0);
-            gsl_matrix_set(J, iter, 3, 0);
-            gsl_matrix_set(J, iter, 4, 0);
-            gsl_matrix_set(J, iter, 5, 0);
-            gsl_matrix_set(J, iter, 6, 0);
-            gsl_matrix_set(J, iter, 7, 0);
-            gsl_matrix_set(J, iter, 8, 0);
         }
-        return GSL_SUCCESS;
+        breakFlag=true;
+    }
+    if (sigma<0)
+    {
+        for (int iter=0; iter<num_fit2; ++iter)
+        {
+            gsl_matrix_set(J, iter, 2, 2e5 *sigma);
+        }
+        breakFlag=true;
+    }
+    if (sigma>vbar)
+    {
+        for (int iter=0; iter<num_fit2; ++iter)
+        {
+            gsl_matrix_set(J, iter, 2, 2e5 *(sigma-vbar) );
+            gsl_matrix_set(J, iter, 1, gsl_matrix_get(J,iter,1) - 2e5 *(sigma-vbar) );
+        }
+        breakFlag=true;
     }
     if (lambda<0)
     {
         for (int iter=0; iter<num_fit2; ++iter)
         {
-            gsl_matrix_set(J, iter, 0, 0);
-            gsl_matrix_set(J, iter, 1, 0);
-            gsl_matrix_set(J, iter, 2, 0);
             gsl_matrix_set(J, iter, 3, 2e5*lambda);
-            gsl_matrix_set(J, iter, 4, 0);
-            gsl_matrix_set(J, iter, 5, 0);
-            gsl_matrix_set(J, iter, 6, 0);
-            gsl_matrix_set(J, iter, 7, 0);
-            gsl_matrix_set(J, iter, 8, 0);
         }
+        breakFlag=true;
+    }
+    if (alpha<0)
+    {
+        for (int iter=0; iter<num_fit2; ++iter)
+        {
+            gsl_matrix_set(J, iter, 0, 2e5*alpha);
+        }
+        breakFlag=true;
+    }
+    if (alpha>1)
+    {
+        for (int iter=0; iter<num_fit2; ++iter)
+        {
+            gsl_matrix_set(J, iter, 0, 2e5*(alpha-1));
+        }
+        breakFlag=true;
+    }
+    if (D<0)
+    {
+        for (int iter=0; iter<num_fit2; ++iter)
+        {
+            gsl_matrix_set(J, iter, 4, 2e5*D);
+        }
+        breakFlag=true;
+    }
+    if (D>10)
+    {
+        for (int iter=0; iter<num_fit2; ++iter)
+        {
+            gsl_matrix_set(J, iter, 4, 2e5*(D-10));
+        }
+        breakFlag=true;
+    }
+    if (A<0)
+    {
+        for (int iter=0; iter<num_fit2; ++iter)
+        {
+            gsl_matrix_set(J, iter, 5, 2e5*A);
+        }
+        breakFlag=true;
+    }
+    if (A2<0)
+    {
+        for (int iter=0; iter<num_fit2; ++iter)
+        {
+            gsl_matrix_set(J, iter, 7, 2e5*A2);
+        }
+        breakFlag=true;
+    }
+    if (breakFlag)
+    {
         return GSL_SUCCESS;
     }
     
@@ -697,7 +768,12 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
     //}
     //cout << endl;
     
+    double* tau=((dataStruct *)sdata)->tau;
+    double* qArray=((dataStruct *)sdata)->q;
+    long double q=qArray[0];
+    
     //Temperary variables used for acceleration.
+    long double Dq2=D*q*q;
     long double Dq2lambda=Dq2+lambda;
     long double vbsigma2=vbar/sigma/sigma;
     long double vb2sigma2=vbsigma2*vbar;
@@ -790,30 +866,9 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
         gsl_matrix_set(J, iter, 6, 1.0/yi );
         gsl_matrix_set(J, iter, 7, 0 );
         gsl_matrix_set(J, iter, 8, 0 );
-        
-        //Punishment terms
-        if (alpha<0)
-        {
-            gsl_matrix_set(J, iter, 0, gsl_matrix_get(J, iter, 0) + 2e5 *alpha);
-        }
-        if (alpha>1)
-        {
-            gsl_matrix_set(J, iter, 0, gsl_matrix_get(J, iter, 0) + 2e5 *(alpha-1));
-        }
-        if (D<0)
-        {
-            gsl_matrix_set(J, iter, 4, gsl_matrix_get(J, iter, 4) + 2e5 *D);
-        }
-        if (A<0)
-        {
-            gsl_matrix_set(J, iter, 5, gsl_matrix_get(J, iter, 5) + 2e5 *A);
-        }
     }
     
     q=qArray[1];
-    A=gsl_vector_get(para, 7);
-    B=gsl_vector_get(para, 8);
-    
     Dq2=D*q*q;
     Dq2lambda=Dq2+lambda;
     
@@ -870,7 +925,7 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
         
         double expterm=exp(-Dq2*t);
         double dA=(1.0-(1.0-alpha)*expterm-alpha*rtd);
-        double yi=A*dA+B;
+        double yi=A2*dA+B2;
         
         gsl_matrix_set(J, iter, 0, A*(expterm-rtd)/yi );
         gsl_matrix_set(J, iter, 1, -A*alpha*dvbarrtd/yi );
@@ -883,26 +938,7 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
         gsl_matrix_set(J, iter, 6, 0 );
         gsl_matrix_set(J, iter, 7, dA/yi );
         gsl_matrix_set(J, iter, 8, 1.0/yi );
-        
-        //Punishment terms
-        if (alpha<0)
-        {
-            gsl_matrix_set(J, iter, 0, gsl_matrix_get(J, iter, 0) + 2e5 *alpha);
-        }
-        if (alpha>1)
-        {
-            gsl_matrix_set(J, iter, 0, gsl_matrix_get(J, iter, 0) + 2e5 *(alpha-1));
-        }
-        if (D<0)
-        {
-            gsl_matrix_set(J, iter, 4, gsl_matrix_get(J, iter, 4) + 2e5 *D);
-        }
-        if (A<0)
-        {
-            gsl_matrix_set(J, iter, 7, gsl_matrix_get(J, iter, 7) + 2e5 *A);
-        }
     }
-    
     return GSL_SUCCESS;
 }
 #endif
