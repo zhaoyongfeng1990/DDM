@@ -118,7 +118,7 @@ const int numOfPara=7;
 //#define NoJacobian
 #define NeedNumericalInverseLaplaceTransformation
 #define IfComplexIntegration
-//#define MultiQFit
+#define MultiQFit
 #endif
 
 #endif /* defined(__ddm__parameters__) */
