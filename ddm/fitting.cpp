@@ -377,7 +377,7 @@ void ddm::fitting_DoubQ()
 #endif
     
 #pragma omp parallel for
-    for (int iterq=0; iterq<fqsize; ++iterq)
+    for (int iterq=1; iterq<fqsize; ++iterq)
     {
         double q1=qabs[iterq];
         double q2=qabs[iterq+30];

@@ -73,7 +73,7 @@ void ddm::printFit()
     }
 #else
     int fqsize=qsize-30;
-    for (int iterq=0; iterq<fqsize; ++iterq)
+    for (int iterq=1; iterq<fqsize; ++iterq)
     {
         for (int iterpara=0; iterpara<numOfPara; ++iterpara)
         {
