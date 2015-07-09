@@ -55,7 +55,7 @@ int main(int argc, const char * argv[])
 #endif
     
     cout << "Fitting..." << endl;
-    ddmExp.fitting_DoubQ();
+    ddmExp.fitting_estRange();
     //ddmExp.printFit();
 
     return 0;
