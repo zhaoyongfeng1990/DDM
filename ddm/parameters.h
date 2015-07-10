@@ -34,7 +34,7 @@
 
 using namespace std;
 
-const int OMP_NUM_THREADS=6;
+const int OMP_NUM_THREADS=1;
 
 const long double pi = 3.141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342117068l;
 const double sqrtpi = sqrt(pi); //Constant for convenience
@@ -62,11 +62,11 @@ const double smin=0.01;
 const int maxIter=200;    //Maximum iteration number in fitting
 
 const double alphaGuess=0.8;
-const double DGuess=0.2;//0.2;
+const double DGuess=0.4;//0.2;
 const double vbarGuess=13;
-const double lambdaGuess=2;
+const double lambdaGuess=1;
 const double ZGuess=3;
-const double sigmaGuess=vbarGuess/2;
+const double sigmaGuess=vbarGuess/8;
 
 //const int winDim = 5;   //Size of searching window. Used in aligning images.
 

@@ -8,6 +8,7 @@
 
 #include "ddm.h"
 #include <iostream>
+//#include <fstream>
 #include <cmath>
 #include <gsl/gsl_multifit_nlin.h>
 #include <omp.h>
@@ -375,15 +376,19 @@ void ddm::fitting_DoubQ()
 #ifdef ISFRTDPNoLT_sigma
     NILT NILT1, NILT2, NILT3, NILT4, NILT5;
 #endif
-    
+    ofstream debug("debug.txt");
 #pragma omp parallel for
     for (int iterq=1; iterq<fqsize; ++iterq)
     {
         double q1=qabs[iterq];
         double q2=qabs[iterq+30];
         
+        //cout << q1 << "\n";
+        
         double B1 = gsl_matrix_get(datag, iterq, 0);
         double A1 = gsl_matrix_get(datag, iterq, numOfDiff-1)-B1;
+        
+        //cout << B1 << " " << A1 << "\n";
         int iniTime1=-1;
         for (int itert=0; itert<numOfDiff; ++itert)
         {
@@ -428,6 +433,9 @@ void ddm::fitting_DoubQ()
         int num_fit2=finalTime2-iniTime2;
         int tempnum_fit[2]={num_fit1, num_fit2};
         int num_fitt=num_fit1+num_fit2;
+        
+        //cout << iniTime1 << " " << finalTime1 << "\n";
+        //cout << iniTime2 << " " << finalTime2 << "\n";
         
         double data[numOfDiff*2];
         double tempq[2]={q1,q2};
@@ -500,22 +508,22 @@ void ddm::fitting_DoubQ()
         gsl_multifit_fdfsolver_set(solver, &fitfun, &para.vector);
         int iter=0;
         //gsl_vector* g=gsl_vector_alloc(numOfPara);
-//        for (int iterpara=0; iterpara<numOfPara+2; ++iterpara)
-//        {
-//            cout << gsl_vector_get(solver->x, iterpara) << endl;
-//        }
-//        cout << endl;
+        //for (int iterpara=0; iterpara<numOfPara+2; ++iterpara)
+        //{
+        //    debug << gsl_vector_get(solver->x, iterpara) << " ";
+        //}
+        //debug << endl;
         
         do
         {
             gsl_multifit_fdfsolver_iterate(solver);		//Iterate one step.
             status[iterq] = norm0_rel_test(solver->dx, solver->x, 1e-10, 1e-10);  //Test the exiting condition
             
-//            for (int iterpara=0; iterpara<numOfPara+2; ++iterpara)
-//            {
-//                cout << gsl_vector_get(solver->x, iterpara) << endl;
-//            }
-//            cout << endl;
+            //for (int iterpara=0; iterpara<numOfPara+2; ++iterpara)
+            //{
+            //    debug << gsl_vector_get(solver->x, iterpara) << " ";
+            //}
+            debug << endl;
             //gsl_multifit_gradient(solver->J,solver->f, g);
             //status[iterq-1]=gsl_multifit_test_gradient(g, 1e-5);
             //			status[iterq - 1] = covar_rel_test(solver->J, solver->x, 1e-4);
