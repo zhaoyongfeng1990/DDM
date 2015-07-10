@@ -34,7 +34,7 @@
 
 using namespace std;
 
-const int OMP_NUM_THREADS=1;
+const int OMP_NUM_THREADS=8;
 
 const long double pi = 3.141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342117068l;
 const double sqrtpi = sqrt(pi); //Constant for convenience

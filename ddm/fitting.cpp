@@ -353,11 +353,6 @@ void ddm::fitting_DoubQ()
     fitErr=gsl_matrix_alloc(fqsize, numOfPara+2);
     status = new int[fqsize];		//Record the status of fitting.
     //datafit = gsl_matrix_alloc(qsize, num_fit);
-    double tempinipara[numOfPara+2];
-    for (int iter=0; iter<numOfPara-2; ++iter)
-    {
-        tempinipara[iter]=inipara[iter];
-    }
     
     const gsl_multifit_fdfsolver_type *solverType;	//GSL solver
     solverType = gsl_multifit_fdfsolver_lmsder;
@@ -380,6 +375,11 @@ void ddm::fitting_DoubQ()
 #pragma omp parallel for
     for (int iterq=1; iterq<fqsize; ++iterq)
     {
+        double tempinipara[numOfPara+2];
+        for (int iter=0; iter<numOfPara-2; ++iter)
+        {
+            tempinipara[iter]=inipara[iter];
+        }
         double q1=qabs[iterq];
         double q2=qabs[iterq+30];
         
