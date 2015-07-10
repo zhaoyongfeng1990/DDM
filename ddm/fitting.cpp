@@ -376,7 +376,7 @@ void ddm::fitting_DoubQ()
 #ifdef ISFRTDPNoLT_sigma
     NILT NILT1, NILT2, NILT3, NILT4, NILT5;
 #endif
-    ofstream debug("debug.txt");
+    //ofstream debug("debug.txt");
 #pragma omp parallel for
     for (int iterq=1; iterq<fqsize; ++iterq)
     {
