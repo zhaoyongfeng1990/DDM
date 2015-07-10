@@ -523,7 +523,7 @@ void ddm::fitting_DoubQ()
             //{
             //    debug << gsl_vector_get(solver->x, iterpara) << " ";
             //}
-            debug << endl;
+            //debug << endl;
             //gsl_multifit_gradient(solver->J,solver->f, g);
             //status[iterq-1]=gsl_multifit_test_gradient(g, 1e-5);
             //			status[iterq - 1] = covar_rel_test(solver->J, solver->x, 1e-4);
