@@ -62,11 +62,11 @@ const double smin=0.01;
 const int maxIter=200;    //Maximum iteration number in fitting
 
 const double alphaGuess=0.8;
-const double DGuess=0.4;//0.2;
+const double DGuess=0.2;
 const double vbarGuess=13;
-const double lambdaGuess=1;
+const double lambdaGuess=2;
 const double ZGuess=3;
-const double sigmaGuess=vbarGuess/8;
+const double sigmaGuess=vbarGuess/4;
 
 //const int winDim = 5;   //Size of searching window. Used in aligning images.
 
