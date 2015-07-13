@@ -404,7 +404,7 @@ void ddm::fitting_DoubQ()
             cout << "Skipping q=" << q1 << " and " << q2 << ", " << 200.0*progress / qsize << "% completed from thread No." << omp_get_thread_num() << "." << endl;
             continue;
         }
-        int finalTime1=30*iniTime1;
+        int finalTime1=4000*iniTime1;
         finalTime1=(finalTime1>numOfDiff) ? numOfDiff : finalTime1;
         iniTime1=0;
         
@@ -425,7 +425,7 @@ void ddm::fitting_DoubQ()
             cout << "Skipping q=" << q2 << " and " << q1 << ", " << 200.0*progress / qsize << "% completed from thread No." << omp_get_thread_num() << "." << endl;
             continue;
         }
-        int finalTime2=30*iniTime2;
+        int finalTime2=4000*iniTime2;
         finalTime2=(finalTime2>numOfDiff) ? numOfDiff : finalTime2;
         iniTime2=0;
         
