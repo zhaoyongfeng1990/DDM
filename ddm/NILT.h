@@ -32,8 +32,8 @@ struct warper
     cpx (*fun)(cpx z, long double* para, long double x);
 };
 
-const double epsabs=1e-13;
-const double epsrel=1e-13;
+const double epsabs=1e-8;
+const double epsrel=1e-8;
 const int workspaceSize=100000;
 #endif
 

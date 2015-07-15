@@ -217,7 +217,8 @@ int ISFfun(const gsl_vector* para, void* sdata, gsl_vector* y)
     long double vb2sigma2=vbsigma2*vbar;
     long double logfactor=vb2sigma2*log(vbsigma2)-gsl_sf_lngamma(vb2sigma2);
     
-    long double paraISF[6]={lambda, q, Dq2lambda, vbsigma2, logfactor, vb2sigma2};
+    //long double paraISF[6]={lambda, q, Dq2lambda, vbsigma2, logfactor, vb2sigma2};
+    long double paraISF[10]={lambda, q, Dq2lambda, vbsigma2, logfactor, vb2sigma2, vbar, 0, 0, sigma};
     
     //Initialization of numerical inverse Laplace transformation solver
     int tid=omp_get_thread_num();
@@ -379,7 +380,7 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
     long double cpsiz1=logvbsigma2-gsl_sf_psi(vb2sigma2);
     long double vb2sigma3=vb2sigma2/sigma;
     
-    long double paraISF[9]={lambda, q, Dq2lambda, vbsigma2, logfactor, vb2sigma2, vbar, cpsiz1, vb2sigma3};
+    long double paraISF[10]={lambda, q, Dq2lambda, vbsigma2, logfactor, vb2sigma2, vbar, cpsiz1, vb2sigma3, sigma};
     
     NILT* ILT=((dataStruct *)sdata)->ISFILT;
     NILT* dvbarILT=((dataStruct *)sdata)->dvbarISFILT;
@@ -577,7 +578,8 @@ int ISFfun(const gsl_vector* para, void* sdata, gsl_vector* y)
     long double vb2sigma2=vbsigma2*vbar;
     long double logfactor=vb2sigma2*log(vbsigma2)-gsl_sf_lngamma(vb2sigma2);
     
-    long double paraISF[6]={lambda, q, Dq2lambda, vbsigma2, logfactor, vb2sigma2};
+    //long double paraISF[6]={lambda, q, Dq2lambda, vbsigma2, logfactor, vb2sigma2};
+    long double paraISF[10]={lambda, q, Dq2lambda, vbsigma2, logfactor, vb2sigma2, vbar, 0, 0, sigma};
     
     //Initialization of numerical inverse Laplace transformation solver
     int tid=omp_get_thread_num();
@@ -782,7 +784,7 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
     long double cpsiz1=logvbsigma2-gsl_sf_psi(vb2sigma2);
     long double vb2sigma3=vb2sigma2/sigma;
     
-    long double paraISF[9]={lambda, q, Dq2lambda, vbsigma2, logfactor, vb2sigma2, vbar, cpsiz1, vb2sigma3};
+    long double paraISF[10]={lambda, q, Dq2lambda, vbsigma2, logfactor, vb2sigma2, vbar, cpsiz1, vb2sigma3, sigma};
     
     NILT* ILT=((dataStruct *)sdata)->ISFILT;
     NILT* dvbarILT=((dataStruct *)sdata)->dvbarISFILT;
