@@ -30,6 +30,109 @@ void ddm::aveQBilinear()
 #pragma omp parallel for
     for (int itertau = 0; itertau < numOfDiff; ++itertau)
     {
+        for (int iterrow = 1; iterrow < dimky-1; ++iterrow)
+        {
+            int kx1 = iterrow;
+            int kx2 = iterrow+1;
+            int refkx1=(dimy-kx1)%dimy;
+            int refkx2=(dimy-kx2)%dimy;
+            for (int itercol = 1; itercol < dimkx-1; ++itercol)
+            {
+                int ky1 = itercol;
+                int ky2 = itercol+1;
+                
+                double dist1=sqrt(kx1*kx1*dqy*dqy+ky1*ky1*dqx*dqx)/qstep;
+                double dist2=sqrt(kx2*kx2*dqy*dqy+ky2*ky2*dqx*dqx)/qstep;
+                
+                int maxqidx=ceil(dist2);
+                int minqidx=ceil(dist1);
+                
+                double dist3=sqrt(kx2*kx2*dqy*dqy+ky1*ky1*dqx*dqx)/qstep;
+                double dist4=sqrt(kx1*kx1*dqy*dqy+ky2*ky2*dqx*dqx)/qstep;
+                
+                for (int iterq=minqidx; iterq<maxqidx; ++iterq)
+                {
+                    double px[2];
+                    double py[2];
+                    
+                    if(dist3>=iterq)
+                    {
+                        py[0]=ky1*dqx/qstep;
+                        px[0]=sqrt(iterq*iterq-py[0]*py[0]);
+                    }
+                    else
+                    {
+                        px[0]=kx2*dqy/qstep;
+                        py[0]=sqrt(iterq*iterq-px[0]*px[0]);
+                    }
+                    
+                    if (dist4>=iterq)
+                    {
+                        px[1]=kx1*dqy/qstep;
+                        py[1]=sqrt(iterq*iterq-px[1]*px[1]);
+                    }
+                    else
+                    {
+                        py[1]=ky2*dqx/qstep;
+                        px[1]=sqrt(iterq*iterq-py[1]*py[1]);
+                    }
+                    
+                    double dist=(px[0]-px[1])*(px[0]-px[1])+(py[0]-py[1])*(py[0]-py[1]);
+                    double cosdt=1-dist/2/iterq/iterq;
+                    double dt=acos(cosdt);
+                    
+                    double cost1=px[0]/iterq;
+                    double sint1=py[0]/iterq;
+                    double cost2=px[1]/iterq;
+                    double sint2=py[1]/iterq;
+                    double dcost=cost2-cost1;
+                    double dsint=sint2-sint1;
+                    double dcos2t=2*(cost2*cost2-cost1*cost1);
+                    
+                    double u11=gsl_matrix_get(imagekDiff[itertau], kx1, ky1);
+                    double u12=gsl_matrix_get(imagekDiff[itertau], kx1, ky2);
+                    double u21=gsl_matrix_get(imagekDiff[itertau], kx2, ky1);
+                    double u22=gsl_matrix_get(imagekDiff[itertau], kx2, ky2);
+                    
+                    double arc=gsl_matrix_get(datag, iterq, itertau);
+                    arc+=u11*dt-(qabs[iterq]*dcost+ky1*dqx*dt)*(u12-u11)/dqx+(qabs[iterq]*dsint-kx1*dqy*dt)*(u21-u11)/dqy+(kx1*dqy*qabs[iterq]*dcost+kx1*ky1*dqx*dqy*dt-qabs[iterq]*qabs[iterq]*dcos2t/4-ky1*dqx*qabs[iterq]*dsint)/dqx/dqy*(u22-u21-u12+u11);
+                    
+                    u11=gsl_matrix_get(imagekDiff[itertau], refkx1, ky1);
+                    u12=gsl_matrix_get(imagekDiff[itertau], refkx1, ky2);
+                    u21=gsl_matrix_get(imagekDiff[itertau], refkx2, ky1);
+                    u22=gsl_matrix_get(imagekDiff[itertau], refkx2, ky2);
+                    
+                    arc+=u11*dt-(qabs[iterq]*dcost+ky1*dqx*dt)*(u12-u11)/dqx+(qabs[iterq]*dsint-kx1*dqy*dt)*(u21-u11)/dqy+(kx1*dqy*qabs[iterq]*dcost+kx1*ky1*dqx*dqy*dt-qabs[iterq]*qabs[iterq]*dcos2t/4-ky1*dqx*qabs[iterq]*dsint)/dqx/dqy*(u22-u21-u12+u11);
+                    
+                    gsl_matrix_set(datag, iterq, itertau, arc);
+                    double angle=gsl_matrix_get(count, iterq, itertau);
+                    angle+=dt*2;
+                    gsl_matrix_set(count, iterq, itertau, angle);
+                }
+            }
+        }
+        gsl_matrix_set(datag, 0, itertau, gsl_matrix_get(imagekDiff[itertau], 0, 0));
+        gsl_matrix_set(count, 0, itertau, 1);
+    }
+    gsl_matrix_div_elements(datag, count);		//Average
+}
+
+void ddm::aveQBicubic()
+{
+    qsize=ceil(qmax/qstep); //qsize is the number of different q value samples.
+    qabs.resize(qsize);     //qabs is the absolute value of q
+    for (int iter=0; iter<qsize; ++iter)
+    {
+        qabs[iter]=iter*qstep;    //For interpolation.
+    }
+    datag = gsl_matrix_calloc(qsize, numOfDiff);
+    gsl_matrix* count = gsl_matrix_alloc(qsize, numOfDiff);
+    gsl_matrix_set_zero(datag);
+    gsl_matrix_set_zero(count);     //Number of elements
+    
+#pragma omp parallel for
+    for (int itertau = 0; itertau < numOfDiff; ++itertau)
+    {
         for (int iterrow = 0; iterrow < dimky-1; ++iterrow)
         {
             int kx1 = iterrow;

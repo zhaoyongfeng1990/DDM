@@ -36,6 +36,7 @@ public:
     void aveQSort();
     void aveQConcentric();
     void aveQBilinear();
+    void aveQBicubic();
     
     void LaplaceTrans();
     
