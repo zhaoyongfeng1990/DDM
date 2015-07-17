@@ -29,15 +29,15 @@ ddm::ddm() : imageSeqk(numOfSeq), imagekDiff(numOfDiff), qabs()
 #endif
 
     
-    for (int itertau=0; itertau<num_fit; ++itertau)
-    {
-#ifdef NeedLaplaceTrans
-        //s[itertau]=exp(smin+ds*itertau);
-        s[itertau]=smin+ds*itertau;
-#else
-        tau[itertau]=(itertau+1+iniTime)*dt;
-#endif
-    }
+//    for (int itertau=0; itertau<num_fit; ++itertau)
+//    {
+//#ifdef NeedLaplaceTrans
+//        //s[itertau]=exp(smin+ds*itertau);
+//        s[itertau]=smin+ds*itertau;
+//#else
+//        tau[itertau]=(itertau+1+iniTime)*dt;
+//#endif
+//    }
     
 #ifdef ISFSWIMMER
     inipara[0]=alphaGuess;

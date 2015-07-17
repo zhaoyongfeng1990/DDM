@@ -8,7 +8,7 @@
 
 #include "ddm.h"
 #include <iostream>
-//#include <fstream>
+#include <fstream>
 #include <cmath>
 #include <gsl/gsl_multifit_nlin.h>
 #include <omp.h>
@@ -24,6 +24,29 @@ int covar_rel_test(const gsl_matrix* J, const gsl_vector* x, double tol);
 #ifndef MultiQFit
 void ddm::fitting()
 {
+    ofstream taufile("tau.txt");
+    ofstream fitdata("fitdata.txt");
+    for (int itertau=0; itertau<32; ++itertau)
+    {
+#ifdef NeedLaplaceTrans
+        //s[itertau]=exp(smin+ds*itertau);
+        s[itertau]=smin+ds*itertau;
+#else
+        tau[itertau]=(itertau+1+iniTime)*dt;
+        taufile << tau[itertau] << '\n';
+#endif
+    }
+    //num_fit=128;
+    int upperLimit=floor(log(numOfDiff/32)/log(2))+32;
+    for (int itertau=32; itertau<upperLimit; ++itertau)
+    {
+        tau[itertau]=2*tau[itertau-1];
+        taufile << tau[itertau] << '\n';
+    }
+    num_fit=upperLimit+1;
+    tau[upperLimit]=numOfDiff*dt;
+    taufile << tau[upperLimit] << '\n';
+    
     fittedPara=gsl_matrix_alloc(qsize, numOfPara);
     //To store the fitting result and error.
     fitErr=gsl_matrix_alloc(qsize, numOfPara);
@@ -37,18 +60,27 @@ void ddm::fitting()
     //Initial guess
     
     //Get the selected data for fitting
-    for (int iterq = 0; iterq < qsize; ++iterq)
+    
+    for (int iterq = 1; iterq < qsize; ++iterq)
     {
         //int inif=floor(exp(-0.5)/dt);
         //int finalf=ceil(exp(0.5)/dt);
-        for (int iterf = 0; iterf < num_fit; ++iterf)
+        for (int iterf = 0; iterf < 32; ++iterf)
         {
 #ifdef NeedLaplaceTrans
             gsl_matrix_set(datafit, iterq, iterf, log(gsl_matrix_get(ldatag, iterq, iterf)));		//Fitting in log scale.
 #else
             gsl_matrix_set(datafit, iterq, iterf, log(gsl_matrix_get(datag, iterq, iterf+iniTime)));		//Fitting in log scale.
+            fitdata << gsl_matrix_get(datafit, iterq, iterf) << ' ';
 #endif
         }
+        for (int iterf=32; iterf<upperLimit; ++iterf)
+        {
+            gsl_matrix_set(datafit, iterq, iterf, log(gsl_matrix_get(datag, iterq, 32*pow(2,iterf-32))));		//Fitting in log scale.
+            fitdata << gsl_matrix_get(datafit, iterq, iterf) << ' ';
+        }
+        gsl_matrix_set(datafit, iterq, upperLimit, log(gsl_matrix_get(datag, iterq, numOfDiff-1)));
+        fitdata << gsl_matrix_get(datafit, iterq, upperLimit) << '\n';
     }
     int progress=0;		//Indicator of progress.
     
@@ -65,7 +97,7 @@ void ddm::fitting()
 #endif
     
 #pragma omp parallel for
-    for (int iterq=0; iterq<qsize; ++iterq)
+    for (int iterq=2; iterq<qsize; ++iterq)
     {
         gsl_multifit_function_fdf fitfun;		//Function point.
         gsl_vector_view dataAry=gsl_matrix_row(datafit, iterq);
@@ -373,7 +405,7 @@ void ddm::fitting_DoubQ()
 #endif
     //ofstream debug("debug.txt");
 #pragma omp parallel for
-    for (int iterq=1; iterq<fqsize; ++iterq)
+    for (int iterq=0; iterq<fqsize; ++iterq)
     {
         double tempinipara[numOfPara+2];
         for (int iter=0; iter<numOfPara-2; ++iter)
@@ -429,8 +461,11 @@ void ddm::fitting_DoubQ()
         finalTime2=(finalTime2>numOfDiff) ? numOfDiff : finalTime2;
         iniTime2=0;
         
-        int num_fit1=finalTime1-iniTime1;
-        int num_fit2=finalTime2-iniTime2;
+        //int num_fit1=finalTime1-iniTime1;
+        //int num_fit2=finalTime2-iniTime2;
+        int num_fit1=floor(log(numOfDiff/128)/log(2))+128;
+        int num_fit2=floor(log(numOfDiff/128)/log(2))+128;
+        
         int tempnum_fit[2]={num_fit1, num_fit2};
         int num_fitt=num_fit1+num_fit2;
         
@@ -441,15 +476,25 @@ void ddm::fitting_DoubQ()
         double tempq[2]={q1,q2};
         double tempt[numOfDiff*2];
         
-        for (int iterf = 0; iterf < num_fit1; ++iterf)
+        for (int iterf = 0; iterf < 128; ++iterf)
         {
             data[iterf]=log(gsl_matrix_get(datag, iterq, iterf+iniTime1));		//Fitting in log scale.
             tempt[iterf]=(iterf+1+iniTime1)*dt;
         }
-        for (int iterf = num_fit1; iterf < num_fitt; ++iterf)
+        for (int iterf=128; iterf<num_fit1; ++iterf)
+        {
+            data[iterf]=log(gsl_matrix_get(datag, iterq, 128*pow(2,iterf-128)));		//Fitting in log scale.
+            tempt[iterf]=2*tempt[iterf-1];
+        }
+        for (int iterf = num_fit1; iterf < num_fit1+128; ++iterf)
         {
             data[iterf]=log(gsl_matrix_get(datag, iterq+30, iterf-num_fit1+iniTime2));		//Fitting in log scale.
             tempt[iterf]=(iterf-num_fit1+1+iniTime2)*dt;
+        }
+        for (int iterf = num_fit1+128; iterf < num_fitt; ++iterf)
+        {
+            data[iterf]=log(gsl_matrix_get(datag, iterq+30, 128*pow(2,iterf-num_fit1-128)));		//Fitting in log scale.
+            tempt[iterf]=2*tempt[iterf-1];
         }
         
         gsl_multifit_function_fdf fitfun;		//Function point.

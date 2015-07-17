@@ -6,7 +6,7 @@
 //  Copyright (c) 2015年 ZYF. All rights reserved.
 //
 #include "ddm.h"
-
+#include <iostream>
 #ifdef ISFSWIMMER
 
 //The ISF is written to meet the API of GSL f function. sdata is the pointer to data structure defined by GSL. y is the return of the function.
@@ -30,7 +30,8 @@ int ISFfun(const gsl_vector* para, void* sdata, gsl_vector* y)
         double Gamma=q*tau[iter]*v/(Z+1);
         double yi=log(A*(1-exp(-D*q*q*tau[iter])*(1-alpha+alpha/Z/Gamma*sin(Z*atan(Gamma))/pow(1+Gamma*Gamma, Z/2.0)))+B);
         
-        double result = yi - dataAry[iter];
+        double weight=exp(dataAry[iter]-log(560*500));
+        double result = (yi - dataAry[iter])/weight;
         
         //Punishment terms, to make constrains in parameter space.
         if (alpha < 0)
@@ -71,6 +72,7 @@ int ISFfun(const gsl_vector* para, void* sdata, gsl_vector* y)
 //The function is written to meet the API of GSL df function. sdata is the pointer to data structure defined by GSL. J is the Jacobian, which is the return of the function.
 int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
 {
+    double* dataAry=((dataStruct *)sdata)->data;
     double* tau=((dataStruct *)sdata)->tau;
     double q=((dataStruct *)sdata)->q;
     int num_fit=((dataStruct *)sdata)->num_fit;
@@ -96,16 +98,17 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
         double zzqqttvv = (1 + Z)*(1 + Z) + qqttvv;
         double yi = A*(1 - difexp*(1 - alpha + alpha / Z / Gamma*sinzg / powg)) + B;
         //(log y)'=y'/y
+        double weight=exp(dataAry[iter]-log(560*500));
         
-        gsl_matrix_set(J, iter, 0, (A*difexp*(1-sinzg/Z/Gamma/powg))/yi );
-        gsl_matrix_set(J, iter, 1, (A*q*q*tau[iter]*(1-alpha+alpha*sinzg/powg/Z/Gamma)*difexp)/yi );
+        gsl_matrix_set(J, iter, 0, (A*difexp*(1-sinzg/Z/Gamma/powg))/yi/weight );
+        gsl_matrix_set(J, iter, 1, (A*q*q*tau[iter]*(1-alpha+alpha*sinzg/powg/Z/Gamma)*difexp)/yi/weight );
         
-        gsl_matrix_set(J, iter, 2, ((alpha*(1+Z)*A*difexp*((1+Z+qqttvv)*sinzg-v*Z*q*tau[iter]*coszg) )/powg/(v*Z*Gamma*zzqqttvv) )/yi );
+        gsl_matrix_set(J, iter, 2, ((alpha*(1+Z)*A*difexp*((1+Z+qqttvv)*sinzg-v*Z*q*tau[iter]*coszg) )/powg/(v*Z*Gamma*zzqqttvv) )/yi/weight );
         
-        gsl_matrix_set(J, iter, 3, ((A*alpha*difexp*( (v*Z*Z*q*tau[iter]-zzqqttvv*zatang)*2*coszg+(2*(1+Z-(Z-1)*qqttvv)+Z*zzqqttvv*log(1+Gamma*Gamma))*sinzg))/powg/Gamma/2/Z/Z/zzqqttvv)/yi );
+        gsl_matrix_set(J, iter, 3, ((A*alpha*difexp*( (v*Z*Z*q*tau[iter]-zzqqttvv*zatang)*2*coszg+(2*(1+Z-(Z-1)*qqttvv)+Z*zzqqttvv*log(1+Gamma*Gamma))*sinzg))/powg/Gamma/2/Z/Z/zzqqttvv)/yi/weight );
         
-        gsl_matrix_set(J, iter, 4, (1-difexp*(1-alpha+alpha/Z/Gamma*sinzg/powg) )/yi );
-        gsl_matrix_set(J, iter, 5, 1/yi);
+        gsl_matrix_set(J, iter, 4, (1-difexp*(1-alpha+alpha/Z/Gamma*sinzg/powg) )/yi/weight );
+        gsl_matrix_set(J, iter, 5, 1/yi/weight );
         
         //Punishment terms, to make constrains in parameter space.
         if (alpha < 0)

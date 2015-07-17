@@ -59,7 +59,7 @@ void ddm::printFit()
     ofstream statusfile("status.txt");
     ofstream qstatusfile("statusq.txt");
 #ifndef MultiQFit
-    for (int iterq=0; iterq<qsize; ++iterq)
+    for (int iterq=1; iterq<qsize; ++iterq)
     {
         for (int iterpara=0; iterpara<numOfPara; ++iterpara)
         {
@@ -73,7 +73,7 @@ void ddm::printFit()
     }
 #else
     int fqsize=qsize-30;
-    for (int iterq=1; iterq<fqsize; ++iterq)
+    for (int iterq=0; iterq<fqsize; ++iterq)
     {
         for (int iterpara=0; iterpara<numOfPara; ++iterpara)
         {
