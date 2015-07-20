@@ -8,100 +8,90 @@
 
 #include <fftw3.h>	//FFTW
 #include "ddm.h"
+#include <fstream>
+#include <omp.h>
 
-ddm::ddm() : imageSeqk(numOfSeq), imagekDiff(numOfDiff), qabs()
+ddm::ddm() : imageSeqk(), imagekDiff(), qabs(), tau()
 {
+    
     datag=nullptr;
-    ldatag=nullptr;
     fittedPara=nullptr;
     fitErr=nullptr;
     status=nullptr;
     datafit=nullptr;
     qsize=0;
     
-    iniTime=0;//floor(exp(-0.5)/dt);
-    finalTime=numOfDiff; //ceil(exp(0.5)/dt);
-    num_fit = finalTime-iniTime; //numOfDiff;  //Number of data
-#ifdef NeedLaplaceTrans
-    s=new double[num_fit];
-#else
-    tau=new double[num_fit];
-#endif
-
+    ifstream paraFile("parameters.txt");
     
-//    for (int itertau=0; itertau<num_fit; ++itertau)
-//    {
-//#ifdef NeedLaplaceTrans
-//        //s[itertau]=exp(smin+ds*itertau);
-//        s[itertau]=smin+ds*itertau;
-//#else
-//        tau[itertau]=(itertau+1+iniTime)*dt;
-//#endif
-//    }
+    paraFile >> OMP_NUM_THREADS;
+    paraFile >> num_qCurve;
+    qIncreList=new int[num_qCurve];
+    qIncreList[0]=0;
+    for (int i=1; i<num_qCurve; ++i)
+    {
+        paraFile >> qIncreList[i];
+    }
     
-#ifdef ISFSWIMMER
+    paraFile >> dimx;
+    paraFile >> dimy;
+    
+    dimkx = dimx / 2 + 1;
+    dimky = dimy / 2 + 1;
+    numOfk = dimy*dimkx;
+    
+    paraFile >> numOfSeq;
+    paraFile >> numOfDiff;
+    paraFile >> dx;
+    
+    dqx = 2 * pi / dx / dimx;    //q step after FFT
+    dqy = 2 * pi / dx / dimy;    //q step after FFT
+    qmax=2 * pi / dx /sqrt(2);   //Maximum possible value of q
+    
+    paraFile >> qmin;
+    paraFile >> qstep;
+    paraFile >> dt;
+    paraFile >> maxIter;
+    
+    paraFile >> alphaGuess;
+    paraFile >> DGuess;
+    paraFile >> vbarGuess;
+    paraFile >> lambdaGuess;
+    paraFile >> ZGuess;
+    paraFile >> sigmaGuess;
+    
+    imageSeqk.reserve(numOfSeq);
+    imagekDiff.reserve(numOfDiff);
+    
+    paraFile.close();
+#ifdef ISFSWP
     inipara[0]=alphaGuess;
     inipara[1]=DGuess;
     inipara[2]=vbarGuess;
     inipara[3]=ZGuess;
 #endif
     
-#ifdef ISFSWIMMERSIMPLE
+#ifdef ISFSW
     inipara[0]=alphaGuess;
     inipara[1]=DGuess;
     inipara[2]=vbarGuess;
 #endif
-    
-#ifdef ISFRUNANDTUMBLE
-    inipara[0]=lambdaGuess;
-    inipara[1]=vbarGuess;
-#endif
-    
-#ifdef ISFRUNANDTUMBLE_3D
-    inipara[0]=vbarGuess;
-    inipara[1]=lambdaGuess;
-#endif
-    
-#ifdef ISFRunAndTumbleAndDiffusion
-    inipara[0]=alphaGuess;
-    inipara[1]=vbarGuess;
-    inipara[2]=lambdaGuess;
-    inipara[3]=DGuess;
-#endif
-    
-#ifdef ISFRunAndTumbleAndDiffusionAndPv
-    inipara[0]=alphaGuess;
-    inipara[1]=vbarGuess;
-    inipara[2]=ZGuess;
-    inipara[3]=lambdaGuess;
-    inipara[4]=DGuess;
-#endif
 
-#ifdef ISFRunAndTumbleAndDiffusionNoLT
+#ifdef ISFRTD
     inipara[0]=alphaGuess;
     inipara[1]=vbarGuess;
     inipara[2]=lambdaGuess;
     inipara[3]=DGuess;
 #endif
     
-#ifdef ISFRTDPNoLT
-    inipara[0]=alphaGuess;
-    inipara[1]=vbarGuess;
-    inipara[2]=ZGuess;
-    inipara[3]=lambdaGuess;
-    inipara[4]=DGuess;
-#endif
-    
-#ifdef ISFRTDPNoLT_sigma
+#ifdef ISFRTDP
     inipara[0]=alphaGuess;
     inipara[1]=vbarGuess;
     inipara[2]=sigmaGuess;
     inipara[3]=lambdaGuess;
     inipara[4]=DGuess;
 #endif
-    //aveVec = gsl_vector_alloc(dim);
-    //gsl_vector_set_all(aveVec, 1.0 / dim);			//Vecter used in calculating average. I hope BLAS can help speed up the average.
     
+    omp_set_num_threads(OMP_NUM_THREADS);     //Number of threads
 }
 
 ddm::~ddm()
@@ -115,8 +105,11 @@ ddm::~ddm()
     if (datafit!=nullptr)
         gsl_matrix_free(datafit);
     if (status!=nullptr)
-        delete[] status;
-    
+        delete [] status;
+    if (qIncreList!=nullptr)
+    {
+        delete [] qIncreList;
+    }
     if (imagekDiff.size()!=0)
     {
         cleankDiff();
@@ -125,12 +118,4 @@ ddm::~ddm()
     {
         cleanSeqk();
     }
-    
-#ifdef NeedLaplaceTrans
-    if (ldatag!=nullptr)
-        gsl_matrix_free(ldatag);
-    delete [] s;
-#else
-    delete [] tau;
-#endif
 }

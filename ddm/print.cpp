@@ -15,37 +15,15 @@ void ddm::printG()
     ofstream qfile("q.txt");
     for (int iter = 0; iter < qsize; ++iter)
     {
-//      qfile << sqrt(q[iter])*dq << endl;
         qfile << qabs[iter] << endl;
     }
     qfile.close();
     ofstream datagfile("datag.txt");
     for (int iterq = 0; iterq < qsize; ++iterq)
     {
-        for (int itertau = 0; itertau < numOfDiff; ++itertau)
-        {
-            datagfile << gsl_matrix_get(datag, iterq, itertau) << " ";
-        }
-        datagfile << endl;
-    }
-    datagfile.close();
-}
-
-void ddm::printGs()
-{
-    ofstream sfile("s.txt");
-    for (int iters = 0; iters < num_fit; ++iters)
-    {
-        sfile << s[iters] << endl;
-    }
-    sfile.close();
-    
-    ofstream datagfile("ldatag.txt");		//Print Laplace transformed g(q,s)
-    for (int iterq = 0; iterq < qsize; ++iterq)
-    {
         for (int itertau = 0; itertau < num_fit; ++itertau)
         {
-            datagfile << gsl_matrix_get(ldatag, iterq, itertau) << " ";
+            datagfile << gsl_matrix_get(datag, iterq, itertau) << " ";
         }
         datagfile << endl;
     }
@@ -58,10 +36,13 @@ void ddm::printFit()
     ofstream fiterrfile("fiterrfile.txt");
     ofstream statusfile("status.txt");
     ofstream qstatusfile("statusq.txt");
-#ifndef MultiQFit
-    for (int iterq=1; iterq<qsize; ++iterq)
+    
+    int cqsize=qsize-qIncreList[num_qCurve-1];
+    int cnumOfPara=numOfPara+2*num_qCurve;
+    
+    for (int iterq=0; iterq<cqsize; ++iterq)
     {
-        for (int iterpara=0; iterpara<numOfPara; ++iterpara)
+        for (int iterpara=0; iterpara<cnumOfPara; ++iterpara)
         {
             fitparafile << gsl_matrix_get(fittedPara, iterq, iterpara) << " ";
             fiterrfile << gsl_matrix_get(fitErr, iterq, iterpara) << " ";
@@ -71,21 +52,6 @@ void ddm::printFit()
         statusfile << iterq << ": q=" << qabs[iterq] << ", "<< gsl_strerror(status[iterq]) << endl;
         qstatusfile << status[iterq] << endl;
     }
-#else
-    int fqsize=qsize-30;
-    for (int iterq=0; iterq<fqsize; ++iterq)
-    {
-        for (int iterpara=0; iterpara<numOfPara; ++iterpara)
-        {
-            fitparafile << gsl_matrix_get(fittedPara, iterq, iterpara) << " ";
-            fiterrfile << gsl_matrix_get(fitErr, iterq, iterpara) << " ";
-        }
-        fitparafile << endl;
-        fiterrfile << endl;
-        statusfile << iterq << ": q=" << qabs[iterq] << ", "<< gsl_strerror(status[iterq]) << endl;
-        qstatusfile << status[iterq] << endl;
-    }
-#endif
     fitparafile.close();
     fiterrfile.close();
     statusfile.close();

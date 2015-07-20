@@ -41,7 +41,7 @@ const int workspaceSize=100000;
 class NILT
 {
 public:
-    NILT();
+    NILT(int omp_num);
     ~NILT();
     
     void NiLT_weeks(cpx (*fun)(cpx, long double*), long double* para);
@@ -54,33 +54,34 @@ public:
     //Estimate parameter b by Weidemans's method, if the function is dominated by two pair of singularities \alpha1+-i\beta1. The sigma is set to be close to the singularity with largest real part, which should set to be alpha2 (sigma=alpha2+incre).
     
     
-    fftwl_plan integration[OMP_NUM_THREADS];
-    fftwl_complex* fftwIn[OMP_NUM_THREADS];
-    fftwl_complex* fftwOut[OMP_NUM_THREADS];
+    int OMP_NUM_THREADS;
+    fftwl_plan* integration;
+    fftwl_complex** fftwIn;
+    fftwl_complex** fftwOut;
     //FFTW stuff used in calculating numerical integration.
     vector<long double>* CoeA;
     //Coefficients in Laguerre polynomial expansion.
     
-    long double b[OMP_NUM_THREADS];
-    long double sigma[OMP_NUM_THREADS];
+    long double* b;
+    long double* sigma;
     //Important paramters in solver.
     
-    long double b2[OMP_NUM_THREADS];
+    long double* b2;
     //b2 is b*2
-    long double sigmab[OMP_NUM_THREADS];
+    long double* sigmab;
     //sigmab is sigma-b
     
 #ifdef IfComplexIntegration
     void NiLT_weeks(long double* para);
     cpx invfun(cpx x, long double* para);
     
-    gsl_function pRe[OMP_NUM_THREADS];
-    gsl_function pIm[OMP_NUM_THREADS];
+    gsl_function pRe;
+    gsl_function pIm;
     
-    //gsl_integration_workspace* workspace[OMP_NUM_THREADS];
-    gsl_integration_cquad_workspace* workspace[OMP_NUM_THREADS];
+    //gsl_integration_workspace* workspace;
+    gsl_integration_cquad_workspace* workspace;
     
-    warper cfun[OMP_NUM_THREADS];
+    warper cfun;
 #endif
 };
 

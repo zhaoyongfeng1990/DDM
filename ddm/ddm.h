@@ -29,27 +29,18 @@ public:
     void recover();
     
     void readAndFFT(const string filePrefix);
-    void shiftImages();
     
     void averSqrModTau();
     
-    void aveQSort();
-    void aveQConcentric();
     void aveQBilinear();
     void aveQBicubic();
     
     void LaplaceTrans();
     
-#ifndef MultiQFit
     void fitting();
-    void fitting_estRange();
-#else
-    void fitting_DoubQ();
-    void fitting_MultiQ();
-#endif
+    int norm0_rel_test(const gsl_vector * dx, const gsl_vector * x, double tol, double tole);
     
     void printG();
-    void printGs();
     void printFit();
     
     void cleanSeqk();
@@ -57,30 +48,49 @@ public:
     
     /////////////////////////////////////////////////////
     //Variables
-    
-    //vector<gsl_matrix*> imageSeq(numOfSeq);
     ////Sequence of images
     vector<gsl_matrix_complex*> imageSeqk;
     //Sequence for storing image after FFT.
     vector<gsl_matrix*> imagekDiff;
     vector<double> qabs;	//Absolute value of q array.
+    vector<double> tau;
     //For storing the time difference of the imageSeqk
     gsl_matrix* datag;      //g(q,t) matrix.
-    gsl_matrix* ldatag;      //g(q,t) matrix.
     gsl_matrix* datafit;
     gsl_matrix* fittedPara;	//To store the fitting result and error.
     gsl_matrix* fitErr;
     int* status;		//Record the status of fitting.
-    double* tau;
-    double* s;
+    int* qIncreList;
     double inipara[numOfPara];
+    double dx;     //Pixel size
+    double dqx;    //q step after FFT
+    double dqy;    //q step after FFT
+    double qmin;
+    double qmax;   //Maximum possible value of q
+    double qstep;    //The width of cirque when averaging the direction of q.
+    double dt;    //Time step
+    double maxIter;    //Maximum iteration number in fitting
     
-    int qsize;				//Element number of q array.
+    double alphaGuess;
+    double DGuess;
+    double vbarGuess;
+    double lambdaGuess;
+    double ZGuess;
+    double sigmaGuess;
     
-    int iniTime;
-    int finalTime;
-    int num_fit;
-    //gsl_vector* aveVec;
+    int qsize;	 //Element number of q array.
+    int fqsize;
+    
+    int OMP_NUM_THREADS;
+    int dimy;    //Size of the image
+    int dimx;    //Size of the image
+    int dimkx;   //Number of wavenumber
+    int dimky;   //Number of wavenumber
+    int numOfSeq;  //Number of total time points in experiment
+    int numOfDiff; //Number of tau
+    int numOfk;    //Number of q
+    int num_fit;   //Number of data points after FFTpoints used in fitting.
+    int num_qCurve;
 };
 
 //Data stuct used in GSL fitting algorithm.
@@ -88,30 +98,18 @@ typedef struct
 {
     double* data;
     double* tau;
-#ifndef MultiQFit
-    double q;
-    int num_fit;
-#else
     double* q;
-    int* num_fit;
-#endif
+    int num_fit;
+    int num_qCurve;
     
-#ifdef ISFRunAndTumbleAndDiffusionNoLT
+#ifdef ISFRTD
     NILT* ISFILT;
     NILT* dvISFILT;
     NILT* dDISFILT;
     NILT* dlambdaISFILT;
 #endif
     
-#ifdef ISFRTDPNoLT
-    NILT* ISFILT;
-    NILT* dvbarISFILT;
-    NILT* dZISFILT;
-    NILT* dDISFILT;
-    NILT* dlambdaISFILT;
-#endif
-    
-#ifdef ISFRTDPNoLT_sigma
+#ifdef ISFRTDP
     NILT* ISFILT;
     NILT* dvbarISFILT;
     NILT* dsigmaISFILT;

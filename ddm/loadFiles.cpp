@@ -11,9 +11,9 @@
 #include <fstream>
 #include <omp.h>
 
-void readTiff(const string tifName, gsl_matrix* data);
+void readTiff(const string tifName, gsl_matrix* data, const int dimx, const int dimy);
 //Reading tiff images.
-void readSim(const string fileName, gsl_matrix* data);
+void readSim(const string fileName, gsl_matrix* data, const int dimx, const int dimy);
 //Read simulation data from ASCII file.
 
 //The data structures for reading tiff
@@ -39,31 +39,34 @@ typedef struct tagTIFFIFD{
 
 void ddm::readAndFFT(const string filePrefix)
 {
+    int cdimy=dimy;
+    int cdimx=dimx;
+    int cdimkx=dimkx;
 #pragma omp parallel
     {
-        gsl_matrix* fftMatrix = gsl_matrix_alloc(dimy, dimx);
-        gsl_matrix_complex* resultMatrix = gsl_matrix_complex_alloc(dimy, dimkx);
+        gsl_matrix* fftMatrix = gsl_matrix_alloc(cdimy, cdimx);
+        gsl_matrix_complex* resultMatrix = gsl_matrix_complex_alloc(cdimy, cdimkx);
         //dimk=dim/2+1, FFTW only return around half points for r2c FFT to save memory usage.
         
         fftw_plan fft2plan;		//FFT need to make a plan before reading data.
 #pragma omp critical (make_plan)
-        fft2plan = fftw_plan_dft_r2c_2d(dimy, dimx, fftMatrix->data, (fftw_complex *)resultMatrix->data, FFTW_MEASURE);
+        fft2plan = fftw_plan_dft_r2c_2d(cdimy, cdimx, fftMatrix->data, (fftw_complex *)resultMatrix->data, FFTW_MEASURE);
         
 #pragma omp for
         for (int iter = 0; iter < numOfSeq; ++iter)
         {
-            imageSeqk[iter] = gsl_matrix_complex_calloc(dimy, dimkx);
+            imageSeqk[iter] = gsl_matrix_complex_calloc(cdimy, cdimkx);
             if (filePrefix=="simulation")
             {
                 stringstream fileName;
                 fileName << iter << ".txt";
-                readSim(fileName.str(), fftMatrix);
+                readSim(fileName.str(), fftMatrix, cdimx, cdimy);
             }
             else
             {
                 stringstream fileName;
                 fileName << filePrefix << iter+1 << ".tif";		//Making path name
-                readTiff(fileName.str(), fftMatrix);
+                readTiff(fileName.str(), fftMatrix, cdimx, cdimy);
             }
             fftw_execute(fft2plan);
             
@@ -86,19 +89,27 @@ void ddm::recover()
         qabs.push_back(tempq);
     }
     
+    qabs.pop_back();
     qsize=(int)qabs.size();
-    //if(qabs[qsize-1]<=qabs[qsize-2])        //If '\n' has been read
-    //{
-        qabs.pop_back();
-        --qsize;
-    //}
     qfile.close();
-    datag = gsl_matrix_alloc(qsize, numOfDiff);		//Allocate memory for g(q,t) matrix.
     
+    tau.reserve(numOfDiff);
+    ifstream taufile("tau.txt");
+    while (!taufile.eof())
+    {
+        double temptau;
+        taufile >> temptau;
+        tau.push_back(temptau);
+    }
+    tau.pop_back();
+    num_fit=(int)tau.size();
+    taufile.close();
+    
+    datag = gsl_matrix_alloc(qsize, num_fit);		//Allocate memory for g(q,t) matrix.
     ifstream datagfile("datag.txt");
     for (int iterq = 0; iterq < qsize; ++iterq)		//Reading g(q,t) matrix.
     {
-        for (int itertau = 0; itertau < numOfDiff; ++itertau)
+        for (int itertau = 0; itertau < num_fit; ++itertau)
         {
             double tempdata;
             datagfile >> tempdata;
@@ -109,7 +120,7 @@ void ddm::recover()
 }
 
 //Reading tif files
-void readTiff(const string tifName, gsl_matrix* data)
+void readTiff(const string tifName, gsl_matrix* data, const int dimx, const int dimy)
 {
     int width=dimx;	//Width and height of the image equals to dim (e.g. =512 pixel)
     int height=dimy;
@@ -196,7 +207,7 @@ void readTiff(const string tifName, gsl_matrix* data)
     infile.close();
 }
 
-void readSim(const string fileName, gsl_matrix* data)	//Read simulation data from ASCII file.
+void readSim(const string fileName, gsl_matrix* data, const int dimx, const int dimy)	//Read simulation data from ASCII file.
 {
     ifstream infile(fileName.c_str());
     for (int iterx=0; iterx<dimy; ++iterx)

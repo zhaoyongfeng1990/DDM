@@ -16,7 +16,6 @@
 //Or, give "recover" can do the fit by reading datag.txt and q.txt directly, save doing time-consuming FFT and averaging.
 int main(int argc, const char * argv[])
 {
-    omp_set_num_threads(OMP_NUM_THREADS);     //Number of threads
     stringstream arg;		//To read the argv
     arg << argv[1];
     
@@ -47,12 +46,6 @@ int main(int argc, const char * argv[])
         cout << "Printing unfitted data..." << endl;
         ddmExp.printG();
     }
-    
-#ifdef NeedLaplaceTrans
-    cout << "Numerical Laplace transforming..." << endl;
-    ddmExp.LaplaceTrans();
-    ddmExp.printGs();
-#endif
     
     cout << "Fitting..." << endl;
     ddmExp.fitting();

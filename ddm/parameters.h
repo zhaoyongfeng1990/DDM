@@ -20,105 +20,40 @@
 ///////////////////
 
 //Switches of different models
-//#define ISFRUNANDTUMBLE
-#define ISFSWIMMER
-//#define ISFSWIMMERSIMPLE
-//#define ISFRUNANDTUMBLE_3D
-//#define ISFRunAndTumbleAndDiffusion
-//#define ISFRunAndTumbleAndDiffusionAndPv
-//#define ISFRunAndTumbleAndDiffusionNoLT
-//#define ISFRTDPNoLT
-//#define ISFRTDPNoLT_sigma
+#include "ISFtype.h"
+//#define ISFSWP
+//#define ISFSW
+//#define ISFRTD
+//#define ISFRTDP
 
 #include <cmath>
 
 using namespace std;
 
-const int OMP_NUM_THREADS=0;
 
 const long double pi = 3.141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342117068l;
-const double sqrtpi = sqrt(pi); //Constant for convenience
-const double s2pi=sqrt(2*pi);
-
-const int dimy = 500;//512;    //Size of the image
-const int dimx = 560;//512;
-const int dimkx = dimx / 2 + 1;   //Number of wavenumber
-const int dimky = dimy / 2 + 1;   //Number of wavenumber
-const int numOfSeq = 3830;  //Number of total time points in experiment
-const int numOfDiff = 2830; //Number of tau
-const int numOfk = dimy*dimkx;    //Number of data points after FFTpoints used in fitting.
-
-const double dx = 1.40449;//6.5 / 4.0; // 0.65;   //Pixel size
-const double dqx = 2 * pi / dx / dimx;    //q step after FFT
-const double dqy = 2 * pi / dx / dimy;    //q step after FFT
-const double qmax=2 * pi / dx /sqrt(2);   //Maximum possible value of q
-const double qstep=0.01;    //The width of cirque when averaging the direction of q.
-
-const double dt = 1.0 / 100;    //Time step
-const double ds=0.01;
-const double smin=0.01;
-
-
-const int maxIter=200;    //Maximum iteration number in fitting
-
-const double alphaGuess=0.7;
-const double DGuess=0.38;
-const double vbarGuess=13;
-const double lambdaGuess=2;
-const double ZGuess=2;
-const double sigmaGuess=vbarGuess/4;
-
-//const int winDim = 5;   //Size of searching window. Used in aligning images.
 
 //Number of model parameters
-#ifdef ISFSWIMMER
-const int numOfPara = 6;
-//#define NoJacobian
-#endif
-
-#ifdef ISFSWIMMERSIMPLE
-const int numOfPara = 5;
-#endif
-
-#ifdef ISFRUNANDTUMBLE
+#ifdef ISFSWP
 const int numOfPara = 4;
-const double precision = 1e-15; //Used in 2D R&T model. The precision of numerical evaluation.
+//#define NoJacobian
 #endif
 
-#ifdef ISFRUNANDTUMBLE_3D
+#ifdef ISFSW
+const int numOfPara = 3;
+#endif
+
+#ifdef ISFRTD
 const int numOfPara=4;
-#define NeedLaplaceTrans
-#endif
-
-#ifdef ISFRunAndTumbleAndDiffusion
-const int numOfPara=6;
-#define NeedLaplaceTrans
-#endif
-
-#ifdef ISFRunAndTumbleAndDiffusionNoLT
-const int numOfPara=6;
 //#define NoJacobian
 #define NeedNumericalInverseLaplaceTransformation
 #endif
 
-#ifdef ISFRunAndTumbleAndDiffusionAndPv
-const int numOfPara=7;
-#define NeedLaplaceTrans
-#endif
-
-#ifdef ISFRTDPNoLT
-const int numOfPara=7;
+#ifdef ISFRTDP
+const int numOfPara=5;
 //#define NoJacobian
 #define NeedNumericalInverseLaplaceTransformation
 #define IfComplexIntegration
-#endif
-
-#ifdef ISFRTDPNoLT_sigma
-const int numOfPara=7;
-//#define NoJacobian
-#define NeedNumericalInverseLaplaceTransformation
-#define IfComplexIntegration
-#define MultiQFit
 #endif
 
 #endif /* defined(__ddm__parameters__) */

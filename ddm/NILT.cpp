@@ -7,10 +7,19 @@
 //
 
 #include "NILT.h"
-#include "omp.h"
+#include <omp.h>
 
-NILT::NILT()
+NILT::NILT(int omp_num)
 {
+    OMP_NUM_THREADS=omp_num;
+    integration=new fftwl_plan[omp_num];
+    fftwIn=new fftwl_complex*[omp_num];
+    fftwOut=new fftwl_complex*[omp_num];
+    b=new long double[omp_num];
+    b2=new long double[omp_num];
+    sigma=new long double[omp_num];
+    sigmab=new long double[omp_num];
+    
     CoeA=new vector<long double> [OMP_NUM_THREADS];
     for (int iter=0; iter<OMP_NUM_THREADS; ++iter)
     {
@@ -44,6 +53,13 @@ NILT::~NILT()
         gsl_integration_cquad_workspace_free(workspace[iter]);
 #endif
     }
+    delete [] integration;
+    delete [] fftwIn;
+    delete [] fftwOut;
+    delete [] b;
+    delete [] b2;
+    delete [] sigma;
+    delete [] sigmab;
     delete [] CoeA;
 }
 
