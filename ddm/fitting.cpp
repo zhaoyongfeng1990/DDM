@@ -121,9 +121,9 @@ void ddm::fitting()
         //gsl_vector* g=gsl_vector_alloc(numOfPara);
         //        for (int iterpara=0; iterpara<numOfPara; ++iterpara)
         //        {
-        //            cout << gsl_vector_get(solver->x, iterpara) << endl;
+        //            cout << gsl_vector_get(solver->x, iterpara) << '\n';
         //        }
-        //        cout << endl;
+        //        cout << '\n';
         
         do
         {
@@ -132,9 +132,9 @@ void ddm::fitting()
             
             //            for (int iterpara=0; iterpara<numOfPara; ++iterpara)
             //            {
-            //                cout << gsl_vector_get(solver->x, iterpara) << endl;
+            //                cout << gsl_vector_get(solver->x, iterpara) << '\n';
             //            }
-            //            cout << endl;
+            //            cout << '\n';
             //gsl_multifit_gradient(solver->J,solver->f, g);
             //status[iterq-1]=gsl_multifit_test_gradient(g, 1e-5);
             //			status[iterq - 1] = covar_rel_test(solver->J, solver->x, 1e-4);
@@ -159,10 +159,10 @@ void ddm::fitting()
         gsl_multifit_fdfsolver_free(solver);
         
         progress+=1;
-        cout << "Fitted q=" << qabs[iterq] << " at iter=" << iter << ", " << 100.0*progress / qsize << "% completed from thread No." << omp_get_thread_num() << ", "<< gsl_strerror(status[iterq]) << "." << endl;
+        cout << "Fitted q=" << qabs[iterq] << " at iter=" << iter << ", " << 100.0*progress / qsize << "% completed from thread No." << omp_get_thread_num() << ", "<< gsl_strerror(status[iterq]) << "." << '\n';
         for (int iterpara=0; iterpara<cnumOfPara; ++iterpara)
         {
-            cout << gsl_matrix_get(fittedPara, iterq, iterpara) << endl;
+            cout << gsl_matrix_get(fittedPara, iterq, iterpara) << '\n';
         }
         delete [] datafit;
         delete [] qList;

@@ -42,6 +42,7 @@ public:
     
     void printG();
     void printFit();
+    void printdebugM(gsl_matrix* m, const string filename);
     
     void cleanSeqk();
     void cleankDiff();

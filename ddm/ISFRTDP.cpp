@@ -212,7 +212,7 @@ int ISFfun(const gsl_vector* para, void* sdata, gsl_vector* y)
     long double& cb2=ILT->b2[tid];
     long double& csigmab=ILT->sigmab[tid];
     
-    //cout << "ok" << endl;
+    //cout << "ok" << '\n';
     
     for (int iterqc=0; iterqc<cnum_qCurve; ++iterqc)
     {
@@ -435,17 +435,17 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
         dlambdaILT->sigmab[tid]=csigmab;
         dDILT->sigmab[tid]=csigmab;
         
-        //cout << "isf" << endl;
+        //cout << "isf" << '\n';
         ILT->NiLT_weeks(paraISF);
-        //cout << "dvisf" << endl;
+        //cout << "dvisf" << '\n';
         dvbarILT->NiLT_weeks(paraISF);
-        //cout << "dzisf" << endl;
+        //cout << "dzisf" << '\n';
         dsigmaILT->NiLT_weeks(paraISF);
-        //cout << "ddisf" << endl;
+        //cout << "ddisf" << '\n';
         dDILT->NiLT_weeks(paraISF);
-        //cout << "dlisf" << endl;
+        //cout << "dlisf" << '\n';
         dlambdaILT->NiLT_weeks(paraISF);
-        //cout << "ok" << endl;
+        //cout << "ok" << '\n';
         
         for (int iter=0; iter<num_fit; ++iter)
         {

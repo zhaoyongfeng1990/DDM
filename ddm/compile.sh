@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 #  compile.sh
 #  ddm
@@ -8,18 +8,25 @@
 
 Type=$1
 
-if [ "$Type" = "SW" ]
+ISF=$(cat ./ISFtype.h)
+
+OldType=$(echo ${ISF:11:14})
+
+if [ "$Type" != "$OldType" ]
 then
-    echo "#define ISFSW" > ISFtype.h
-elif [ "$Type" = "SWP" ]
-then
-    echo "#define ISFSWP" > ISFtype.h
-elif [ "$Type" = "RTD" ]
-then
-    echo "#define ISFRTD" > ISFtype.h
-elif [ "$Type" = "RTDP" ]
-then
-    echo "#define ISFRTDP" > ISFtype.h
+    if [ "$Type" = "SW" ]
+    then
+        echo "#define ISFSW" > ISFtype.h
+    elif [ "$Type" = "SWP" ]
+    then
+        echo "#define ISFSWP" > ISFtype.h
+    elif [ "$Type" = "RTD" ]
+    then
+        echo "#define ISFRTD" > ISFtype.h
+    elif [ "$Type" = "RTDP" ]
+    then
+        echo "#define ISFRTDP" > ISFtype.h
+    fi
 fi
 
 make

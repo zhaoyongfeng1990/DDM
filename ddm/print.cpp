@@ -15,7 +15,7 @@ void ddm::printG()
     ofstream qfile("q.txt");
     for (int iter = 0; iter < qsize; ++iter)
     {
-        qfile << qabs[iter] << endl;
+        qfile << qabs[iter] << '\n';
     }
     qfile.close();
     ofstream datagfile("datag.txt");
@@ -25,9 +25,14 @@ void ddm::printG()
         {
             datagfile << gsl_matrix_get(datag, iterq, itertau) << " ";
         }
-        datagfile << endl;
+        datagfile << '\n';
     }
     datagfile.close();
+    ofstream taufile("tau.txt");
+    for (int itertau = 0; itertau < num_fit; ++itertau)
+    {
+        taufile << tau[itertau] << '\n';
+    }
 }
 
 void ddm::printFit()
@@ -47,13 +52,27 @@ void ddm::printFit()
             fitparafile << gsl_matrix_get(fittedPara, iterq, iterpara) << " ";
             fiterrfile << gsl_matrix_get(fitErr, iterq, iterpara) << " ";
         }
-        fitparafile << endl;
-        fiterrfile << endl;
-        statusfile << iterq << ": q=" << qabs[iterq] << ", "<< gsl_strerror(status[iterq]) << endl;
-        qstatusfile << status[iterq] << endl;
+        fitparafile << '\n';
+        fiterrfile << '\n';
+        statusfile << iterq << ": q=" << qabs[iterq] << ", "<< gsl_strerror(status[iterq]) << '\n';
+        qstatusfile << status[iterq] << '\n';
     }
     fitparafile.close();
     fiterrfile.close();
     statusfile.close();
     qstatusfile.close();
+}
+
+void ddm::printdebugM(gsl_matrix* m, const string filename)
+{
+    ofstream outfile(filename);
+    for (int iter=0; iter<m->size1; ++iter)
+    {
+        for (int iterc=0; iterc<m->size2; ++iterc)
+        {
+            outfile << gsl_matrix_get(m, iter, iterc) << " ";
+        }
+        outfile << endl;
+    }
+    outfile.close();
 }

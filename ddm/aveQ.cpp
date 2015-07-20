@@ -7,6 +7,7 @@
 //
 
 #include "ddm.h"
+#include <iostream>
 
 //int find(const vector<int>& vec, const int value);
 ////Find the position of a particular member in a vector.
@@ -53,8 +54,8 @@ void ddm::aveQBilinear()
                 double dist1=sqrt(kx1*kx1*cdqy*cdqy+ky1*ky1*cdqx*cdqx)/cqstep;
                 double dist2=sqrt(kx2*kx2*cdqy*cdqy+ky2*ky2*cdqx*cdqx)/cqstep;
                 
-                int maxqidx=ceil(dist2);
-                int minqidx=ceil(dist1);
+                int maxqidx=ceil(dist2-cqmin/cqstep);
+                int minqidx=ceil(dist1-cqmin/cqstep);
                 
                 double dist3=sqrt(kx2*kx2*cdqy*cdqy+ky1*ky1*cdqx*cdqx)/cqstep;
                 double dist4=sqrt(kx1*kx1*cdqy*cdqy+ky2*ky2*cdqx*cdqx)/cqstep;
@@ -64,36 +65,40 @@ void ddm::aveQBilinear()
                     double px[2];
                     double py[2];
                     
-                    if(dist3>=iterq)
+                    double cq=iterq+cqmin/cqstep;
+                    
+                    //cout << cq << '\n';
+                    
+                    if(dist3>=cq)
                     {
                         py[0]=ky1*cdqx/cqstep;
-                        px[0]=sqrt(iterq*iterq-py[0]*py[0]);
+                        px[0]=sqrt(cq*cq-py[0]*py[0]);
                     }
                     else
                     {
                         px[0]=kx2*cdqy/cqstep;
-                        py[0]=sqrt(iterq*iterq-px[0]*px[0]);
+                        py[0]=sqrt(cq*cq-px[0]*px[0]);
                     }
                     
-                    if (dist4>=iterq)
+                    if (dist4>=cq)
                     {
                         px[1]=kx1*cdqy/cqstep;
-                        py[1]=sqrt(iterq*iterq-px[1]*px[1]);
+                        py[1]=sqrt(cq*cq-px[1]*px[1]);
                     }
                     else
                     {
                         py[1]=ky2*cdqx/cqstep;
-                        px[1]=sqrt(iterq*iterq-py[1]*py[1]);
+                        px[1]=sqrt(cq*cq-py[1]*py[1]);
                     }
                     
                     double dist=(px[0]-px[1])*(px[0]-px[1])+(py[0]-py[1])*(py[0]-py[1]);
-                    double cosdt=1-dist/2/iterq/iterq;
-                    double dt=acos(cosdt);
+                    double cosdt=1-dist/2/cq/cq;
+                    double dtheta=acos(cosdt);
                     
-                    double cost1=px[0]/iterq;
-                    double sint1=py[0]/iterq;
-                    double cost2=px[1]/iterq;
-                    double sint2=py[1]/iterq;
+                    double cost1=px[0]/cq;
+                    double sint1=py[0]/cq;
+                    double cost2=px[1]/cq;
+                    double sint2=py[1]/cq;
                     double dcost=cost2-cost1;
                     double dsint=sint2-sint1;
                     double dcos2t=2*(cost2*cost2-cost1*cost1);
@@ -103,20 +108,22 @@ void ddm::aveQBilinear()
                     double u21=gsl_matrix_get(imagekDiff[itertau], kx2, ky1);
                     double u22=gsl_matrix_get(imagekDiff[itertau], kx2, ky2);
                     
-                    double cq=qabs[iterq];
+                    cq*=cqstep;
                     double arc=gsl_matrix_get(datag, iterq, itertau);
-                    arc+=u11*dt-(cq*dcost+ky1*cdqx*dt)*(u12-u11)/cdqx+(cq*dsint-kx1*cdqy*dt)*(u21-u11)/cdqy+(kx1*cdqy*cq*dcost+kx1*ky1*cdqx*cdqy*dt-cq*cq*dcos2t/4-ky1*cdqx*cq*dsint)/cdqx/cdqy*(u22-u21-u12+u11);
+                    arc+=u11*dtheta-(cq*dcost+ky1*cdqx*dtheta)*(u12-u11)/cdqx+(cq*dsint-kx1*cdqy*dtheta)*(u21-u11)/cdqy+(kx1*cdqy*cq*dcost+kx1*ky1*cdqx*cdqy*dtheta-cq*cq*dcos2t/4-ky1*cdqx*cq*dsint)/cdqx/cdqy*(u22-u21-u12+u11);
+                    
+                    //cout << arc << '\n';
                     
                     u11=gsl_matrix_get(imagekDiff[itertau], refkx1, ky1);
                     u12=gsl_matrix_get(imagekDiff[itertau], refkx1, ky2);
                     u21=gsl_matrix_get(imagekDiff[itertau], refkx2, ky1);
                     u22=gsl_matrix_get(imagekDiff[itertau], refkx2, ky2);
                     
-                    arc+=u11*dt-(cq*dcost+ky1*cdqx*dt)*(u12-u11)/cdqx+(cq*dsint-kx1*cdqy*dt)*(u21-u11)/cdqy+(kx1*cdqy*cq*dcost+kx1*ky1*cdqx*cdqy*dt-cq*cq*dcos2t/4-ky1*cdqx*cq*dsint)/cdqx/cdqy*(u22-u21-u12+u11);
+                    arc+=u11*dtheta-(cq*dcost+ky1*cdqx*dtheta)*(u12-u11)/cdqx+(cq*dsint-kx1*cdqy*dtheta)*(u21-u11)/cdqy+(kx1*cdqy*cq*dcost+kx1*ky1*cdqx*cdqy*dtheta-cq*cq*dcos2t/4-ky1*cdqx*cq*dsint)/cdqx/cdqy*(u22-u21-u12+u11);
                     
                     gsl_matrix_set(datag, iterq, itertau, arc);
                     double angle=gsl_matrix_get(count, iterq, itertau);
-                    angle+=dt*2;
+                    angle+=dtheta*2;
                     gsl_matrix_set(count, iterq, itertau, angle);
                 }
             }
@@ -191,7 +198,7 @@ void ddm::aveQBicubic()
                     
                     double dist=(px[0]-px[1])*(px[0]-px[1])+(py[0]-py[1])*(py[0]-py[1]);
                     double cosdt=1-dist/2/iterq/iterq;
-                    double dt=acos(cosdt);
+                    double dtheta=acos(cosdt);
                     
                     double cost1=px[0]/iterq;
                     double sint1=py[0]/iterq;
@@ -207,18 +214,18 @@ void ddm::aveQBicubic()
                     double u22=gsl_matrix_get(imagekDiff[itertau], kx2, ky2);
                     
                     double arc=gsl_matrix_get(datag, iterq, itertau);
-                    arc+=u11*dt-(qabs[iterq]*dcost+ky1*dqx*dt)*(u12-u11)/dqx+(qabs[iterq]*dsint-kx1*dqy*dt)*(u21-u11)/dqy+(kx1*dqy*qabs[iterq]*dcost+kx1*ky1*dqx*dqy*dt-qabs[iterq]*qabs[iterq]*dcos2t/4-ky1*dqx*qabs[iterq]*dsint)/dqx/dqy*(u22-u21-u12+u11);
+                    arc+=u11*dtheta-(qabs[iterq]*dcost+ky1*dqx*dtheta)*(u12-u11)/dqx+(qabs[iterq]*dsint-kx1*dqy*dtheta)*(u21-u11)/dqy+(kx1*dqy*qabs[iterq]*dcost+kx1*ky1*dqx*dqy*dtheta-qabs[iterq]*qabs[iterq]*dcos2t/4-ky1*dqx*qabs[iterq]*dsint)/dqx/dqy*(u22-u21-u12+u11);
                     
                     u11=gsl_matrix_get(imagekDiff[itertau], refkx1, ky1);
                     u12=gsl_matrix_get(imagekDiff[itertau], refkx1, ky2);
                     u21=gsl_matrix_get(imagekDiff[itertau], refkx2, ky1);
                     u22=gsl_matrix_get(imagekDiff[itertau], refkx2, ky2);
                     
-                    arc+=u11*dt-(qabs[iterq]*dcost+ky1*dqx*dt)*(u12-u11)/dqx+(qabs[iterq]*dsint-kx1*dqy*dt)*(u21-u11)/dqy+(kx1*dqy*qabs[iterq]*dcost+kx1*ky1*dqx*dqy*dt-qabs[iterq]*qabs[iterq]*dcos2t/4-ky1*dqx*qabs[iterq]*dsint)/dqx/dqy*(u22-u21-u12+u11);
+                    arc+=u11*dtheta-(qabs[iterq]*dcost+ky1*dqx*dtheta)*(u12-u11)/dqx+(qabs[iterq]*dsint-kx1*dqy*dtheta)*(u21-u11)/dqy+(kx1*dqy*qabs[iterq]*dcost+kx1*ky1*dqx*dqy*dtheta-qabs[iterq]*qabs[iterq]*dcos2t/4-ky1*dqx*qabs[iterq]*dsint)/dqx/dqy*(u22-u21-u12+u11);
                     
                     gsl_matrix_set(datag, iterq, itertau, arc);
                     double angle=gsl_matrix_get(count, iterq, itertau);
-                    angle+=dt*2;
+                    angle+=dtheta*2;
                     gsl_matrix_set(count, iterq, itertau, angle);
                 }
             }

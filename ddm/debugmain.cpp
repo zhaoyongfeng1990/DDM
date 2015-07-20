@@ -102,10 +102,10 @@ int main()
     ofstream dlambdadebug("dlambdadebug.txt");
     ofstream dDdebug("dDdebug.txt");
     ofstream a("a.txt");
-    cout << M << endl;
+    cout << M << '\n';
     for (int iter = 0; iter<M; ++iter)
     {
-      a << setprecision(30) << ILT.CoeA[tid][iter] << endl;
+      a << setprecision(30) << ILT.CoeA[tid][iter] << '\n';
       //Temperary variables used for acceleration.
     }
     for (int iter = 0; iter<num_fit; ++iter)
@@ -116,11 +116,11 @@ int main()
         double dZrtd=dZILT.clenshaw(t);
         double dlambdartd=dlambdaILT.clenshaw(t);
         double dDrtd=dDILT.clenshaw(t);
-        debug << setprecision(30) << rtd << endl;
-        dvdebug << setprecision(30) << dvrtd << endl;
-        dlambdadebug << setprecision(30) << dlambdartd << endl;
-        dDdebug << setprecision(30) << dDrtd << endl;
-        dZdebug << setprecision(30) << dZrtd << endl;
+        debug << setprecision(30) << rtd << '\n';
+        dvdebug << setprecision(30) << dvrtd << '\n';
+        dlambdadebug << setprecision(30) << dlambdartd << '\n';
+        dDdebug << setprecision(30) << dDrtd << '\n';
+        dZdebug << setprecision(30) << dZrtd << '\n';
         //Temperary variables used for acceleration.
     }
 

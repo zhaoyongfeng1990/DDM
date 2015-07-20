@@ -9,6 +9,7 @@
 #include "ddm.h"
 #include <sstream>
 #include <fstream>
+#include <iostream>
 #include <omp.h>
 
 void readTiff(const string tifName, gsl_matrix* data, const int dimx, const int dimy);

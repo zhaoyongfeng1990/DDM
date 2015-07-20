@@ -24,7 +24,7 @@ int main(int argc, const char * argv[])
     
     if (arg.str() == "recover")		//recover from pre-calculated g(q,t) data
     {
-        cout << "Loading datag.txt..." << endl;
+        cout << "Loading datag.txt..." << '\n';
         ddmExp.recover();
     }
     else
@@ -32,22 +32,22 @@ int main(int argc, const char * argv[])
         string filePrefix = arg.str();
         //string filePrefix="cl-m1-ddm-01_X";
         
-        cout << "Loading and calculating FFT..." << endl;
+        cout << "Loading and calculating FFT..." << '\n';
         ddmExp.readAndFFT(filePrefix);
         
-        cout << "Calculating average of square module for different tau... 0% finished." << endl;
+        cout << "Calculating average of square module for different tau... 0% finished." << '\n';
         ddmExp.averSqrModTau();
         ddmExp.cleanSeqk();
 
-        cout << "Averaging on directions of q..." << endl;
+        cout << "Averaging on directions of q..." << '\n';
         ddmExp.aveQBilinear();
         ddmExp.cleankDiff();
        
-        cout << "Printing unfitted data..." << endl;
+        cout << "Printing unfitted data..." << '\n';
         ddmExp.printG();
     }
     
-    cout << "Fitting..." << endl;
+    cout << "Fitting..." << '\n';
     ddmExp.fitting();
     ddmExp.printFit();
 

@@ -45,9 +45,9 @@ void NILT::NiLT_weeks(long double* para)
     {
         cpx itheta={0.0l,pi*(2.0l*iter+1.0l)/M};
         cpx expterm=exp(itheta)-1.0l;
-        //cout << csigma << endl;
-        //cout << cb << endl;
-        //cout << expterm << endl;
+        //cout << csigma << '\n';
+        //cout << cb << '\n';
+        //cout << expterm << '\n';
         cpx s=csigma-cb*(expterm+2.0l)/expterm;
         cpx r=-cb2*invfun(s,para)/expterm;
         cfftwIn[iter][0]=real(r);

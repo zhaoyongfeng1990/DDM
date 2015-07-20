@@ -19,7 +19,7 @@ void ddm::cleanSeqk()
 void ddm::cleankDiff()
 {
 #pragma omp parallel for
-    for (int iter = 0; iter < numOfDiff; ++iter)
+    for (int iter = 0; iter < num_fit; ++iter)
         gsl_matrix_free(imagekDiff[iter]);
     imagekDiff.clear();
 }

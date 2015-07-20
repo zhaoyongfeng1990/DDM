@@ -21,18 +21,21 @@ void ddm::averSqrModTau()
     
     vector<int> diff;
     diff.reserve(cnumOfDiff);
+    tau.reserve(cnumOfDiff);
     diff.push_back(1);
+    tau.push_back(dt);
     int candidates[4]={2, 3, 5, 7};
     while (candidates[0]<cnumOfDiff)
     {
         diff.push_back(candidates[0]);
+        tau.push_back(dt*candidates[0]);
         candidates[0]*=2;
-        int insertPos=0;
+        int insertPos=3;
         for (int iteri=1; iteri<4; ++iteri)
         {
-            if (candidates[0]<iteri)
+            if (candidates[0]<candidates[iteri])
             {
-                insertPos=iteri;
+                insertPos=iteri-1;
                 break;
             }
         }
@@ -47,13 +50,14 @@ void ddm::averSqrModTau()
         }
     }
     diff.push_back(cnumOfDiff);
+    tau.push_back(cnumOfDiff*dt);
     num_fit=(int)diff.size();
     
     int cnum_fit=num_fit;
     
     int progress = 0;       //Indicator of the progess.
 #pragma omp parallel for
-    for (int iterdiff = 0; iterdiff <= cnum_fit; ++iterdiff)
+    for (int iterdiff = 0; iterdiff < cnum_fit; ++iterdiff)
     {
         int cdiff=diff[iterdiff];
         gsl_matrix* temp = gsl_matrix_alloc(cdimy, cdimkx);
@@ -76,6 +80,6 @@ void ddm::averSqrModTau()
         progress += 1; // numOfSeq - iterdiff;
         gsl_matrix_scale(temp, 1.0 / numAve);		//Average on t
         imagekDiff[iterdiff] = temp;
-        cout << "Calculating average of square module for different tau... " << 100.0*progress / cnum_fit << "% finished." << endl;
+        cout << "Calculating average of square module for different tau... " << 100.0*progress / cnum_fit << "% finished." << '\n';
     }
 }
