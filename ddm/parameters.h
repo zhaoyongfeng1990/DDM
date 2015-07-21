@@ -33,10 +33,11 @@ using namespace std;
 
 const long double pi = 3.141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342117068l;
 
+//#define NoJacobian
+
 //Number of model parameters
 #ifdef ISFSWP
 const int numOfPara = 4;
-//#define NoJacobian
 #endif
 
 #ifdef ISFSW
@@ -45,13 +46,11 @@ const int numOfPara = 3;
 
 #ifdef ISFRTD
 const int numOfPara=4;
-//#define NoJacobian
 #define NeedNumericalInverseLaplaceTransformation
 #endif
 
 #ifdef ISFRTDP
 const int numOfPara=5;
-//#define NoJacobian
 #define NeedNumericalInverseLaplaceTransformation
 #define IfComplexIntegration
 #endif

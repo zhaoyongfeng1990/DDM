@@ -36,7 +36,7 @@ int ISFfun(const gsl_vector* para, void* sdata, gsl_vector* y)
             double Gamma=q*t*v/(Z+1);
             double yi=log(A*(1-exp(-D*q*q*t)*(1-alpha+alpha/Z/Gamma*sin(Z*atan(Gamma))/pow(1+Gamma*Gamma, Z/2.0)))+B);
             
-            double weight=1;//dataAry[cidx]-log(560*500);
+            double weight=1;//sqrt(exp(dataAry[cidx]-log(560*500)));
             double result = (yi - dataAry[cidx])/weight;
             
             //Punishment terms, to make constrains in parameter space.
@@ -93,8 +93,8 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
     
     for (int iterqc=0; iterqc<cnum_qCurve; ++iterqc)
     {
-        double A=gsl_vector_get(para, 3+2*iterqc);
-        double B=gsl_vector_get(para, 4+2*iterqc);
+        double A=gsl_vector_get(para, 4+2*iterqc);
+        double B=gsl_vector_get(para, 5+2*iterqc);
         double q=qArray[iterqc];
         for (int iter=0; iter<num_fit; ++iter)
         {
@@ -112,7 +112,7 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
             double dydA=(1 - difexp*(1 - alpha + alpha / Z / Gamma*sinzg / powg));
             double yi = A*dydA + B;
             //(log y)'=y'/y
-            double weight=1;//dataAry[cidx]-log(560*500);
+            double weight=1;//sqrt(exp(dataAry[cidx]-log(560*500)));
             
             gsl_matrix_set(J, cidx, 0, (A*difexp*(1-sinzg/Z/Gamma/powg))/yi/weight );
             gsl_matrix_set(J, cidx, 1, (A*q*q*t*(1-alpha+alpha*sinzg/powg/Z/Gamma)*difexp)/yi/weight );

@@ -119,22 +119,24 @@ void ddm::fitting()
         gsl_multifit_fdfsolver_set(solver, &fitfun, &para.vector);
         int iter=0;
         //gsl_vector* g=gsl_vector_alloc(numOfPara);
-        //        for (int iterpara=0; iterpara<numOfPara; ++iterpara)
-        //        {
-        //            cout << gsl_vector_get(solver->x, iterpara) << '\n';
-        //        }
-        //        cout << '\n';
+        
+//        cout << qList[0] << '\n';
+//        for (int iterpara=0; iterpara<numOfPara; ++iterpara)
+//        {
+//            cout << gsl_vector_get(solver->x, iterpara) << '\n';
+//        }
+//        cout << '\n';
         
         do
         {
             gsl_multifit_fdfsolver_iterate(solver);		//Iterate one step.
             status[iterq] = norm0_rel_test(solver->dx, solver->x, 1e-10, 1e-10);  //Test the exiting condition
             
-            //            for (int iterpara=0; iterpara<numOfPara; ++iterpara)
-            //            {
-            //                cout << gsl_vector_get(solver->x, iterpara) << '\n';
-            //            }
-            //            cout << '\n';
+//            for (int iterpara=0; iterpara<numOfPara; ++iterpara)
+//            {
+//                cout << gsl_vector_get(solver->x, iterpara) << '\n';
+//            }
+//            cout << '\n';
             //gsl_multifit_gradient(solver->J,solver->f, g);
             //status[iterq-1]=gsl_multifit_test_gradient(g, 1e-5);
             //			status[iterq - 1] = covar_rel_test(solver->J, solver->x, 1e-4);
