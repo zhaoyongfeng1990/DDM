@@ -61,7 +61,7 @@ void ddm::fitting()
                 datafit[iterf+iterqc*cnum_fit]=log(gsl_matrix_get(datag, iterq+qIncreList[iterqc], iterf));		//Fitting in log scale.
                 time[iterf+iterqc*cnum_fit]=tau[iterf];
             }
-            qList[iterqc]=qabs[iterq]+qabs[iterq+qIncreList[iterqc]];
+            qList[iterqc]=qabs[iterq+qIncreList[iterqc]];
         }
         
         gsl_multifit_function_fdf fitfun;		//Function point.
@@ -97,7 +97,7 @@ void ddm::fitting()
         fitfun.df=&dISFfun;
         fitfun.fdf=&fdISFfun;
 #endif
-        fitfun.n=cnum_fit;
+        fitfun.n=ctnum_fit;
         fitfun.p=cnumOfPara;
         fitfun.params=&sdata;
         
@@ -109,13 +109,13 @@ void ddm::fitting()
         //Estimation of A(q) and B(q)
         for (int iterqc=0; iterqc<num_qCurve; ++iterqc)
         {
-            localinipara[numOfPara-1+2*iterqc] = gsl_matrix_get(datag, iterq+qIncreList[iterqc], 0);
-            localinipara[numOfPara-2+2*iterqc] = gsl_matrix_get(datag, iterq+qIncreList[iterqc], cnum_fit-1)-localinipara[numOfPara-1+2*iterqc];
+            localinipara[numOfPara+1+2*iterqc] = gsl_matrix_get(datag, iterq+qIncreList[iterqc], 0);
+            localinipara[numOfPara+2*iterqc] = gsl_matrix_get(datag, iterq+qIncreList[iterqc], cnum_fit-1)-localinipara[numOfPara+1+2*iterqc];
         }
         
         //Initiallization of the solver
         gsl_vector_view para=gsl_vector_view_array(localinipara, cnumOfPara);
-        gsl_multifit_fdfsolver* solver = gsl_multifit_fdfsolver_alloc(solverType, cnum_fit, cnumOfPara);
+        gsl_multifit_fdfsolver* solver = gsl_multifit_fdfsolver_alloc(solverType, ctnum_fit, cnumOfPara);
         gsl_multifit_fdfsolver_set(solver, &fitfun, &para.vector);
         int iter=0;
         //gsl_vector* g=gsl_vector_alloc(numOfPara);
