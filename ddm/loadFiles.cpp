@@ -65,7 +65,7 @@ void ddm::readAndFFT(const string filePrefix)
                 fileName << iter;// << ".txt";
                 readSim(fileName.str(), fftMatrix, cdimx, cdimy);
             }
-            if (filePrefix=="simulationTXT")
+            else if (filePrefix=="simulationTXT")
             {
                 stringstream fileName;
                 fileName << iter << ".txt";
