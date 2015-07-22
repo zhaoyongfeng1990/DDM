@@ -36,7 +36,7 @@ int ISFfun(const gsl_vector* para, void* sdata, gsl_vector* y)
             double Gamma=q*t*v/(Z+1);
             double yi=log(A*(1-exp(-D*q*q*t)*(1-alpha+alpha/Z/Gamma*sin(Z*atan(Gamma))/pow(1+Gamma*Gamma, Z/2.0)))+B);
             
-            double weight=sqrt(exp(dataAry[cidx]));
+            double weight=sqrt(exp(dataAry[cidx])/500/500);
             double result = (yi - dataAry[cidx])*weight;
             
             //Punishment terms, to make constrains in parameter space.
@@ -112,7 +112,7 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
             double dydA=(1 - difexp*(1 - alpha + alpha / Z / Gamma*sinzg / powg));
             double yi =A*dydA + B;
             //(log y)'=y'/y
-            double weight=sqrt(exp(dataAry[cidx]));
+            double weight=sqrt(exp(dataAry[cidx])/500/500);
             
             //cout << t << ": " << weight << '\n';
             
