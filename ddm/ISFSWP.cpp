@@ -28,7 +28,7 @@ int ISFfun(const gsl_vector* para, void* sdata, gsl_vector* y)
     {
         double A=gsl_vector_get(para, 4+2*iterqc);
         double B=gsl_vector_get(para, 5+2*iterqc);
-        double q=qArray[iterqc];
+        const double q=qArray[iterqc];
         for (int iter = 0; iter<num_fit; ++iter)
         {
             int cidx=iter+iterqc*num_fit;
@@ -95,7 +95,7 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
     {
         double A=gsl_vector_get(para, 4+2*iterqc);
         double B=gsl_vector_get(para, 5+2*iterqc);
-        double q=qArray[iterqc];
+        const double q=qArray[iterqc];
         for (int iter=0; iter<num_fit; ++iter)
         {
             int cidx=iter+iterqc*num_fit;
