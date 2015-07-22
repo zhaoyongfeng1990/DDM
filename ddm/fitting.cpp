@@ -23,9 +23,18 @@ int covar_rel_test(const gsl_matrix* J, const gsl_vector* x, double tol);
 
 void ddm::fitting()
 {
+    int cnum_fit=num_fit;
+    for (int itert=0; itert<num_fit; ++itert)
+    {
+        if (tau[itert]>10)
+        {
+            cnum_fit=itert;
+            break;
+        }
+    }
+    
     int cqsize=qsize-qIncreList[num_qCurve-1];
     int cnum_qCurve=num_qCurve;
-    int cnum_fit=num_fit;
     int ctnum_fit=cnum_fit*num_qCurve;
     int cnumOfPara=numOfPara+2*num_qCurve;
     
@@ -110,7 +119,7 @@ void ddm::fitting()
         for (int iterqc=0; iterqc<num_qCurve; ++iterqc)
         {
             localinipara[numOfPara+1+2*iterqc] = gsl_matrix_get(datag, iterq+qIncreList[iterqc], 0);
-            localinipara[numOfPara+2*iterqc] = gsl_matrix_get(datag, iterq+qIncreList[iterqc], cnum_fit-1)-localinipara[numOfPara+1+2*iterqc];
+            localinipara[numOfPara+2*iterqc] = gsl_matrix_get(datag, iterq+qIncreList[iterqc], num_fit-1)-localinipara[numOfPara+1+2*iterqc];
         }
         
         //Initiallization of the solver

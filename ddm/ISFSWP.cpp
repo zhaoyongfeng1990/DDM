@@ -36,8 +36,8 @@ int ISFfun(const gsl_vector* para, void* sdata, gsl_vector* y)
             double Gamma=q*t*v/(Z+1);
             double yi=log(A*(1-exp(-D*q*q*t)*(1-alpha+alpha/Z/Gamma*sin(Z*atan(Gamma))/pow(1+Gamma*Gamma, Z/2.0)))+B);
             
-            double weight=1;//sqrt(exp(dataAry[cidx]-log(560*500)));
-            double result = (yi - dataAry[cidx])/weight;
+            double weight=sqrt(exp(dataAry[cidx]));
+            double result = (yi - dataAry[cidx])*weight;
             
             //Punishment terms, to make constrains in parameter space.
             if (alpha < 0)
@@ -110,19 +110,21 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
             double qqttvv=q*q*t*t*v*v;
             double zzqqttvv = (1 + Z)*(1 + Z) + qqttvv;
             double dydA=(1 - difexp*(1 - alpha + alpha / Z / Gamma*sinzg / powg));
-            double yi = A*dydA + B;
+            double yi =A*dydA + B;
             //(log y)'=y'/y
-            double weight=1;//sqrt(exp(dataAry[cidx]-log(560*500)));
+            double weight=sqrt(exp(dataAry[cidx]));
             
-            gsl_matrix_set(J, cidx, 0, (A*difexp*(1-sinzg/Z/Gamma/powg))/yi/weight );
-            gsl_matrix_set(J, cidx, 1, (A*q*q*t*(1-alpha+alpha*sinzg/powg/Z/Gamma)*difexp)/yi/weight );
+            //cout << t << ": " << weight << '\n';
             
-            gsl_matrix_set(J, cidx, 2, ((alpha*(1+Z)*A*difexp*((1+Z+qqttvv)*sinzg-v*Z*q*t*coszg) )/powg/(v*Z*Gamma*zzqqttvv) )/yi/weight );
+            gsl_matrix_set(J, cidx, 0, (A*difexp*(1-sinzg/Z/Gamma/powg))/yi*weight );
+            gsl_matrix_set(J, cidx, 1, (A*q*q*t*(1-alpha+alpha*sinzg/powg/Z/Gamma)*difexp)/yi*weight );
             
-            gsl_matrix_set(J, cidx, 3, ((A*alpha*difexp*( (v*Z*Z*q*t-zzqqttvv*zatang)*2*coszg+(2*(1+Z-(Z-1)*qqttvv)+Z*zzqqttvv*log(1+Gamma*Gamma))*sinzg))/powg/Gamma/2/Z/Z/zzqqttvv)/yi/weight );
+            gsl_matrix_set(J, cidx, 2, ((alpha*(1+Z)*A*difexp*((1+Z+qqttvv)*sinzg-v*Z*q*t*coszg) )/powg/(v*Z*Gamma*zzqqttvv) )/yi*weight );
             
-            gsl_matrix_set(J, cidx, 4+2*iterqc, dydA/yi/weight );
-            gsl_matrix_set(J, cidx, 5+2*iterqc, 1/yi/weight );
+            gsl_matrix_set(J, cidx, 3, ((A*alpha*difexp*( (v*Z*Z*q*t-zzqqttvv*zatang)*2*coszg+(2*(1+Z-(Z-1)*qqttvv)+Z*zzqqttvv*log(1+Gamma*Gamma))*sinzg))/powg/Gamma/2/Z/Z/zzqqttvv)/yi*weight );
+            
+            gsl_matrix_set(J, cidx, 4+2*iterqc, dydA/yi*weight );
+            gsl_matrix_set(J, cidx, 5+2*iterqc, 1/yi*weight );
             
             //Punishment terms, to make constrains in parameter space.
             if (alpha < 0)

@@ -24,14 +24,14 @@ void ddm::averSqrModTau()
     tau.reserve(cnumOfDiff);
     diff.push_back(1);
     tau.push_back(dt);
-    int candidates[5]={2, 3, 5, 7, 9};
+    int candidates[16]={2, 3, 5, 7, 9,11,13,15,17,19,21,23,25,27,29,31};
     while (candidates[0]<cnumOfDiff)
     {
         diff.push_back(candidates[0]);
         tau.push_back(dt*candidates[0]);
         candidates[0]*=2;
-        int insertPos=4;
-        for (int iteri=1; iteri<5; ++iteri)
+        int insertPos=15;
+        for (int iteri=1; iteri<16; ++iteri)
         {
             if (candidates[0]<candidates[iteri])
             {

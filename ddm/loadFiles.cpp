@@ -15,6 +15,8 @@
 void readTiff(const string tifName, gsl_matrix* data, const int dimx, const int dimy);
 //Reading tiff images.
 void readSim(const string fileName, gsl_matrix* data, const int dimx, const int dimy);
+//Read simulation data from binary file.
+void readSimTXT(const string fileName, gsl_matrix* data, const int dimx, const int dimy);
 //Read simulation data from ASCII file.
 
 //The data structures for reading tiff
@@ -60,8 +62,14 @@ void ddm::readAndFFT(const string filePrefix)
             if (filePrefix=="simulation")
             {
                 stringstream fileName;
-                fileName << iter << ".txt";
+                fileName << iter;// << ".txt";
                 readSim(fileName.str(), fftMatrix, cdimx, cdimy);
+            }
+            if (filePrefix=="simulationTXT")
+            {
+                stringstream fileName;
+                fileName << iter << ".txt";
+                readSimTXT(fileName.str(), fftMatrix, cdimx, cdimy);
             }
             else
             {
@@ -129,7 +137,10 @@ void readTiff(const string tifName, gsl_matrix* data, const int dimx, const int 
     TIFFILEHEAD fileHead;	//File head
     TIFFIFD* firstIFD;
     
+    char buffer[4096];
     ifstream infile(tifName.c_str(),ios_base::binary);
+    infile.rdbuf()->pubsetbuf(buffer, 4096);
+    
     infile.read((char *)&fileHead.biOrder,2);
     infile.read((char *)&fileHead.version,2);
     infile.read((char *)&fileHead.offsetIFD,4);
@@ -208,9 +219,20 @@ void readTiff(const string tifName, gsl_matrix* data, const int dimx, const int 
     infile.close();
 }
 
-void readSim(const string fileName, gsl_matrix* data, const int dimx, const int dimy)	//Read simulation data from ASCII file.
+void readSim(const string fileName, gsl_matrix* data, const int dimx, const int dimy)	//Read simulation data from binary file.
 {
+    char buffer[4096];
+    ifstream infile(fileName.c_str(), ios::binary | ios::in);
+    infile.rdbuf()->pubsetbuf(buffer, 4096);
+    infile.read((char *)(data->data), dimx*dimy*sizeof(double));
+    infile.close();
+}
+
+void readSimTXT(const string fileName, gsl_matrix* data, const int dimx, const int dimy)	//Read simulation data from ASCII file.
+{
+    char buffer[4096];
     ifstream infile(fileName.c_str());
+    infile.rdbuf()->pubsetbuf(buffer, 4096);
     for (int iterx=0; iterx<dimy; ++iterx)
     {
         for (int itery=0; itery<dimx; ++itery)
@@ -220,4 +242,5 @@ void readSim(const string fileName, gsl_matrix* data, const int dimx, const int 
             gsl_matrix_set(data, iterx, itery, temp);
         }
     }
+    infile.close();
 }

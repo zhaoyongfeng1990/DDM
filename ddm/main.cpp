@@ -16,6 +16,7 @@
 //Or, give "recover" can do the fit by reading datag.txt and q.txt directly, save doing time-consuming FFT and averaging.
 int main(int argc, const char * argv[])
 {
+    ios::sync_with_stdio(false);
     stringstream arg;		//To read the argv
     arg << argv[1];
     
