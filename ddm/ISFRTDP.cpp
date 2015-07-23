@@ -25,17 +25,17 @@ cpx dlambdaISFs(cpx s, long double* para, long double v);
 cpx ISFs(cpx s, long double* para, long double v)
 {
     //Temperary variables used for acceleration.
-    long double lambda=para[0];
-    long double q=para[1];
-    long double Dq2lambda=para[2];
-    long double vbsigma2=para[3];
-    long double logfactor=para[4];
-    long double vb2sigma2=para[5];
+    const long double lambda=para[0];
+    const long double q=para[1];
+    const long double Dq2lambda=para[2];
+    const long double vbsigma2=para[3];
+    const long double logfactor=para[4];
+    const long double vb2sigma2=para[5];
     
-    long double qv=q*v;
-    long double pv=exp((vb2sigma2-1)*log(v)+logfactor-v*vbsigma2);
+    const long double qv=q*v;
+    const long double pv=exp((vb2sigma2-1)*log(v)+logfactor-v*vbsigma2);
     
-    cpx atanterm=atan(qv/(Dq2lambda+s));
+    const cpx atanterm=atan(qv/(Dq2lambda+s));
     
     return atanterm/(qv-lambda*atanterm)*pv;
 }
@@ -43,20 +43,20 @@ cpx ISFs(cpx s, long double* para, long double v)
 cpx dvbarISFs(cpx s, long double* para, long double v)
 {
     //Temperary variables used for acceleration.
-    long double lambda=para[0];
-    long double q=para[1];
-    long double Dq2lambda=para[2];
-    long double vbsigma2=para[3];
-    long double logfactor=para[4];
-    long double vb2sigma2=para[5];
-    long double vb=para[6];
-    long double cpsiz1=para[7];
+    const long double lambda=para[0];
+    const long double q=para[1];
+    const long double Dq2lambda=para[2];
+    const long double vbsigma2=para[3];
+    const long double logfactor=para[4];
+    const long double vb2sigma2=para[5];
+    const long double vb=para[6];
+    const long double cpsiz1=para[7];
     
-    long double logv=log(v);
-    long double qv=q*v;
-    long double pv=exp((vb2sigma2-1)*logv+logfactor-v*vbsigma2);
+    const long double logv=log(v);
+    const long double qv=q*v;
+    const long double pv=exp((vb2sigma2-1)*logv+logfactor-v*vbsigma2);
     
-    cpx atanterm=atan(qv/(Dq2lambda+s));
+    const cpx atanterm=atan(qv/(Dq2lambda+s));
     
     return atanterm/(qv-lambda*atanterm)*pv*vbsigma2*(1.0l-v/vb+2.0l*(logv+cpsiz1));
 }
@@ -64,21 +64,21 @@ cpx dvbarISFs(cpx s, long double* para, long double v)
 cpx dsigmaISFs(cpx s, long double* para, long double v)
 {
     //Temperary variables used for acceleration.
-    long double lambda=para[0];
-    long double q=para[1];
-    long double Dq2lambda=para[2];
-    long double vbsigma2=para[3];
-    long double logfactor=para[4];
-    long double vb2sigma2=para[5];
-    long double vb=para[6];
-    long double cpsiz1=para[7];
-    long double vb2sigma3=para[8];
+    const long double lambda=para[0];
+    const long double q=para[1];
+    const long double Dq2lambda=para[2];
+    const long double vbsigma2=para[3];
+    const long double logfactor=para[4];
+    const long double vb2sigma2=para[5];
+    const long double vb=para[6];
+    const long double cpsiz1=para[7];
+    const long double vb2sigma3=para[8];
     
-    long double logv=log(v);
-    long double qv=q*v;
-    long double pv=exp((vb2sigma2-1)*logv+logfactor-v*vbsigma2);
+    const long double logv=log(v);
+    const long double qv=q*v;
+    const long double pv=exp((vb2sigma2-1)*logv+logfactor-v*vbsigma2);
     
-    cpx atanterm=atan(qv/(Dq2lambda+s));
+    const cpx atanterm=atan(qv/(Dq2lambda+s));
     
     return 2.0l*atanterm/(qv-lambda*atanterm)*pv*vb2sigma3*(v/vb-1.0l-logv-cpsiz1);
 }
@@ -86,61 +86,61 @@ cpx dsigmaISFs(cpx s, long double* para, long double v)
 cpx dDISFs(cpx s, long double* para, long double v)
 {
     //Temperary variables used for acceleration.
-    long double lambda=para[0];
-    long double q=para[1];
-    long double Dq2lambda=para[2];
-    long double vbsigma2=para[3];
-    long double logfactor=para[4];
-    long double vb2sigma2=para[5];
+    const long double lambda=para[0];
+    const long double q=para[1];
+    const long double Dq2lambda=para[2];
+    const long double vbsigma2=para[3];
+    const long double logfactor=para[4];
+    const long double vb2sigma2=para[5];
     
-    long double qv=q*v;
-    long double pv=exp((vb2sigma2-1)*log(v)+logfactor-v*vbsigma2);
+    const long double qv=q*v;
+    const long double pv=exp((vb2sigma2-1)*log(v)+logfactor-v*vbsigma2);
     
-    long double qv2=qv*qv;
+    const long double qv2=qv*qv;
     
-    cpx Dq2lambdas=Dq2lambda+s;
-    cpx atanterm=atan(qv/Dq2lambdas);
+    const cpx Dq2lambdas=Dq2lambda+s;
+    const cpx atanterm=atan(qv/Dq2lambdas);
     return -q*q*qv2/(qv2+Dq2lambdas*Dq2lambdas)/(qv-lambda*atanterm)/(qv-lambda*atanterm)*pv;
 }
 
 cpx dlambdaISFs(cpx s, long double* para, long double v)
 {
     //Temperary variables used for acceleration.
-    long double lambda=para[0];
-    long double q=para[1];
-    long double Dq2lambda=para[2];
-    long double vbsigma2=para[3];
-    long double logfactor=para[4];
-    long double vb2sigma2=para[5];
+    const long double lambda=para[0];
+    const long double q=para[1];
+    const long double Dq2lambda=para[2];
+    const long double vbsigma2=para[3];
+    const long double logfactor=para[4];
+    const long double vb2sigma2=para[5];
     
-    long double qv=q*v;
-    long double pv=exp((vb2sigma2-1)*log(v)+logfactor-v*vbsigma2);
+    const long double qv=q*v;
+    const long double pv=exp((vb2sigma2-1)*log(v)+logfactor-v*vbsigma2);
     
-    long double qv2=qv*qv;
+    const long double qv2=qv*qv;
     
-    cpx Dq2lambdas=Dq2lambda+s;
-    cpx atanterm=atan(qv/Dq2lambdas);
+    const cpx Dq2lambdas=Dq2lambda+s;
+    const cpx atanterm=atan(qv/Dq2lambdas);
     return ((qv2+Dq2lambdas*Dq2lambdas)*atanterm*atanterm-qv2)/(qv2+Dq2lambdas*Dq2lambdas)/(qv-lambda*atanterm)/(qv-lambda*atanterm)*pv;
 }
 
 //The ISF is written to meet the API of GSL f function. sdata is the pointer to data structure defined by GSL. y is the return of the function.
 int ISFfun(const gsl_vector* para, void* sdata, gsl_vector* y)
 {
-    double* dataAry=((dataStruct *)sdata)->data;
-    double* tau=((dataStruct *)sdata)->tau;
-    double* qArray=((dataStruct *)sdata)->q;
+    const double* dataAry=((dataStruct *)sdata)->data;
+    const double* tau=((dataStruct *)sdata)->tau;
+    const double* qArray=((dataStruct *)sdata)->q;
     NILT* ILT=((dataStruct *)sdata)->ISFILT;
     
-    int num_fit=((dataStruct *)sdata)->num_fit;
-    int cnum_qCurve=((dataStruct *)sdata)->num_qCurve;
-    int tnum_fit=num_fit*cnum_qCurve;
+    const int num_fit=((dataStruct *)sdata)->num_fit;
+    const int cnum_qCurve=((dataStruct *)sdata)->num_qCurve;
+    const int tnum_fit=num_fit*cnum_qCurve;
     
     //Get the parameters.
-    long double alpha=gsl_vector_get(para, 0);
-    long double vbar=gsl_vector_get(para, 1);
-    long double sigma=gsl_vector_get(para, 2);
-    long double lambda=gsl_vector_get(para, 3);
-    long double D=gsl_vector_get(para, 4);
+    const long double alpha=gsl_vector_get(para, 0);
+    const long double vbar=gsl_vector_get(para, 1);
+    const long double sigma=gsl_vector_get(para, 2);
+    const long double lambda=gsl_vector_get(para, 3);
+    const long double D=gsl_vector_get(para, 4);
     
     bool breakFlag=false;
     
@@ -196,9 +196,9 @@ int ISFfun(const gsl_vector* para, void* sdata, gsl_vector* y)
     }
     
     //Temperary variables used for acceleration.
-    long double vbsigma2=vbar/sigma/sigma;
-    long double vb2sigma2=vbsigma2*vbar;
-    long double logfactor=vb2sigma2*log(vbsigma2)-gsl_sf_lngamma(vb2sigma2);
+    const long double vbsigma2=vbar/sigma/sigma;
+    const long double vb2sigma2=vbsigma2*vbar;
+    const long double logfactor=vb2sigma2*log(vbsigma2)-gsl_sf_lngamma(vb2sigma2);
     
     long double paraISF[10]={lambda, 0, 0, vbsigma2, logfactor, vb2sigma2, vbar, 0, 0, sigma};
     
@@ -216,8 +216,8 @@ int ISFfun(const gsl_vector* para, void* sdata, gsl_vector* y)
     
     for (int iterqc=0; iterqc<cnum_qCurve; ++iterqc)
     {
-        long double A=gsl_vector_get(para, 5+2*iterqc);
-        long double B=gsl_vector_get(para, 6+2*iterqc);
+        const long double A=gsl_vector_get(para, 5+2*iterqc);
+        const long double B=gsl_vector_get(para, 6+2*iterqc);
         
         if (A<0)
         {
@@ -233,9 +233,9 @@ int ISFfun(const gsl_vector* para, void* sdata, gsl_vector* y)
             return GSL_SUCCESS;
         }
         
-        long double q=qArray[iterqc];
-        long double Dq2=D*q*q;
-        double Dq2lambda=Dq2+lambda;
+        const long double q=qArray[iterqc];
+        const long double Dq2=D*q*q;
+        const double Dq2lambda=Dq2+lambda;
         
         paraISF[1]=q;
         paraISF[2]=Dq2lambda;
@@ -252,12 +252,14 @@ int ISFfun(const gsl_vector* para, void* sdata, gsl_vector* y)
         
         for (int iter = 0; iter<num_fit; ++iter)
         {
-            int cidx=iter+iterqc*num_fit;
-            long double t=tau[cidx];
+            const int cidx=iter+iterqc*num_fit;
+            const long double t=tau[cidx];
             //Evaluate ISF at time t, the coefficients has been calculated.
-            double rtd=ILT->clenshaw(t);
-            double yi=log(A2*(1.0-(1.0-alpha)*exp(-Dq2*t)-alpha*rtd)+B2);
+            const double rtd=ILT->clenshaw(t);
+            const double yi=(A2*(1.0-(1.0-alpha)*exp(-Dq2*t)-alpha*rtd)+B2);
             
+            const double weight=1.0/sqrt(dataAry[cidx]);
+
             double result = yi - dataAry[cidx];
             
             gsl_vector_set(y, cidx, result);
@@ -269,15 +271,15 @@ int ISFfun(const gsl_vector* para, void* sdata, gsl_vector* y)
 //The function is written to meet the API of GSL df function. sdata is the pointer to data structure defined by GSL. J is the Jacobian, which is the return of the function.
 int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
 {
-    int num_fit=((dataStruct *)sdata)->num_fit;
-    int cnum_qCurve=((dataStruct *)sdata)->num_qCurve;
-    int tnum_fit=num_fit*cnum_qCurve;
+    const int num_fit=((dataStruct *)sdata)->num_fit;
+    const int cnum_qCurve=((dataStruct *)sdata)->num_qCurve;
+    const int tnum_fit=num_fit*cnum_qCurve;
     
-    long double alpha=gsl_vector_get(para, 0);
-    long double vbar=gsl_vector_get(para, 1);
-    long double sigma=gsl_vector_get(para, 2);
-    long double lambda=gsl_vector_get(para, 3);
-    long double D=gsl_vector_get(para, 4);
+    const long double alpha=gsl_vector_get(para, 0);
+    const long double vbar=gsl_vector_get(para, 1);
+    const long double sigma=gsl_vector_get(para, 2);
+    const long double lambda=gsl_vector_get(para, 3);
+    const long double D=gsl_vector_get(para, 4);
     
     gsl_matrix_set_zero(J);
     bool breakFlag=false;
@@ -352,18 +354,18 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
         return GSL_SUCCESS;
     }
     
-    double* tau=((dataStruct *)sdata)->tau;
-    double* qArray=((dataStruct *)sdata)->q;
+    const double* tau=((dataStruct *)sdata)->tau;
+    const double* qArray=((dataStruct *)sdata)->q;
     
     //Temperary variables used for acceleration.
-    long double vbsigma2=vbar/sigma/sigma;
-    long double vb2sigma2=vbsigma2*vbar;
-    long double logvbsigma2=log(vbsigma2);
-    long double logfactor=vb2sigma2*logvbsigma2-gsl_sf_lngamma(vb2sigma2);
-    long double cpsiz1=logvbsigma2-gsl_sf_psi(vb2sigma2);
-    long double vb2sigma3=vb2sigma2/sigma;
+    const long double vbsigma2=vbar/sigma/sigma;
+    const long double vb2sigma2=vbsigma2*vbar;
+    const long double logvbsigma2=log(vbsigma2);
+    const long double logfactor=vb2sigma2*logvbsigma2-gsl_sf_lngamma(vb2sigma2);
+    const long double cpsiz1=logvbsigma2-gsl_sf_psi(vb2sigma2);
+    const long double vb2sigma3=vb2sigma2/sigma;
     
-    long double paraISF[10]={lambda, q, Dq2lambda, vbsigma2, logfactor, vb2sigma2, vbar, cpsiz1, vb2sigma3, sigma};
+    long double paraISF[10]={lambda, 0, 0, vbsigma2, logfactor, vb2sigma2, vbar, cpsiz1, vb2sigma3, sigma};
     
     NILT* ILT=((dataStruct *)sdata)->ISFILT;
     NILT* dvbarILT=((dataStruct *)sdata)->dvbarISFILT;
@@ -371,7 +373,7 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
     NILT* dlambdaILT=((dataStruct *)sdata)->dlambdaISFILT;
     NILT* dDILT=((dataStruct *)sdata)->dDISFILT;
     
-    int tid=omp_get_thread_num();
+    const int tid=omp_get_thread_num();
     ILT->cfun[tid].fun=ISFs;
     dvbarILT->cfun[tid].fun=dvbarISFs;
     dsigmaILT->cfun[tid].fun=dsigmaISFs;
@@ -385,8 +387,8 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
     
     for (int iterqc=0; iterqc<cnum_qCurve; ++iterqc)
     {
-        long double A=gsl_vector_get(para, 5+2*iterqc);
-        long double B=gsl_vector_get(para, 6+2*iterqc);
+        const long double A=gsl_vector_get(para, 5+2*iterqc);
+        const long double B=gsl_vector_get(para, 6+2*iterqc);
         
         if (A<0)
         {
@@ -402,9 +404,9 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
             return GSL_SUCCESS;
         }
         
-        long double q=qArray[iterqc];
-        long double Dq2=D*q*q;
-        long double Dq2lambda=Dq2+lambda;
+        const long double q=qArray[iterqc];
+        const long double Dq2=D*q*q;
+        const long double Dq2lambda=Dq2+lambda;
         
         paraISF[1]=q;
         paraISF[2]=Dq2lambda;
@@ -449,26 +451,26 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
         
         for (int iter=0; iter<num_fit; ++iter)
         {
-            int cidx=iter+iterqc*num_fit;
+            const int cidx=iter+iterqc*num_fit;
             //Temperary variables used for acceleration.
-            long double t=tau[cidx];
-            double rtd=ILT->clenshaw(t);
-            double dvbarrtd=dvbarILT->clenshaw(t);
-            double dsigmartd=dsigmaILT->clenshaw(t);
-            double dlambdartd=dlambdaILT->clenshaw(t);
-            double dDrtd=dDILT->clenshaw(t);
+            const long double t=tau[cidx];
+            const double rtd=ILT->clenshaw(t);
+            const double dvbarrtd=dvbarILT->clenshaw(t);
+            const double dsigmartd=dsigmaILT->clenshaw(t);
+            const double dlambdartd=dlambdaILT->clenshaw(t);
+            const double dDrtd=dDILT->clenshaw(t);
             
-            double expterm=exp(-Dq2*t);
-            double dA=(1.0-(1.0-alpha)*expterm-alpha*rtd);
-            double yi=A*dA+B;
+            const double expterm=exp(-Dq2*t);
+            const double dA=(1.0-(1.0-alpha)*expterm-alpha*rtd);
+            const double weight=1.0/sqrt(dataAry[cidx]);
             
-            gsl_matrix_set(J, cidx, 0, A*(expterm-rtd)/yi );
-            gsl_matrix_set(J, cidx, 1, -A*alpha*dvbarrtd/yi );
-            gsl_matrix_set(J, cidx, 2, -A*alpha*dsigmartd/yi );
-            gsl_matrix_set(J, cidx, 3, -A*alpha*dlambdartd/yi );
-            gsl_matrix_set(J, cidx, 4, A*((1.0-alpha)*expterm*q*q*t-alpha*dDrtd)/yi );
-            gsl_matrix_set(J, cidx, 5+2*iterqc, dA/yi );
-            gsl_matrix_set(J, cidx, 6+2*iterqc, 1.0/yi );
+            gsl_matrix_set(J, cidx, 0, A*(expterm-rtd)*weight );
+            gsl_matrix_set(J, cidx, 1, -A*alpha*dvbarrtd*weight );
+            gsl_matrix_set(J, cidx, 2, -A*alpha*dsigmartd*weight );
+            gsl_matrix_set(J, cidx, 3, -A*alpha*dlambdartd*weight );
+            gsl_matrix_set(J, cidx, 4, A*((1.0-alpha)*expterm*q*q*t-alpha*dDrtd)*weight );
+            gsl_matrix_set(J, cidx, 5+2*iterqc, dA*weight );
+            gsl_matrix_set(J, cidx, 6+2*iterqc, 1.0*weight );
         }
     }
     return GSL_SUCCESS;

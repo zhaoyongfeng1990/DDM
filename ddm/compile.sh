@@ -33,14 +33,14 @@ make
 
 if [ "$Type" = "SW" ]
 then
-    mv ./ddm ./ddmSW
+    mv ./ddm ./bin/ddmSW
 elif [ "$Type" = "SWP" ]
 then
-    mv ./ddm ./ddmSWP
+    mv ./ddm ./bin/ddmSWP
 elif [ "$Type" = "RTD" ]
 then
-    mv ./ddm ./ddmRTD
+    mv ./ddm ./bin/ddmRTD
 elif [ "$Type" = "RTDP" ]
 then
-    mv ./ddm ./ddmRTDP
+    mv ./ddm ./bin/ddmRTDP
 fi

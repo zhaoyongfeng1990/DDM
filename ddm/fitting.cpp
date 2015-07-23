@@ -67,7 +67,7 @@ void ddm::fitting()
         {
             for (int iterf = 0; iterf < cnum_fit; ++iterf)
             {
-                datafit[iterf+iterqc*cnum_fit]=log(gsl_matrix_get(datag, iterq+qIncreList[iterqc], iterf));		//Fitting in log scale.
+                datafit[iterf+iterqc*cnum_fit]=(gsl_matrix_get(datag, iterq+qIncreList[iterqc], iterf));		//Fitting in log scale.
                 time[iterf+iterqc*cnum_fit]=tau[iterf];
             }
             qList[iterqc]=qabs[iterq+qIncreList[iterqc]];

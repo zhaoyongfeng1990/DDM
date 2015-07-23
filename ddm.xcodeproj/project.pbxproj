@@ -59,7 +59,7 @@
 		A2AD627A1A0742490057D8C8 /* parameters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = parameters.h; sourceTree = "<group>"; };
 		A2B28CAF1B419A7F0000AC77 /* NILT_RTDP.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NILT_RTDP.cpp; sourceTree = "<group>"; };
 		A2CE9DDA1B5D4BF600DDE052 /* compile.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = compile.sh; sourceTree = "<group>"; };
-		A2CE9DDB1B5D545500DDE052 /* config.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = config.sh; sourceTree = "<group>"; };
+		A2CE9DDC1B6112A700DDE052 /* config.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = config.sh; path = bin/config.sh; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +93,7 @@
 		A2AD62681A073D350057D8C8 /* ddm */ = {
 			isa = PBXGroup;
 			children = (
+				A2CE9DDC1B6112A700DDE052 /* config.sh */,
 				A2AD62691A073D350057D8C8 /* main.cpp */,
 				A2AD627A1A0742490057D8C8 /* parameters.h */,
 				A26E72EC1B21B70D00CC4075 /* ISFSWP.cpp */,
@@ -112,7 +113,6 @@
 				A2B28CAF1B419A7F0000AC77 /* NILT_RTDP.cpp */,
 				A275AEE61B4A8F3300EC7F86 /* ISFRTDP.cpp */,
 				A2CE9DDA1B5D4BF600DDE052 /* compile.sh */,
-				A2CE9DDB1B5D545500DDE052 /* config.sh */,
 			);
 			path = ddm;
 			sourceTree = "<group>";
