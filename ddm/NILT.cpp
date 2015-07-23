@@ -65,10 +65,12 @@ NILT::~NILT()
     delete [] sigma;
     delete [] sigmab;
     delete [] CoeA;
+#ifdef IfComplexIntegration
     delete [] workspace;
     delete [] pRe;
     delete [] pIm;
     delete [] cfun;
+#endif
 }
 
 void NILT::NiLT_weeks(cpx (*fun)(cpx, const long double*), const long double* para)
