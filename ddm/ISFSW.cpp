@@ -104,7 +104,7 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
             gsl_matrix_set(J, iter, 0, (A*difexp*(1-sinqvt/qvt))*weight );
             gsl_matrix_set(J, iter, 1, (A*q*q*t*(1-alpha+alpha*sinqvt/qvt)*difexp)*weight );
             
-            gsl_matrix_set(J, iter, 2, A*difexp*alpha*(sinqvt/qvt-cos(qvt))/v/yi );
+            gsl_matrix_set(J, iter, 2, A*difexp*alpha*(sinqvt/qvt-cos(qvt))/v*weight );
             
             gsl_matrix_set(J, iter, 3+2*iterqc, dyda*weight );
             gsl_matrix_set(J, iter, 4+2*iterqc, 1.0*weight);

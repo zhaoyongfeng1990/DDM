@@ -13,12 +13,12 @@
 #include <vector>
 #include <omp.h>
 
-cpx ISFs(cpx s, long double* para);
-cpx dvISFs(cpx s, long double* para);
-cpx dDISFs(cpx s, long double* para);
-cpx dlambdaISFs(cpx s, long double* para);
+cpx ISFs(cpx s, const long double* para);
+cpx dvISFs(cpx s, const long double* para);
+cpx dDISFs(cpx s, const long double* para);
+cpx dlambdaISFs(cpx s, const long double* para);
 
-cpx ISFs(cpx s, long double* para)
+cpx ISFs(cpx s, const long double* para)
 {
     //Temperary variables used for acceleration.
     const long double qv=para[0];
@@ -30,7 +30,7 @@ cpx ISFs(cpx s, long double* para)
     return atanterm/(qv-lambda*atanterm);
 }
 
-cpx dvISFs(cpx s, long double* para)
+cpx dvISFs(cpx s, const long double* para)
 {
     //Temperary variables used for acceleration.
     const long double qv=para[0];
@@ -44,7 +44,7 @@ cpx dvISFs(cpx s, long double* para)
     return q*(qv*Dq2lambdas-(qv2+Dq2lambdas*Dq2lambdas)*atanterm)/(qv2+Dq2lambdas*Dq2lambdas)/(qv-lambda*atanterm)/(qv-lambda*atanterm);
 }
 
-cpx dDISFs(cpx s, long double* para)
+cpx dDISFs(cpx s, const long double* para)
 {
     //Temperary variables used for acceleration.
     const long double qv=para[0];
@@ -58,7 +58,7 @@ cpx dDISFs(cpx s, long double* para)
     return -q*q*qv2/(qv2+Dq2lambdas*Dq2lambdas)/(qv-lambda*atanterm)/(qv-lambda*atanterm);
 }
 
-cpx dlambdaISFs(cpx s, long double* para)
+cpx dlambdaISFs(cpx s, const long double* para)
 {
     //Temperary variables used for acceleration.
     const long double qv=para[0];
@@ -93,9 +93,9 @@ int ISFfun(const gsl_vector* para, void* sdata, gsl_vector* y)
     bool breakFlag=false;
     
     double punishment=0;
-    if (vbar<0)
+    if (v0<0)
     {
-        punishment+=1e5*vbar*vbar;
+        punishment+=1e5*v0*v0;
         breakFlag=true;
     }
     if (lambda<0)
@@ -219,11 +219,11 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
     
     gsl_matrix_set_zero(J);
     bool breakFlag=false;
-    if (vbar<0)
+    if (v0<0)
     {
         for (int iter=0; iter<tnum_fit; ++iter)
         {
-            gsl_matrix_set(J, iter, 1, 2e5 *vbar);
+            gsl_matrix_set(J, iter, 1, 2e5 *v0);
         }
         breakFlag=true;
     }

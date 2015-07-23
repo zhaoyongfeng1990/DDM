@@ -30,7 +30,11 @@ NILT::NILT(int omp_num)
         
 #ifdef IfComplexIntegration
         //workspace[iter]=gsl_integration_workspace_alloc(workspaceSize);
+        workspace=new gsl_integration_cquad_workspace*[omp_num];
         workspace[iter]=gsl_integration_cquad_workspace_alloc(workspaceSize);
+        cfun=new warper[omp_num];
+        pRe=new gsl_function[omp_num];
+        pIm=new gsl_function[omp_num];
         pRe[iter].params=&cfun[iter];
         pIm[iter].params=&cfun[iter];
         pRe[iter].function=Re;
@@ -61,9 +65,13 @@ NILT::~NILT()
     delete [] sigma;
     delete [] sigmab;
     delete [] CoeA;
+    delete [] workspace;
+    delete [] pRe;
+    delete [] pIm;
+    delete [] cfun;
 }
 
-void NILT::NiLT_weeks(cpx (*fun)(cpx, long double*), long double* para)
+void NILT::NiLT_weeks(cpx (*fun)(cpx, const long double*), const long double* para)
 {
     int tid=omp_get_thread_num();
     fftwl_complex* cfftwIn=fftwIn[tid];

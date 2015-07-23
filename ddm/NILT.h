@@ -27,9 +27,9 @@ typedef complex<long double> cpx;
 
 struct warper
 {
-    long double* parameters;
     cpx z;
     cpx (*fun)(cpx z, long double* para, long double x);
+    long double* parameters;
 };
 
 const double epsabs=1e-8;
@@ -44,7 +44,7 @@ public:
     NILT(int omp_num);
     ~NILT();
     
-    void NiLT_weeks(cpx (*fun)(cpx, long double*), long double* para);
+    void NiLT_weeks(cpx (*fun)(cpx, const long double*), const long double* para);
     //Calculation of the coefficients in Laguerre polynomial expansion.
     double clenshaw(long double t);
     //Clenshaw summation for function evaluation.
@@ -75,13 +75,13 @@ public:
     void NiLT_weeks(long double* para);
     cpx invfun(cpx x, long double* para);
     
-    gsl_function pRe;
-    gsl_function pIm;
+    gsl_function* pRe;
+    gsl_function* pIm;
     
     //gsl_integration_workspace* workspace;
-    gsl_integration_cquad_workspace* workspace;
+    gsl_integration_cquad_workspace** workspace;
     
-    warper cfun;
+    warper* cfun;
 #endif
 };
 

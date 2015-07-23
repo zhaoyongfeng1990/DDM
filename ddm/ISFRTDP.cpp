@@ -256,7 +256,7 @@ int ISFfun(const gsl_vector* para, void* sdata, gsl_vector* y)
             const long double t=tau[cidx];
             //Evaluate ISF at time t, the coefficients has been calculated.
             const double rtd=ILT->clenshaw(t);
-            const double yi=(A2*(1.0-(1.0-alpha)*exp(-Dq2*t)-alpha*rtd)+B2);
+            const double yi=(A*(1.0-(1.0-alpha)*exp(-Dq2*t)-alpha*rtd)+B);
             
             const double weight=1.0/sqrt(dataAry[cidx]);
 
@@ -356,6 +356,7 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
     
     const double* tau=((dataStruct *)sdata)->tau;
     const double* qArray=((dataStruct *)sdata)->q;
+    const double* dataAry=((dataStruct *)sdata)->data;
     
     //Temperary variables used for acceleration.
     const long double vbsigma2=vbar/sigma/sigma;
