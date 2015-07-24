@@ -134,7 +134,6 @@ int ISFfun(const gsl_vector* para, void* sdata, gsl_vector* y)
     const int num_fit=((dataStruct *)sdata)->num_fit;
     const int cnum_qCurve=((dataStruct *)sdata)->num_qCurve;
     const int tnum_fit=num_fit*cnum_qCurve;
-    
     //Get the parameters.
     const long double alpha=gsl_vector_get(para, 0);
     const long double vbar=gsl_vector_get(para, 1);

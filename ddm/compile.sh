@@ -10,7 +10,7 @@ Type=$1
 
 ISF=$(cat ./ISFtype.h)
 
-OldType=$(echo ${ISF:11:14})
+OldType=$(echo ${ISF:11})
 
 if [ "$Type" != "$OldType" ]
 then

@@ -79,7 +79,7 @@ void ddm::fitting()
         sdata.data=datafit;
         sdata.tau=time;
         sdata.q=qList;
-        sdata.num_fit=ctnum_fit;
+        sdata.num_fit=cnum_fit;
         sdata.num_qCurve=cnum_qCurve;
         
 #ifdef ISFRTD
@@ -110,7 +110,7 @@ void ddm::fitting()
         fitfun.p=cnumOfPara;
         fitfun.params=&sdata;
         
-        double localinipara[cnumOfPara];
+        double* localinipara=new double[cnumOfPara];
         for (int iterp=0; iterp<numOfPara; ++iterp)
         {
             localinipara[iterp]=inipara[iterp];
@@ -177,6 +177,7 @@ void ddm::fitting()
         }
         delete [] datafit;
         delete [] qList;
+        delete [] localinipara;
     }
 }
 

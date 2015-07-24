@@ -8,6 +8,7 @@
 
 #include "NILT.h"
 #include <omp.h>
+#include <iostream>
 
 NILT::NILT(int omp_num)
 {
