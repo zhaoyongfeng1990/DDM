@@ -12,67 +12,6 @@
 #include <cmath>
 #include <gsl/gsl_multifit_nlin.h>
 
-#include <gsl/gsl_permutation.h>
-#include <gsl/gsl_linalg.h>
-#include <gsl/gsl_math.h>
-#include <gsl/gsl_blas.h>
-#include <gsl/gsl_errno.h>
-#include <stddef.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <float.h>
-double
-enorm (const gsl_vector * f)
-{
-    return gsl_blas_dnrm2 (f);
-}
-
-static double
-scaled_enorm (const gsl_vector * d, const gsl_vector * f)
-{
-    double e2 = 0;
-    size_t i, n = f->size;
-    for (i = 0; i < n; i++)
-    {
-        double fi = gsl_vector_get (f, i);
-        double di = gsl_vector_get (d, i);
-        double u = di * fi;
-        e2 += u * u;
-    }
-    return sqrt (e2);
-}
-
-static double
-compute_delta (gsl_vector * diag, gsl_vector * x)
-{
-    double Dx = scaled_enorm (diag, x);
-    double factor = 100;  /* generally recommended value from MINPACK */
-    
-    return (Dx > 0) ? factor * Dx : factor;
-}
-
-static void
-compute_diag (const gsl_matrix * J, gsl_vector * diag)
-{
-    size_t i, j, n = J->size1, p = J->size2;
-    
-    for (j = 0; j < p; j++)
-    {
-        double sum = 0;
-        
-        for (i = 0; i < n; i++)
-        {
-            double Jij = gsl_matrix_get (J, i, j);
-            sum += Jij * Jij;
-        }
-        if (sum == 0)
-            sum = 1.0;
-        
-        gsl_vector_set (diag, j, sqrt (sum));
-    }
-}
-
-
 #include <omp.h>
 
 int fdISFfun(const gsl_vector* para, void* sdata, gsl_vector* y, gsl_matrix* J);
