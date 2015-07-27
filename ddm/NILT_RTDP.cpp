@@ -15,19 +15,19 @@
 double Re(double x, void* params)
 {
     warper* cfun=(warper*)params;
-    //long double v=(1-x)/x;
-    cpx result=cfun->fun(cfun->z, cfun->parameters, x);
-    return result.real();
+    long double v=(1-x)/x;
+    //cpx result=cfun->fun(cfun->z, cfun->parameters, x);
+    cpx result=cfun->fun(cfun->z, cfun->parameters, v);
+    return result.real()/x/x;
 }
 
 double Im(double x, void* params)
 {
     warper* cfun=(warper*)params;
-    
-    //long double v=(1-x)/x;
-    
-    cpx result=cfun->fun(cfun->z, cfun->parameters, x);
-    return result.imag();
+    long double v=(1-x)/x;
+    //cpx result=cfun->fun(cfun->z, cfun->parameters, x);
+    cpx result=cfun->fun(cfun->z, cfun->parameters, v);
+    return result.imag()/x/x;
 }
 
 void NILT::NiLT_weeks(long double* para)
@@ -77,9 +77,9 @@ cpx NILT::invfun(cpx x, long double* para)
     
     double vb=para[6];
     double sigma=para[9];
-    double lowerBound=vb-8*sigma;
-    lowerBound=lowerBound<0 ? 0 : lowerBound;
-    double upperBound=vb+8*sigma;
+    double lowerBound=0;//vb-8*sigma;
+    //lowerBound=lowerBound<0 ? 0 : lowerBound;
+    double upperBound=1;//vb+8*sigma;
     
     gsl_integration_cquad(&pRe[tid], lowerBound, upperBound, epsabs, epsrel, workspace[tid], &realpart, &error, &nevals);
     gsl_integration_cquad(&pIm[tid], lowerBound, upperBound, epsabs, epsrel, workspace[tid], &imagpart, &error, &nevals);

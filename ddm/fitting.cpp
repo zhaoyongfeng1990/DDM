@@ -22,30 +22,6 @@ int norm0_rel_test(const gsl_vector * dx, const gsl_vector * x, double tol, doub
 int covar_rel_test(const gsl_matrix* J, const gsl_vector* x, double tol);
 //Test fitting result using error estimation from covariance matrix, not reliable. tol is the relative tolerance of error.
 
-typedef struct
-{
-    size_t iter;
-    double xnorm;
-    double fnorm;
-    double delta;
-    double par;
-    gsl_matrix *r;
-    gsl_vector *tau;
-    gsl_vector *diag;
-    gsl_vector *qtf;
-    gsl_vector *newton;
-    gsl_vector *gradient;
-    gsl_vector *x_trial;
-    gsl_vector *f_trial;
-    gsl_vector *df;
-    gsl_vector *sdiag;
-    gsl_vector *rptdx;
-    gsl_vector *w;
-    gsl_vector *work1;
-    gsl_permutation * perm;
-}
-lmder_state_t;
-
 void ddm::fitting()
 {
     int cnum_fit=num_fit;
