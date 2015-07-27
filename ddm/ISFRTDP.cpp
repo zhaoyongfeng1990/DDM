@@ -267,7 +267,7 @@ int ISFfun(const gsl_vector* para, void* sdata, gsl_vector* y)
             
             const double weight=1.0/sqrt(dataAry[cidx]);
 
-            double result = yi - dataAry[cidx];
+            double result = (yi - dataAry[cidx])*weight;
             
             gsl_vector_set(y, cidx, result);
         }
