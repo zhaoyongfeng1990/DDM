@@ -22,6 +22,14 @@ NILT::NILT(int omp_num)
     sigmab=new long double[omp_num];
     
     CoeA=new vector<long double> [OMP_NUM_THREADS];
+    
+#ifdef IfComplexIntegration
+    workspace=new gsl_integration_cquad_workspace*[omp_num];
+    cfun=new warper[omp_num];
+    pRe=new gsl_function[omp_num];
+    pIm=new gsl_function[omp_num];
+#endif
+    
     for (int iter=0; iter<OMP_NUM_THREADS; ++iter)
     {
         fftwIn[iter]=fftwl_alloc_complex(M);
@@ -31,11 +39,7 @@ NILT::NILT(int omp_num)
         
 #ifdef IfComplexIntegration
         //workspace[iter]=gsl_integration_workspace_alloc(workspaceSize);
-        workspace=new gsl_integration_cquad_workspace*[omp_num];
         workspace[iter]=gsl_integration_cquad_workspace_alloc(workspaceSize);
-        cfun=new warper[omp_num];
-        pRe=new gsl_function[omp_num];
-        pIm=new gsl_function[omp_num];
         pRe[iter].params=&cfun[iter];
         pIm[iter].params=&cfun[iter];
         pRe[iter].function=Re;

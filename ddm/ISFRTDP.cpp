@@ -126,6 +126,7 @@ cpx dlambdaISFs(cpx s, long double* para, long double v)
 //The ISF is written to meet the API of GSL f function. sdata is the pointer to data structure defined by GSL. y is the return of the function.
 int ISFfun(const gsl_vector* para, void* sdata, gsl_vector* y)
 {
+    
     const double* dataAry=((dataStruct *)sdata)->data;
     const double* tau=((dataStruct *)sdata)->tau;
     const double* qArray=((dataStruct *)sdata)->q;
@@ -140,6 +141,13 @@ int ISFfun(const gsl_vector* para, void* sdata, gsl_vector* y)
     const long double sigma=gsl_vector_get(para, 2);
     const long double lambda=gsl_vector_get(para, 3);
     const long double D=gsl_vector_get(para, 4);
+    
+//    cout << qArray[0] << ' ' << qArray[1] << '\n';
+//    for (int i=0; i<9; ++i)
+//    {
+//        cout << gsl_vector_get(para, i) << '\n';
+//    }
+//    cout << '\n';
     
     bool breakFlag=false;
     

@@ -8,7 +8,7 @@
 
 #include "NILT.h"
 #include <omp.h>
-//#include <iostream>
+#include <iostream>
 
 #ifdef IfComplexIntegration
 
