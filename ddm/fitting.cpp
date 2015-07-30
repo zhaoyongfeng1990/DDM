@@ -16,39 +16,41 @@
 
 int fdISFfun(const gsl_vector* para, void* sdata, gsl_vector* y, gsl_matrix* J);
 
-int norm0_rel_test(const gsl_vector * dx, const gsl_vector * x, double tol, double tole);
-//Test fitting result using 0-norm (maximum absolute value) of the relative step size dx/x. tol is the relative tolerance of error, tole is the absolute tolerance of error.
-
-int covar_rel_test(const gsl_matrix* J, const gsl_vector* x, double tol);
 //Test fitting result using error estimation from covariance matrix, not reliable. tol is the relative tolerance of error.
+int covar_rel_test(const gsl_matrix* J, const gsl_vector* x, double tol);
 
+//Fitting. Allow fitting multiple q curves simultaneously to decrease the chance of converging to local minimum.
 void ddm::fitting()
 {
     int cnum_fit=num_fit;
+    int ctimeWindow=timeWindow;
+    //Find the truncation time if time window is set
     for (int itert=0; itert<num_fit; ++itert)
     {
-        if (tau[itert]>10)
+        if (tau[itert]>ctimeWindow)
         {
             cnum_fit=itert;
             break;
         }
     }
     
-    int cqsize=qsize-qIncreList[num_qCurve-1];
+    //Local variables
+    int cqsize=qsize-qIncreList[num_qCurve-1];  //number of fitting result
     int cnum_qCurve=num_qCurve;
     int ctnum_fit=cnum_fit*num_qCurve;
-    int cnumOfPara=numOfPara+2*num_qCurve;
+    int cnumOfPara=numOfPara+2*num_qCurve;  //Total number of parameters
     
     fittedPara=gsl_matrix_alloc(cqsize, cnumOfPara);
     //To store the fitting result and error.
     fitErr=gsl_matrix_alloc(cqsize, cnumOfPara);
     status = new int[cqsize];		//Record the status of fitting.
     
-    const gsl_multifit_fdfsolver_type *solverType = gsl_multifit_fdfsolver_lmsder;
     //Using Levenberg-Marquardt algorithm as implemented in the scaled lmder routine in minpack. Jacobian is given.
+    const gsl_multifit_fdfsolver_type *solverType = gsl_multifit_fdfsolver_lmsder;
     
     int progress=0;		//Indicator of progress.
     
+    //Objects to do numerical inverse Laplace transformation
 #ifdef ISFRTD
     NILT NILT1(OMP_NUM_THREADS), NILT2(OMP_NUM_THREADS), NILT3(OMP_NUM_THREADS), NILT4(OMP_NUM_THREADS);
 #endif
@@ -60,10 +62,11 @@ void ddm::fitting()
 #pragma omp parallel for
     for (int iterq=0; iterq<cqsize; ++iterq)
     {
-        //Get the selected data for fitting
+        //Data array which is going to present to the fitting algorithm
         double* datafit=new double[ctnum_fit];
         double* qList=new double[cnum_qCurve];
         double* time=new double[ctnum_fit];
+        //Truncate the data, and put multiple curves into one array
         for (int iterqc=0; iterqc<cnum_qCurve; ++iterqc)
         {
             for (int iterf = 0; iterf < cnum_fit; ++iterf)
@@ -74,9 +77,10 @@ void ddm::fitting()
             qList[iterqc]=qabs[iterq+qIncreList[iterqc]];
         }
         
-        gsl_multifit_function_fdf fitfun;		//Function point.
+        gsl_multifit_function_fdf fitfun;		//Pointer of function to fit.
         dataStruct sdata;		//GSL data structure
         
+        //Data is passed to ISFfun by sdata
         sdata.data=datafit;
         sdata.tau=time;
         sdata.q=qList;
@@ -111,6 +115,7 @@ void ddm::fitting()
         fitfun.p=cnumOfPara;
         fitfun.params=&sdata;
         
+        //Initialization of the parameters
         double* localinipara=new double[cnumOfPara];
         for (int iterp=0; iterp<numOfPara; ++iterp)
         {
@@ -129,33 +134,40 @@ void ddm::fitting()
         int iter=0;
         //gsl_vector* g=gsl_vector_alloc(numOfPara);
         
-        cout << qList[0] << ' ' << qList[1] << '\n';
-        for (int iterpara=0; iterpara<cnumOfPara; ++iterpara)
-        {
-            cout << gsl_vector_get(solver->x, iterpara) << '\n';
-        }
-        cout << '\n';
+        //For debugging and monitering the iterations
+//        cout << qList[0] << ' ' << qList[1] << '\n';
+//        for (int iterpara=0; iterpara<cnumOfPara; ++iterpara)
+//        {
+//            cout << gsl_vector_get(solver->x, iterpara) << '\n';
+//        }
+//        cout << '\n';
         
+        int cstatus=GSL_CONTINUE;   //Current status
         do
         {
             gsl_multifit_fdfsolver_iterate(solver);		//Iterate one step.
-            status[iterq] = norm0_rel_test(solver->dx, solver->x, 1e-7, 1e-7);  //Test the exiting condition
+            cstatus = norm0_rel_test(solver->dx, solver->x, 1e-7, 1e-7);  //Test the exiting criteria
             
-            for (int iterpara=0; iterpara<cnumOfPara; ++iterpara)
-            {
-                cout << gsl_vector_get(solver->x, iterpara) << '\n';
-            }
-            cout << '\n';
+            //For debugging and monitering the iterations
+//            for (int iterpara=0; iterpara<cnumOfPara; ++iterpara)
+//            {
+//                cout << gsl_vector_get(solver->x, iterpara) << '\n';
+//            }
+//            cout << '\n';
+            
+            //If to use other exiting criteria
             //gsl_multifit_gradient(solver->J,solver->f, g);
             //status[iterq-1]=gsl_multifit_test_gradient(g, 1e-5);
             //			status[iterq - 1] = covar_rel_test(solver->J, solver->x, 1e-4);
             
             ++iter;
+            //Number of iterations exceed certain limitation
             if (iter>maxIter)
             {
-                status[iterq]=GSL_EMAXITER;
+                cstatus=GSL_EMAXITER;
             }
-        } while (status[iterq] == GSL_CONTINUE);
+        } while (cstatus == GSL_CONTINUE);
+        status[iterq]=cstatus;
         //gsl_vector_free(g);
         
         //Estimating the error.
@@ -169,12 +181,14 @@ void ddm::fitting()
         gsl_matrix_free(covar);
         gsl_multifit_fdfsolver_free(solver);
         
+        //Output to standard I/O
         progress+=1;
         cout << "Fitted q=" << qabs[iterq] << " at iter=" << iter << ", " << 100.0*progress / qsize << "% completed from thread No." << omp_get_thread_num() << ", "<< gsl_strerror(status[iterq]) << "." << '\n';
         for (int iterpara=0; iterpara<cnumOfPara; ++iterpara)
         {
             cout << gsl_matrix_get(fittedPara, iterq, iterpara) << '\n';
         }
+        cout << '\n';
         delete [] datafit;
         delete [] qList;
         delete [] localinipara;

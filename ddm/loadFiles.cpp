@@ -12,12 +12,12 @@
 #include <iostream>
 #include <omp.h>
 
-void readTiff(const string tifName, gsl_matrix* data, const int dimx, const int dimy);
 //Reading tiff images.
-void readSim(const string fileName, gsl_matrix* data, const int dimx, const int dimy);
+void readTiff(const string tifName, gsl_matrix* data, const int dimx, const int dimy);
 //Read simulation data from binary file.
-void readSimTXT(const string fileName, gsl_matrix* data, const int dimx, const int dimy);
+void readSim(const string fileName, gsl_matrix* data, const int dimx, const int dimy);
 //Read simulation data from ASCII file.
+void readSimTXT(const string fileName, gsl_matrix* data, const int dimx, const int dimy);
 
 //The data structures for reading tiff
 typedef struct tagTIFFILEHEAD{
@@ -42,6 +42,7 @@ typedef struct tagTIFFIFD{
 
 void ddm::readAndFFT(const string filePrefix)
 {
+    //Local variables
     int cdimy=dimy;
     int cdimx=dimx;
     int cdimkx=dimkx;
@@ -62,7 +63,7 @@ void ddm::readAndFFT(const string filePrefix)
             if (filePrefix=="simulation")
             {
                 stringstream fileName;
-                fileName << iter;// << ".txt";
+                fileName << iter;
                 readSim(fileName.str(), fftMatrix, cdimx, cdimy);
             }
             else if (filePrefix=="simulationTXT")
@@ -90,6 +91,7 @@ void ddm::readAndFFT(const string filePrefix)
 void ddm::recover()
 {
     qabs.reserve((dimkx - 1)*(dimky - 1)/2);	//the number of effective q will not exceed (dimk - 1)*(dimk - 1)/2.
+    //Loading table of q
     ifstream qfile("q.txt");
     while (!qfile.eof())
     {
@@ -97,11 +99,12 @@ void ddm::recover()
         qfile >> tempq;
         qabs.push_back(tempq);
     }
-    
+    //The last line must be '\n', drop it. (So there must be a '\n' at the end of the file! )
     qabs.pop_back();
     qsize=(int)qabs.size();
     qfile.close();
     
+    //Loading table of tau
     tau.reserve(numOfDiff);
     ifstream taufile("tau.txt");
     while (!taufile.eof())
@@ -110,6 +113,7 @@ void ddm::recover()
         taufile >> temptau;
         tau.push_back(temptau);
     }
+    //The last line must be '\n', drop it. (So there must be a '\n' at the end of the file! )
     tau.pop_back();
     num_fit=(int)tau.size();
     taufile.close();
@@ -219,20 +223,22 @@ void readTiff(const string tifName, gsl_matrix* data, const int dimx, const int 
     infile.close();
 }
 
-void readSim(const string fileName, gsl_matrix* data, const int dimx, const int dimy)	//Read simulation data from binary file.
+//Read simulation data from binary file.
+void readSim(const string fileName, gsl_matrix* data, const int dimx, const int dimy)
 {
     char buffer[4096];
     ifstream infile(fileName.c_str(), ios::binary | ios::in);
-    infile.rdbuf()->pubsetbuf(buffer, 4096);
+    infile.rdbuf()->pubsetbuf(buffer, 4096);    //Set the buffer size to speed up
     infile.read((char *)(data->data), dimx*dimy*sizeof(double));
     infile.close();
 }
 
-void readSimTXT(const string fileName, gsl_matrix* data, const int dimx, const int dimy)	//Read simulation data from ASCII file.
+//Read simulation data from ASCII file. Much much slower than binary file reading!
+void readSimTXT(const string fileName, gsl_matrix* data, const int dimx, const int dimy)
 {
     char buffer[4096];
     ifstream infile(fileName.c_str());
-    infile.rdbuf()->pubsetbuf(buffer, 4096);
+    infile.rdbuf()->pubsetbuf(buffer, 4096);    //Set the buffer size to speed up
     for (int iterx=0; iterx<dimy; ++iterx)
     {
         for (int itery=0; itery<dimx; ++itery)

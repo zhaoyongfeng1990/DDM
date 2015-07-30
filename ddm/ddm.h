@@ -26,52 +26,62 @@ public:
     ddm();
     ~ddm();
     
+    //Reading g(q,t), q, and tau data from corresponding files.
     void recover();
-    
+    //Reading data from images or simulation result (binary or text), and do FFT on it.
     void readAndFFT(const string filePrefix);
     
+    //Calculating <|\Delta I(q, t)|^2>_t
     void averSqrModTau();
     
+    //Average the directions of q, by integrating bilinear interpolation function.
     void aveQBilinear();
+    
+    //Not finished yet!!
     void aveQBicubic();
     
-    void LaplaceTrans();
-    
+    //Fitting.
     void fitting();
+    //Test fitting result using 0-norm (maximum absolute value) of the relative step size dx/x. tol is the relative tolerance of error, tole is the absolute tolerance of error.
     int norm0_rel_test(const gsl_vector * dx, const gsl_vector * x, double tol, double tole);
     
+    //Print unfitted data
     void printG();
+    //Print fitting result
     void printFit();
+    //Print arbitrary gsl_matrix m for debug
     void printdebugM(gsl_matrix* m, const string filename);
     
+    //Free the memory used by imageSeqk
     void cleanSeqk();
+    //Free the memory used by imagekDiff
     void cleankDiff();
     
     /////////////////////////////////////////////////////
     //Variables
     ////Sequence of images
     vector<gsl_matrix_complex*> imageSeqk;
-    //Sequence for storing image after FFT.
+    //Sequence for storing image after FFT
     vector<gsl_matrix*> imagekDiff;
-    vector<double> qabs;	//Absolute value of q array.
-    vector<double> tau;
+    vector<double> qabs;	//Absolute value of q
+    vector<double> tau;     //List of time point
     //For storing the time difference of the imageSeqk
-    gsl_matrix* datag;      //g(q,t) matrix.
-    gsl_matrix* datafit;
-    gsl_matrix* fittedPara;	//To store the fitting result and error.
-    gsl_matrix* fitErr;
-    int* status;		//Record the status of fitting.
-    int* qIncreList;
-    double inipara[numOfPara];
+    gsl_matrix* datag;      //g(q,t) matrix
+    gsl_matrix* fittedPara;	//To store the fitting result
+    gsl_matrix* fitErr;     //To store the fitting error
+    int* status;		//Record the status of fitting
+    int* qIncreList;    //The increment of q for multiple q curves
+    double inipara[numOfPara];  //Initial parameters
     double dx;     //Pixel size
     double dqx;    //q step after FFT
     double dqy;    //q step after FFT
-    double qmin;
+    double qmin;    //Minimal q value
     double qmax;   //Maximum possible value of q
     double qstep;    //The width of cirque when averaging the direction of q.
     double dt;    //Time step
     double maxIter;    //Maximum iteration number in fitting
     
+    //The initial values to be passed from outside
     double alphaGuess;
     double DGuess;
     double vbarGuess;
@@ -80,9 +90,8 @@ public:
     double sigmaGuess;
     
     int qsize;	 //Element number of q array.
-    int fqsize;
     
-    int OMP_NUM_THREADS;
+    int OMP_NUM_THREADS;    //Number of threads for openMP
     int dimy;    //Size of the image
     int dimx;    //Size of the image
     int dimkx;   //Number of wavenumber
@@ -91,7 +100,8 @@ public:
     int numOfDiff; //Number of tau
     int numOfk;    //Number of q
     int num_fit;   //Number of data points after FFTpoints used in fitting.
-    int num_qCurve;
+    int num_qCurve; //Number of q curves
+    double timeWindow;  //Time window that is used in fitting
 };
 
 //Data stuct used in GSL fitting algorithm.

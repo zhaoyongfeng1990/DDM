@@ -26,7 +26,7 @@ int main(int argc, const char * argv[])
     if (arg.str() == "recover")		//recover from pre-calculated g(q,t) data
     {
         cout << "Loading datag.txt..." << '\n';
-        ddmExp.recover();
+        ddmExp.recover();   //Loading g(q,t), q, and t data from files
     }
     else
     {
@@ -38,11 +38,11 @@ int main(int argc, const char * argv[])
         
         cout << "Calculating average of square module for different tau... 0% finished." << '\n';
         ddmExp.averSqrModTau();
-        ddmExp.cleanSeqk();
+        ddmExp.cleanSeqk();     //Free memory
 
         cout << "Averaging on directions of q..." << '\n';
         ddmExp.aveQBilinear();
-        ddmExp.cleankDiff();
+        ddmExp.cleankDiff();     //Free memory
        
         cout << "Printing unfitted data..." << '\n';
         ddmExp.printG();

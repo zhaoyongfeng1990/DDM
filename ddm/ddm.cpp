@@ -11,6 +11,7 @@
 #include <fstream>
 #include <omp.h>
 
+//Initialization. Calculation of some constant.
 ddm::ddm() : imageSeqk(), imagekDiff(), qabs(), tau()
 {
     
@@ -18,7 +19,6 @@ ddm::ddm() : imageSeqk(), imagekDiff(), qabs(), tau()
     fittedPara=nullptr;
     fitErr=nullptr;
     status=nullptr;
-    datafit=nullptr;
     qsize=0;
     
     ifstream paraFile("parameters.txt");
@@ -50,6 +50,8 @@ ddm::ddm() : imageSeqk(), imagekDiff(), qabs(), tau()
     paraFile >> qmin;
     paraFile >> qstep;
     paraFile >> dt;
+    paraFile >> timeWindow;
+    
     paraFile >> maxIter;
     
     paraFile >> alphaGuess;
@@ -91,9 +93,10 @@ ddm::ddm() : imageSeqk(), imagekDiff(), qabs(), tau()
     inipara[4]=DGuess;
 #endif
     
-    omp_set_num_threads(OMP_NUM_THREADS);     //Number of threads
+    omp_set_num_threads(OMP_NUM_THREADS);     //Set the number of threads
 }
 
+//Destructor, cleaning up.
 ddm::~ddm()
 {
     if (datag!=nullptr)
@@ -102,8 +105,6 @@ ddm::~ddm()
         gsl_matrix_free(fittedPara);
     if (fitErr!=nullptr)
         gsl_matrix_free(fitErr);
-    if (datafit!=nullptr)
-        gsl_matrix_free(datafit);
     if (status!=nullptr)
         delete [] status;
     if (qIncreList!=nullptr)

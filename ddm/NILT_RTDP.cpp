@@ -8,14 +8,15 @@
 
 #include "NILT.h"
 #include <omp.h>
-#include <iostream>
+//#include <iostream>
 
 #ifdef IfComplexIntegration
 
+//Real part and image part of the complex function. Defined outside the class to make use of their pointers.
 double Re(double x, void* params)
 {
     warper* cfun=(warper*)params;
-    long double v=(1-x)/x;
+    long double v=(1-x)/x;  //Transform the integration range from [0,Infinity] to [0,1]
     //cpx result=cfun->fun(cfun->z, cfun->parameters, x);
     cpx result=cfun->fun(cfun->z, cfun->parameters, v);
     return result.real()/x/x;
@@ -24,12 +25,13 @@ double Re(double x, void* params)
 double Im(double x, void* params)
 {
     warper* cfun=(warper*)params;
-    long double v=(1-x)/x;
+    long double v=(1-x)/x;  //Transform the integration range from [0,Infinity] to [0,1]
     //cpx result=cfun->fun(cfun->z, cfun->parameters, x);
     cpx result=cfun->fun(cfun->z, cfun->parameters, v);
     return result.imag()/x/x;
 }
 
+//Calculation of the coefficients in Laguerre polynomial expansion, with integration on v.
 void NILT::NiLT_weeks(long double* para)
 {
     int tid=omp_get_thread_num();
@@ -63,6 +65,7 @@ void NILT::NiLT_weeks(long double* para)
     }
 }
 
+//Numerical evaluation of function to be inverse transformed.
 cpx NILT::invfun(cpx x, long double* para)
 {
     int tid=omp_get_thread_num();

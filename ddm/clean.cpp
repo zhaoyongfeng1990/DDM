@@ -8,6 +8,7 @@
 
 #include "ddm.h"
 
+//Free the memory used by imageSeqk
 void ddm::cleanSeqk()
 {
 #pragma omp parallel for
@@ -16,6 +17,7 @@ void ddm::cleanSeqk()
     imageSeqk.clear();
 }
 
+//Free the memory used by imagekDiff
 void ddm::cleankDiff()
 {
 #pragma omp parallel for

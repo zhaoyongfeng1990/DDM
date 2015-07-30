@@ -6,16 +6,21 @@
 //  Copyright (c) 2015年 ZYF. All rights reserved.
 //
 #include "ddm.h"
-#include <iostream>
+//#include <iostream>
 #ifdef ISFSWP
 
 //The ISF is written to meet the API of GSL f function. sdata is the pointer to data structure defined by GSL. y is the return of the function.
 int ISFfun(const gsl_vector* para, void* sdata, gsl_vector* y)
 {
+    //Get the number of data points of each curve
     const int num_fit=((dataStruct *)sdata)->num_fit;
+    //Get the number of curves
     const int cnum_qCurve=((dataStruct *)sdata)->num_qCurve;
+    //Time points list
     const double* tau=((dataStruct *)sdata)->tau;
+    //q list
     const double* qArray=((dataStruct *)sdata)->q;
+    //data list
     const double* dataAry=((dataStruct *)sdata)->data;
     
     //Get the parameters.
@@ -24,18 +29,25 @@ int ISFfun(const gsl_vector* para, void* sdata, gsl_vector* y)
     const double v=gsl_vector_get(para, 2);
     const double Z=gsl_vector_get(para, 3);
     
+    //Loop over the curves
     for (int iterqc=0; iterqc<cnum_qCurve; ++iterqc)
     {
+        //Each curve have different value of q, but A(q) and B(q) depend on q.
         const double A=gsl_vector_get(para, 4+2*iterqc);
         const double B=gsl_vector_get(para, 5+2*iterqc);
         const double q=qArray[iterqc];
+        
+        //Loop over each data point of the curve
         for (int iter = 0; iter<num_fit; ++iter)
         {
+            //The real index of iter-th data in each curve
             const int cidx=iter+iterqc*num_fit;
+            //Local variable for speeding up
             const double t=tau[cidx];
             const double Gamma=q*t*v/(Z+1);
             const double yi=(A*(1-exp(-D*q*q*t)*(1-alpha+alpha/Z/Gamma*sin(Z*atan(Gamma))/pow(1+Gamma*Gamma, Z/2.0)))+B);
             
+            //Actually, sqrt(weight)
             const double weight=1.0/sqrt(dataAry[cidx]);
             double result = (yi - dataAry[cidx])*weight;
             
@@ -78,11 +90,17 @@ int ISFfun(const gsl_vector* para, void* sdata, gsl_vector* y)
 //The function is written to meet the API of GSL df function. sdata is the pointer to data structure defined by GSL. J is the Jacobian, which is the return of the function.
 int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
 {
+    //Cleaning
     gsl_matrix_set_zero(J);
+    //Get the number of data points of each curve
     const int num_fit=((dataStruct *)sdata)->num_fit;
+    //Get the number of curves
     const int cnum_qCurve=((dataStruct *)sdata)->num_qCurve;
+    //Time points list
     const double* tau=((dataStruct *)sdata)->tau;
+    //q list
     const double* qArray=((dataStruct *)sdata)->q;
+    //data list
     const double* dataAry=((dataStruct *)sdata)->data;
     
     //Get the parameters
@@ -91,16 +109,21 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
     const double v = gsl_vector_get(para, 2);
     const double Z = gsl_vector_get(para, 3);
     
+    //Loop over the curves
     for (int iterqc=0; iterqc<cnum_qCurve; ++iterqc)
     {
+        //Each curve have different value of q, but A(q) and B(q) depend on q.
         const double A=gsl_vector_get(para, 4+2*iterqc);
         const double B=gsl_vector_get(para, 5+2*iterqc);
         const double q=qArray[iterqc];
+        
+        //Loop over each data point of the curve
         for (int iter=0; iter<num_fit; ++iter)
         {
+            //The real index of iter-th data in each curve
             const int cidx=iter+iterqc*num_fit;
-            const double t=tau[cidx];
             //Temperary variables used for acceleration.
+            const double t=tau[cidx];
             const double Gamma=q*t*v/(Z+1);
             const double difexp=exp(-D*q*q*t);
             const double zatang=Z*atan(Gamma);
@@ -112,6 +135,8 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
             const double dydA=(1 - difexp*(1 - alpha + alpha / Z / Gamma*sinzg / powg));
             //const double yi =A*dydA + B;
             //(log y)'=y'/y
+            
+            //Actually, sqrt(weight)
             const double weight=1.0/sqrt(dataAry[cidx]);
             
             //cout << t << ": " << weight << '\n';

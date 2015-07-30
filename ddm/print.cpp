@@ -8,8 +8,9 @@
 
 #include "ddm.h"
 #include <fstream>
-#include <iostream>
+//#include <iostream>
 
+//Print unfitted data
 void ddm::printG()
 {
     ofstream qfile("q.txt");
@@ -35,6 +36,7 @@ void ddm::printG()
     }
 }
 
+//Print fitting result
 void ddm::printFit()
 {
     ofstream fitparafile("fitparafile.txt");
@@ -63,6 +65,7 @@ void ddm::printFit()
     qstatusfile.close();
 }
 
+//Print arbitrary gsl_matrix m for debug
 void ddm::printdebugM(gsl_matrix* m, const string filename)
 {
     ofstream outfile(filename);

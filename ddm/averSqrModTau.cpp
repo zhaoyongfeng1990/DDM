@@ -19,12 +19,14 @@ void ddm::averSqrModTau()
     int cdimkx=dimkx;
     int cdimy=dimy;
     
-    vector<int> diff;
+    //Generate the list of tau, which of the form like n*2^m while n is an odd number given by the initial value of 'candidates'.
+    vector<int> diff;   //To store the index of tau value.
     diff.reserve(cnumOfDiff);
     tau.reserve(cnumOfDiff);
     diff.push_back(1);
     tau.push_back(dt);
     int candidates[16]={2, 3, 5, 7, 9,11,13,15,17,19,21,23,25,27,29,31};
+    //We always put the first element in candidates to diff, then double this element and do sorting again. As we only have a list of 16 element which is almost sorted, direct insert sorting is good enough.
     while (candidates[0]<cnumOfDiff)
     {
         diff.push_back(candidates[0]);
@@ -49,6 +51,7 @@ void ddm::averSqrModTau()
             candidates[insertPos]=temp;
         }
     }
+    //We also include the last time point
     diff.push_back(cnumOfDiff);
     tau.push_back(cnumOfDiff*dt);
     num_fit=(int)diff.size();

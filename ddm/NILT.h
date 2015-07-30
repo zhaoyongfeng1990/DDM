@@ -16,8 +16,8 @@
 
 using namespace std;
 
-const int M=1024;
 //The number of points in evaluating numerical integration in Weeks method. This also gives the number of terms in series expansion. But not all the terms in expansion is necessary.
+const int M=1024;
 
 typedef complex<long double> cpx;
 
@@ -25,6 +25,7 @@ typedef complex<long double> cpx;
 
 #include <gsl/gsl_integration.h>
 
+//To make the iterface between real itegration and complex evaluation of functions, we use this structure to present the function that is to be integrated.
 struct warper
 {
     cpx z;
@@ -32,6 +33,7 @@ struct warper
     long double* parameters;
 };
 
+//Error tolerance and size of workspace for numerical integration.
 const double epsabs=1e-8;
 const double epsrel=1e-8;
 const int workspaceSize=100000;
@@ -44,48 +46,55 @@ public:
     NILT(int omp_num);
     ~NILT();
     
-    void NiLT_weeks(cpx (*fun)(cpx, const long double*), const long double* para);
     //Calculation of the coefficients in Laguerre polynomial expansion.
-    double clenshaw(long double t);
+    void NiLT_weeks(cpx (*fun)(cpx, const long double*), const long double* para);
     //Clenshaw summation for function evaluation.
-    void weideman(long double alpha1, long double beta1, long double incre);
+    double clenshaw(long double t);
     //Estimate parameter b by Weidemans's method, if the function is dominated by one pair of singularities \alpha1+-i\beta1. The sigma is set to be close to the singularity (sigma=alpha1+incre).
-    void weideman(long double alpha1, long double beta1, long double alpha2, long double alpha3, long double incre);
+    void weideman(long double alpha1, long double beta1, long double incre);
     //Estimate parameter b by Weidemans's method, if the function is dominated by two pair of singularities \alpha1+-i\beta1. The sigma is set to be close to the singularity with largest real part, which should set to be alpha2 (sigma=alpha2+incre).
+    void weideman(long double alpha1, long double beta1, long double alpha2, long double alpha3, long double incre);
     
+    //The class is usually defined outside the parallel part of the code, to avoid allocate memory at every iteration. But this will causs memory conflict in shared memory model like openMP. So everything should be kept as a list with number of elements equals to number of threads, and different thread uses different element.
     
-    int OMP_NUM_THREADS;
-    fftwl_plan* integration;
+    int OMP_NUM_THREADS;    //Number of threads
+    
+    //FFTW stuff used in calculating numerical integration.
+    fftwl_plan* integration;    //Integration is done by FFT.
     fftwl_complex** fftwIn;
     fftwl_complex** fftwOut;
-    //FFTW stuff used in calculating numerical integration.
-    vector<long double>* CoeA;
     //Coefficients in Laguerre polynomial expansion.
+    vector<long double>* CoeA;
     
+    //Important paramters in solver.
     long double* b;
     long double* sigma;
-    //Important paramters in solver.
     
+    //b2 = b*2
     long double* b2;
-    //b2 is b*2
+    //sigmab = sigma-b
     long double* sigmab;
-    //sigmab is sigma-b
     
 #ifdef IfComplexIntegration
+    //Calculation of the coefficients in Laguerre polynomial expansion, with integration on v.
     void NiLT_weeks(long double* para);
+    //Numerical evaluation of function to be inverse transformed.
     cpx invfun(cpx x, long double* para);
     
+    //Pointers of Re and Im
     gsl_function* pRe;
     gsl_function* pIm;
     
     //gsl_integration_workspace* workspace;
     gsl_integration_cquad_workspace** workspace;
     
+    //To make the iterface between real itegration and complex evaluation of functions, we use this structure to present the function that is to be integrated.
     warper* cfun;
 #endif
 };
 
 #ifdef IfComplexIntegration
+//Real part and image part of the complex function. Defined outside the class to make use of their pointers.
 double Re(double x, void* params);
 double Im(double x, void* params);
 #endif

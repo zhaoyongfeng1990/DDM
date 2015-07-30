@@ -7,7 +7,7 @@
 //
 
 #include "ddm.h"
-#include <iostream>
+//#include <iostream>
 
 //int find(const vector<int>& vec, const int value);
 ////Find the position of a particular member in a vector.
@@ -17,6 +17,7 @@
 //Average all directions of q by bilinear interpolation. This is done by integrating the bilinear interpolation function in every lattice, and then dividing by the length of arc.
 void ddm::aveQBilinear()
 {
+    //Local variables
     double cqmin=qmin;
     double cqmax=qmax;
     double cqstep=qstep;
@@ -30,45 +31,54 @@ void ddm::aveQBilinear()
     qabs.resize(cqsize);     //qabs is the absolute value of q
     for (int iter=0; iter<cqsize; ++iter)
     {
-        qabs[iter]=iter*cqstep+cqmin;    //For interpolation.
+        qabs[iter]=iter*cqstep+cqmin;    //Points to interpolate.
     }
     datag = gsl_matrix_calloc(cqsize, cnum_fit);
-    gsl_matrix* count = gsl_matrix_alloc(cqsize, cnum_fit);
+    gsl_matrix* count = gsl_matrix_alloc(cqsize, cnum_fit);     //Lenght of arc;
     gsl_matrix_set_zero(datag);
-    gsl_matrix_set_zero(count);     //Number of elements
+    gsl_matrix_set_zero(count);
     
 #pragma omp parallel for
-    for (int itertau = 0; itertau < cnum_fit; ++itertau)
+    for (int itertau = 0; itertau < cnum_fit; ++itertau)    //For each tau value
     {
+        //We go though every cell (and its reflection about y axis simultaneously) in one quadrant of q space, find all the interpolation q value, calculate the integration of interpolation function over the arc and the lenght of arc.
         for (int iterrow = 1; iterrow < cdimky-1; ++iterrow)
         {
+            //The x index of the 4 vertices of the cell and its reflection about y axis.
             int kx1 = iterrow;
             int kx2 = iterrow+1;
             int refkx1=(cdimy-kx1)%cdimy;
             int refkx2=(cdimy-kx2)%cdimy;
             for (int itercol = 1; itercol < cdimkx-1; ++itercol)
             {
+                //The y index of the 4 vertices of the cell
                 int ky1 = itercol;
                 int ky2 = itercol+1;
                 
+                //The distance between the lower-left corner and origin, in the unit of qstep
                 double dist1=sqrt(kx1*kx1*cdqy*cdqy+ky1*ky1*cdqx*cdqx)/cqstep;
+                //The distance between the upper-right corner and origin, in the unit of qstep
                 double dist2=sqrt(kx2*kx2*cdqy*cdqy+ky2*ky2*cdqx*cdqx)/cqstep;
                 
+                //Calculate the range of interpolation points in this cell
                 int maxqidx=ceil(dist2-cqmin/cqstep);
                 int minqidx=ceil(dist1-cqmin/cqstep);
                 
+                //The distance between origin and the other two vertices, will be used later
                 double dist3=sqrt(kx2*kx2*cdqy*cdqy+ky1*ky1*cdqx*cdqx)/cqstep;
                 double dist4=sqrt(kx1*kx1*cdqy*cdqy+ky2*ky2*cdqx*cdqx)/cqstep;
                 
+                //For each interpolation point.
                 for (int iterq=minqidx; iterq<maxqidx; ++iterq)
                 {
+                    //To store the coordinates of the two ends of the arc in the cell
                     double px[2];
                     double py[2];
                     
+                    //Current interpolation point, in the unit of qstep
                     double cq=iterq+cqmin/cqstep;
                     
-                    //cout << cq << '\n';
-                    
+                    //Calculate the coordinates of the ends of the arc
                     if(dist3>=cq)
                     {
                         py[0]=ky1*cdqx/cqstep;
@@ -91,6 +101,7 @@ void ddm::aveQBilinear()
                         px[1]=sqrt(cq*cq-py[1]*py[1]);
                     }
                     
+                    //Calculate the angle that correspond to the arc, by solving the triangle
                     double dist=(px[0]-px[1])*(px[0]-px[1])+(py[0]-py[1])*(py[0]-py[1]);
                     double cosdt=1-dist/2/cq/cq;
                     double dtheta=acos(cosdt);
@@ -108,12 +119,13 @@ void ddm::aveQBilinear()
                     double u21=gsl_matrix_get(imagekDiff[itertau], kx2, ky1);
                     double u22=gsl_matrix_get(imagekDiff[itertau], kx2, ky2);
                     
+                    //Now we change the unit of cq from qstep to um^-1
                     cq*=cqstep;
                     double arc=gsl_matrix_get(datag, iterq, itertau);
+                    //The integration has been done analytically, this is just substitution.
                     arc+=u11*dtheta-(cq*dcost+ky1*cdqx*dtheta)*(u12-u11)/cdqx+(cq*dsint-kx1*cdqy*dtheta)*(u21-u11)/cdqy+(kx1*cdqy*cq*dcost+kx1*ky1*cdqx*cdqy*dtheta-cq*cq*dcos2t/4-ky1*cdqx*cq*dsint)/cdqx/cdqy*(u22-u21-u12+u11);
                     
-                    //cout << arc << '\n';
-                    
+                    //The cell that is reflection of axis y.
                     u11=gsl_matrix_get(imagekDiff[itertau], refkx1, ky1);
                     u12=gsl_matrix_get(imagekDiff[itertau], refkx1, ky2);
                     u21=gsl_matrix_get(imagekDiff[itertau], refkx2, ky1);
@@ -130,10 +142,10 @@ void ddm::aveQBilinear()
         }
     }
     gsl_matrix_div_elements(datag, count);		//Average
-    qsize=cqsize;
+    qsize=cqsize;   //Set the size of q array
 }
 
-void ddm::aveQBicubic()
+void ddm::aveQBicubic()     //Not finished yet!!!!
 {
     qsize=ceil(qmax/qstep); //qsize is the number of different q value samples.
     qabs.resize(qsize);     //qabs is the absolute value of q

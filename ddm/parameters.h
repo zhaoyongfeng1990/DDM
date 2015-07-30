@@ -33,6 +33,7 @@ using namespace std;
 
 const long double pi = 3.141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342117068l;
 
+//If you found some problem with the Jaccobian calculation, you can try to turn on this switch.
 //#define NoJacobian
 
 //Number of model parameters
