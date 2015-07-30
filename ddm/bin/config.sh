@@ -30,7 +30,7 @@ lambdaGuess=0.5
 ZGuess=15
 sigmaGuess=3
 
-if [ $nqcurve == 1 ]
+if [ $nqcurve = 1 ]
 then
     paraList="$omp_num""\n""$nqcurve""\n""$dimx""\n""$dimy""\n""$numOfSeq""\n""$numOfDiff""\n""$dx""\n""$qmin""\n""$qstep""\n""$dt""\n""$timeWindow""\n""$maxIter""\n""$alphaGuess""\n""$DGuess""\n""$vbarGuess""\n""$lambdaGuess""\n""$ZGuess""\n""$sigmaGuess""\n"
 else
