@@ -482,9 +482,9 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
         
         //Calculate the coefficients of Laguerre polynomial series expansion.
         ILT->NiLT_weeks(paraISF);
-        dvbarILT->NiLT_weeks(paraISF);
-        dsigmaILT->NiLT_weeks(paraISF);
-        dDILT->NiLT_weeks(paraISF);
+        //dvbarILT->NiLT_weeks(paraISF);
+        //dsigmaILT->NiLT_weeks(paraISF);
+        //dDILT->NiLT_weeks(paraISF);
         dlambdaILT->NiLT_weeks(paraISF);
         
         //Loop over each data point of the curve
@@ -496,21 +496,21 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
             const long double t=tau[cidx];
             //Evaluate ISF at time t, the coefficients has been calculated.
             const double rtd=ILT->clenshaw(t);
-            const double dvbarrtd=dvbarILT->clenshaw(t);
-            const double dsigmartd=dsigmaILT->clenshaw(t);
+            //const double dvbarrtd=dvbarILT->clenshaw(t);
+            //const double dsigmartd=dsigmaILT->clenshaw(t);
             const double dlambdartd=dlambdaILT->clenshaw(t);
-            const double dDrtd=dDILT->clenshaw(t);
+            //const double dDrtd=dDILT->clenshaw(t);
             
             const double expterm=exp(-Dq2*t);
             const double dA=(1.0-(1.0-alpha)*expterm-alpha*rtd);
             //Actually, sqrt(weight)
             const double weight=1.0/sqrt(dataAry[cidx]);
             
-            gsl_matrix_set(J, cidx, 0, A*(expterm-rtd)*weight );
-            gsl_matrix_set(J, cidx, 1, -A*alpha*dvbarrtd*weight );
-            gsl_matrix_set(J, cidx, 2, -A*alpha*dsigmartd*weight );
+            gsl_matrix_set(J, cidx, 0, 0/*A*(expterm-rtd)*weight*/ );
+            gsl_matrix_set(J, cidx, 1, 0/*-A*alpha*dvbarrtd*weight*/ );
+            gsl_matrix_set(J, cidx, 2, 0/*-A*alpha*dsigmartd*weight*/ );
             gsl_matrix_set(J, cidx, 3, -A*alpha*dlambdartd*weight );
-            gsl_matrix_set(J, cidx, 4, A*((1.0-alpha)*expterm*q*q*t-alpha*dDrtd)*weight );
+            gsl_matrix_set(J, cidx, 4, 0/*A*((1.0-alpha)*expterm*q*q*t-alpha*dDrtd)*weight*/ );
             gsl_matrix_set(J, cidx, 5+2*iterqc, dA*weight );
             gsl_matrix_set(J, cidx, 6+2*iterqc, 1.0*weight );
         }
