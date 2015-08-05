@@ -59,6 +59,20 @@ void ddm::fitting()
     NILT NILT1(OMP_NUM_THREADS), NILT2(OMP_NUM_THREADS), NILT3(OMP_NUM_THREADS), NILT4(OMP_NUM_THREADS), NILT5(OMP_NUM_THREADS);
 #endif
     
+#ifdef ISFRTDPfit
+    NILT NILT1(OMP_NUM_THREADS), NILT2(OMP_NUM_THREADS);
+    
+    const long double vbar=vbarGuess;
+    const long double sigma=sigmaGuess;
+    
+    const long double vbsigma2=vbar/sigma/sigma;
+    const long double vb2sigma2=vbsigma2*vbar;
+    const long double logvbsigma2=log(vbsigma2);
+    const long double logfactor=vb2sigma2*logvbsigma2-gsl_sf_lngamma(vb2sigma2);
+    const long double cpsiz1=logvbsigma2-gsl_sf_psi(vb2sigma2);
+    const long double vb2sigma3=vb2sigma2/sigma;
+#endif
+    
 #pragma omp parallel for
     for (int iterq=0; iterq<cqsize; ++iterq)
     {

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		A22382281B2729DD0070B7CD /* ISFSW.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A22382271B2729DD0070B7CD /* ISFSW.cpp */; };
 		A2339A9E1B32F17F0024CE52 /* ISFRTD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2339A9D1B32F17F0024CE52 /* ISFRTD.cpp */; };
+		A24DB9AF1B6BC38100D02C15 /* ISFRTDPfix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A24DB9AE1B6BC38100D02C15 /* ISFRTDPfix.cpp */; };
 		A26E72ED1B21B70D00CC4075 /* ISFSWP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A26E72EC1B21B70D00CC4075 /* ISFSWP.cpp */; };
 		A26E72F51B21B7F600CC4075 /* makefile in Sources */ = {isa = PBXBuildFile; fileRef = A26E72F41B21B7F600CC4075 /* makefile */; };
 		A26E72F91B21F77100CC4075 /* debugmain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A26E72F81B21F77100CC4075 /* debugmain.cpp */; };
@@ -40,6 +41,7 @@
 /* Begin PBXFileReference section */
 		A22382271B2729DD0070B7CD /* ISFSW.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ISFSW.cpp; sourceTree = "<group>"; };
 		A2339A9D1B32F17F0024CE52 /* ISFRTD.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ISFRTD.cpp; sourceTree = "<group>"; };
+		A24DB9AE1B6BC38100D02C15 /* ISFRTDPfix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ISFRTDPfix.cpp; sourceTree = "<group>"; };
 		A26E72EC1B21B70D00CC4075 /* ISFSWP.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ISFSWP.cpp; sourceTree = "<group>"; };
 		A26E72F41B21B7F600CC4075 /* makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; name = makefile; path = ddm/makefile; sourceTree = "<group>"; };
 		A26E72F81B21F77100CC4075 /* debugmain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = debugmain.cpp; sourceTree = "<group>"; };
@@ -113,6 +115,7 @@
 				A2B28CAF1B419A7F0000AC77 /* NILT_RTDP.cpp */,
 				A275AEE61B4A8F3300EC7F86 /* ISFRTDP.cpp */,
 				A2CE9DDA1B5D4BF600DDE052 /* compile.sh */,
+				A24DB9AE1B6BC38100D02C15 /* ISFRTDPfix.cpp */,
 			);
 			path = ddm;
 			sourceTree = "<group>";
@@ -180,6 +183,7 @@
 				A2339A9E1B32F17F0024CE52 /* ISFRTD.cpp in Sources */,
 				A2A69D661B382E0500BE49E0 /* fitting.cpp in Sources */,
 				A26E72ED1B21B70D00CC4075 /* ISFSWP.cpp in Sources */,
+				A24DB9AF1B6BC38100D02C15 /* ISFRTDPfix.cpp in Sources */,
 				A2A69D601B38206400BE49E0 /* aveQ.cpp in Sources */,
 				A22382281B2729DD0070B7CD /* ISFSW.cpp in Sources */,
 				A2A69D681B3845CC00BE49E0 /* clean.cpp in Sources */,

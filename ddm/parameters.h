@@ -56,4 +56,10 @@ const int numOfPara=5;
 #define IfComplexIntegration
 #endif
 
+#ifdef ISFRTDPfix
+const int numOfPara=1;
+#define NeedNumericalInverseLaplaceTransformation
+#define IfComplexIntegration
+#endif
+
 #endif /* defined(__ddm__parameters__) */
