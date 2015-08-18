@@ -131,6 +131,8 @@ typedef struct
 #ifdef ISFRTDPfix
     long double alpha;
     long double D;
+    long double vbar;
+    long double sigma;
     
     long double vbsigma2;
     long double logfactor;

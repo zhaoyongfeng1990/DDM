@@ -11,8 +11,9 @@
 //Free the memory used by imageSeqk
 void ddm::cleanSeqk()
 {
+    size_t size=imageSeqk.size();
 #pragma omp parallel for
-    for (int iter = 0; iter < numOfSeq; ++iter)		//Free the memory
+    for (int iter = 0; iter < size; ++iter)		//Free the memory
         gsl_matrix_complex_free(imageSeqk[iter]);
     imageSeqk.clear();
 }
@@ -20,8 +21,9 @@ void ddm::cleanSeqk()
 //Free the memory used by imagekDiff
 void ddm::cleankDiff()
 {
+    size_t size=imagekDiff.size();
 #pragma omp parallel for
-    for (int iter = 0; iter < num_fit; ++iter)
+    for (int iter = 0; iter < size; ++iter)
         gsl_matrix_free(imagekDiff[iter]);
     imagekDiff.clear();
 }

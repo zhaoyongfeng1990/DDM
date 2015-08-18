@@ -7,10 +7,16 @@
 //
 
 #include "ddm.h"
+
 #include <iostream>
 #include <fstream>
 #include <cmath>
 #include <gsl/gsl_multifit_nlin.h>
+
+#ifdef ISFRTDPfix
+#include <gsl/gsl_sf_gamma.h>
+#include <gsl/gsl_sf_psi.h>
+#endif
 
 #include <omp.h>
 
@@ -59,7 +65,7 @@ void ddm::fitting()
     NILT NILT1(OMP_NUM_THREADS), NILT2(OMP_NUM_THREADS), NILT3(OMP_NUM_THREADS), NILT4(OMP_NUM_THREADS), NILT5(OMP_NUM_THREADS);
 #endif
     
-#ifdef ISFRTDPfit
+#ifdef ISFRTDPfix
     NILT NILT1(OMP_NUM_THREADS), NILT2(OMP_NUM_THREADS);
     
     const long double vbar=vbarGuess;
@@ -114,6 +120,21 @@ void ddm::fitting()
         sdata.dsigmaISFILT=&NILT3;
         sdata.dDISFILT=&NILT4;
         sdata.dlambdaISFILT=&NILT5;
+#endif
+        
+#ifdef ISFRTDPfix
+        sdata.alpha=alphaGuess;
+        sdata.D=DGuess;
+        sdata.vbar=vbar;
+        sdata.sigma=sigma;
+        
+        sdata.vbsigma2=vbsigma2;
+        sdata.logfactor=logfactor;
+        sdata.vb2sigma2=vb2sigma2;
+        sdata.cpsiz1=cpsiz1;
+        sdata.vb2sigma3=vb2sigma3;
+        sdata.ISFILT=&NILT1;
+        sdata.dlambdaISFILT=&NILT2;
 #endif
         
         //API

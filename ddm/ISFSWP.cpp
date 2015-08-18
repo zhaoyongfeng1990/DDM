@@ -54,31 +54,31 @@ int ISFfun(const gsl_vector* para, void* sdata, gsl_vector* y)
             //Punishment terms, to make constrains in parameter space.
             if (alpha < 0)
             {
-                result += 1e7 * alpha *alpha;
+                result += 1e10 * alpha *alpha;
             }
             
             if (alpha>1)
             {
-                result += 1e7*(alpha - 1)*(alpha - 1);
+                result += 1e10*(alpha - 1)*(alpha - 1);
             }
             
             if (D<0)
             {
-                result += 1e7*D*D;
+                result += 1e10*D*D;
             }
             
             if (v<0)
             {
-                result += 1e7*v*v;
+                result += 1e10*v*v;
             }
             
             if (Z<0)
             {
-                result += 1e7*Z*Z;
+                result += 1e10*Z*Z;
             }
             if (A<0)
             {
-                result += 1e7*A*A;
+                result += 1e10*A*A;
             }
             
             gsl_vector_set(y, cidx, result);
@@ -154,32 +154,32 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
             //Punishment terms, to make constrains in parameter space.
             if (alpha < 0)
             {
-                gsl_matrix_set(J,cidx,0, gsl_matrix_get(J, cidx, 0)+ 2e7 *alpha);
+                gsl_matrix_set(J,cidx,0, gsl_matrix_get(J, cidx, 0)+ 2e10 *alpha);
             }
             
             if (alpha>1)
             {
-                gsl_matrix_set(J, cidx, 0, gsl_matrix_get(J, cidx, 0) + 2e7 *(alpha-1));
+                gsl_matrix_set(J, cidx, 0, gsl_matrix_get(J, cidx, 0) + 2e10 *(alpha-1));
             }
             
             if (D<0)
             {
-                gsl_matrix_set(J, cidx, 1, gsl_matrix_get(J, cidx, 1) + 2e7 *D);
+                gsl_matrix_set(J, cidx, 1, gsl_matrix_get(J, cidx, 1) + 2e10 *D);
             }
             
             if (v<0)
             {
-                gsl_matrix_set(J, cidx, 2, gsl_matrix_get(J, cidx, 2) + 2e7 *v);
+                gsl_matrix_set(J, cidx, 2, gsl_matrix_get(J, cidx, 2) + 2e10 *v);
             }
             
             if (Z<0)
             {
-                gsl_matrix_set(J, cidx, 3, gsl_matrix_get(J, cidx, 3) + 2e7 *Z);
+                gsl_matrix_set(J, cidx, 3, gsl_matrix_get(J, cidx, 3) + 2e10 *Z);
             }
             
             if (A<0)
             {
-                gsl_matrix_set(J, cidx, 4+2*iterqc, gsl_matrix_get(J, cidx, 4+2*iterqc) + 2e7 *A);
+                gsl_matrix_set(J, cidx, 4+2*iterqc, gsl_matrix_get(J, cidx, 4+2*iterqc) + 2e10 *A);
             }
         }
     }
