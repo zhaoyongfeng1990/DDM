@@ -93,6 +93,10 @@ ddm::ddm() : imageSeqk(), imagekDiff(), qabs(), tau()
     inipara[4]=DGuess;
 #endif
     
+#ifdef ISFRTDPfix
+    inipara[0]=lambdaGuess;
+#endif
+    
     omp_set_num_threads(OMP_NUM_THREADS);     //Set the number of threads
 }
 

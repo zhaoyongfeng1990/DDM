@@ -48,6 +48,6 @@ then
     mv ./ddm ./bin/ddmRTDP
 elif [ "$Type" = "RTDPfix" ]
 then
-    mv ./ddm ./bin/ddmRTDP
+    mv ./ddm ./bin/ddmRTDPfix
 fi
 

@@ -107,6 +107,11 @@ int ISFfun(const gsl_vector* para, void* sdata, gsl_vector* y)
         punishment+=1e5*lambda*lambda;
         breakFlag=true;
     }
+    if (lambda>1e6)
+    {
+        punishment+=1e5*(lambda-1e6)*(lambda-1e6);
+        breakFlag=true;
+    }
     
     if (breakFlag)
     {
@@ -229,6 +234,14 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
         }
         breakFlag=true;
     }
+    if (lambda>1e6)
+    {
+        for (int iter=0; iter<tnum_fit; ++iter)
+        {
+            gsl_matrix_set(J, iter, 0, 2e5*(lambda-1e6));
+        }
+        breakFlag=true;
+    }
     if (breakFlag)
     {
         return GSL_SUCCESS;
@@ -250,6 +263,7 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
     NILT* dlambdaILT=((dataStruct *)sdata)->dlambdaISFILT;
     
     const int tid=omp_get_thread_num();
+    
     ILT->cfun[tid].fun=ISFs;
     dlambdaILT->cfun[tid].fun=dlambdaISFs;
     
