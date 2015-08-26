@@ -21,8 +21,8 @@
 
 //Switches of different models
 #include "ISFtype.h"
-//#define ISFSWP
-//#define ISFSW
+//#define ISFRDP
+//#define ISFRD
 //#define ISFRTD
 //#define ISFRTDP
 
@@ -37,11 +37,11 @@ const long double pi = 3.1415926535897932384626433832795028841971693993751058209
 //#define NoJacobian
 
 //Number of model parameters
-#ifdef ISFSWP
+#ifdef ISFRDP
 const int numOfPara = 4;
 #endif
 
-#ifdef ISFSW
+#ifdef ISFRD
 const int numOfPara = 3;
 #endif
 

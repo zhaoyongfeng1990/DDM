@@ -6,13 +6,13 @@
 #  Created by Zhao Yongfeng on 15/7/20.
 #  Copyright (c) 2015年 ZYF. All rights reserved.
 
-echo "#define ISFSW" > ISFtype.h
+echo "#define ISFRD" > ISFtype.h
 make
-mv ./ddm ./bin/ddmSW
+mv ./ddm ./bin/ddmRD
 
-echo "#define ISFSWP" > ISFtype.h
+echo "#define ISFRDP" > ISFtype.h
 make
-mv ./ddm ./bin/ddmSWP
+mv ./ddm ./bin/ddmRDP
 
 echo "#define ISFRTD" > ISFtype.h
 make

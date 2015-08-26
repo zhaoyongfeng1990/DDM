@@ -65,14 +65,14 @@ ddm::ddm() : imageSeqk(), imagekDiff(), qabs(), tau()
     imagekDiff.reserve(numOfDiff);
     
     paraFile.close();
-#ifdef ISFSWP
+#ifdef ISFRDP
     inipara[0]=alphaGuess;
     inipara[1]=DGuess;
     inipara[2]=vbarGuess;
     inipara[3]=ZGuess;
 #endif
     
-#ifdef ISFSW
+#ifdef ISFRD
     inipara[0]=alphaGuess;
     inipara[1]=DGuess;
     inipara[2]=vbarGuess;

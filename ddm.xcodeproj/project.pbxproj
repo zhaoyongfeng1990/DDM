@@ -7,10 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A22382281B2729DD0070B7CD /* ISFSW.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A22382271B2729DD0070B7CD /* ISFSW.cpp */; };
+		A22382281B2729DD0070B7CD /* ISFRD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A22382271B2729DD0070B7CD /* ISFRD.cpp */; };
 		A2339A9E1B32F17F0024CE52 /* ISFRTD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2339A9D1B32F17F0024CE52 /* ISFRTD.cpp */; };
 		A24DB9AF1B6BC38100D02C15 /* ISFRTDPfix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A24DB9AE1B6BC38100D02C15 /* ISFRTDPfix.cpp */; };
-		A26E72ED1B21B70D00CC4075 /* ISFSWP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A26E72EC1B21B70D00CC4075 /* ISFSWP.cpp */; };
+		A26E72ED1B21B70D00CC4075 /* ISFRDP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A26E72EC1B21B70D00CC4075 /* ISFRDP.cpp */; };
 		A26E72F51B21B7F600CC4075 /* makefile in Sources */ = {isa = PBXBuildFile; fileRef = A26E72F41B21B7F600CC4075 /* makefile */; };
 		A26E72F91B21F77100CC4075 /* debugmain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A26E72F81B21F77100CC4075 /* debugmain.cpp */; };
 		A275AEE71B4A8F3300EC7F86 /* ISFRTDP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A275AEE61B4A8F3300EC7F86 /* ISFRTDP.cpp */; };
@@ -39,10 +39,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		A22382271B2729DD0070B7CD /* ISFSW.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ISFSW.cpp; sourceTree = "<group>"; };
+		A22382271B2729DD0070B7CD /* ISFRD.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ISFRD.cpp; sourceTree = "<group>"; };
 		A2339A9D1B32F17F0024CE52 /* ISFRTD.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ISFRTD.cpp; sourceTree = "<group>"; };
 		A24DB9AE1B6BC38100D02C15 /* ISFRTDPfix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ISFRTDPfix.cpp; sourceTree = "<group>"; };
-		A26E72EC1B21B70D00CC4075 /* ISFSWP.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ISFSWP.cpp; sourceTree = "<group>"; };
+		A26E72EC1B21B70D00CC4075 /* ISFRDP.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ISFRDP.cpp; sourceTree = "<group>"; };
 		A26E72F41B21B7F600CC4075 /* makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; name = makefile; path = ddm/makefile; sourceTree = "<group>"; };
 		A26E72F81B21F77100CC4075 /* debugmain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = debugmain.cpp; sourceTree = "<group>"; };
 		A275AEE61B4A8F3300EC7F86 /* ISFRTDP.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ISFRTDP.cpp; sourceTree = "<group>"; };
@@ -99,9 +99,9 @@
 				A2CE9DDC1B6112A700DDE052 /* config.sh */,
 				A2AD62691A073D350057D8C8 /* main.cpp */,
 				A2AD627A1A0742490057D8C8 /* parameters.h */,
-				A26E72EC1B21B70D00CC4075 /* ISFSWP.cpp */,
+				A26E72EC1B21B70D00CC4075 /* ISFRDP.cpp */,
 				A26E72F81B21F77100CC4075 /* debugmain.cpp */,
-				A22382271B2729DD0070B7CD /* ISFSW.cpp */,
+				A22382271B2729DD0070B7CD /* ISFRD.cpp */,
 				A2339A9D1B32F17F0024CE52 /* ISFRTD.cpp */,
 				A2A69D551B38136600BE49E0 /* ddm.h */,
 				A2A69D561B3815C600BE49E0 /* ddm.cpp */,
@@ -184,10 +184,10 @@
 				A2A69D6B1B38682500BE49E0 /* NILT.cpp in Sources */,
 				A2339A9E1B32F17F0024CE52 /* ISFRTD.cpp in Sources */,
 				A2A69D661B382E0500BE49E0 /* fitting.cpp in Sources */,
-				A26E72ED1B21B70D00CC4075 /* ISFSWP.cpp in Sources */,
+				A26E72ED1B21B70D00CC4075 /* ISFRDP.cpp in Sources */,
 				A24DB9AF1B6BC38100D02C15 /* ISFRTDPfix.cpp in Sources */,
 				A2A69D601B38206400BE49E0 /* aveQ.cpp in Sources */,
-				A22382281B2729DD0070B7CD /* ISFSW.cpp in Sources */,
+				A22382281B2729DD0070B7CD /* ISFRD.cpp in Sources */,
 				A2A69D681B3845CC00BE49E0 /* clean.cpp in Sources */,
 				A2A69D591B3815DA00BE49E0 /* loadFiles.cpp in Sources */,
 				A2A69D571B3815C600BE49E0 /* ddm.cpp in Sources */,

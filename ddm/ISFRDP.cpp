@@ -7,7 +7,7 @@
 //
 #include "ddm.h"
 //#include <iostream>
-#ifdef ISFSWP
+#ifdef ISFRDP
 
 //The ISF is written to meet the API of GSL f function. sdata is the pointer to data structure defined by GSL. y is the return of the function.
 int ISFfun(const gsl_vector* para, void* sdata, gsl_vector* y)

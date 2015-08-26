@@ -2,8 +2,8 @@ CXX = g++-5
 CXXFLAGS = -fopenmp -O3 -std=c++11 -DHAVE_INLINE
 LFLAGS = -lm -lgsl -lgslcblas -O3 -lfftw3 -lfftw3l -fopenmp -std=c++11
 
-Objects = aveQ.o averSqrModTau.o clean.o ddm.o fitting.o loadFiles.o main.o print.o NILT.o NILT_RTDP.o ISFRTD.o ISFSWP.o ISFSW.o ISFRTDP.o ISFRTDPfix.o
-debugObjects = ISFRTD.o ISFSWP.o ISFSW.o ISFRTDP.o ISFRTDPfix.o aveQ.o averSqrModTau.o clean.o ddm.o fitting.o loadFiles.o debugmain.o print.o NILT.o NILT_RTDP.o
+Objects = aveQ.o averSqrModTau.o clean.o ddm.o fitting.o loadFiles.o main.o print.o NILT.o NILT_RTDP.o ISFRTD.o ISFRDP.o ISFRD.o ISFRTDP.o ISFRTDPfix.o
+debugObjects = ISFRTD.o ISFRDP.o ISFRD.o ISFRTDP.o ISFRTDPfix.o aveQ.o averSqrModTau.o clean.o ddm.o fitting.o loadFiles.o debugmain.o print.o NILT.o NILT_RTDP.o
 
 ddm : $(Objects)
 	$(CXX) -o ddm $(LFLAGS) $(Objects)

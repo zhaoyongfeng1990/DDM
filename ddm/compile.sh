@@ -14,12 +14,12 @@ OldType=$(echo ${ISF:11})
 
 if [ "$Type" != "$OldType" ]
 then
-    if [ "$Type" = "SW" ]
+    if [ "$Type" = "RD" ]
     then
-        echo "#define ISFSW" > ISFtype.h
-    elif [ "$Type" = "SWP" ]
+        echo "#define ISFRD" > ISFtype.h
+    elif [ "$Type" = "RDP" ]
     then
-        echo "#define ISFSWP" > ISFtype.h
+        echo "#define ISFRDP" > ISFtype.h
     elif [ "$Type" = "RTD" ]
     then
         echo "#define ISFRTD" > ISFtype.h
@@ -34,12 +34,12 @@ fi
 
 make
 
-if [ "$Type" = "SW" ]
+if [ "$Type" = "RD" ]
 then
-    mv ./ddm ./bin/ddmSW
-elif [ "$Type" = "SWP" ]
+    mv ./ddm ./bin/ddmRD
+elif [ "$Type" = "RDP" ]
 then
-    mv ./ddm ./bin/ddmSWP
+    mv ./ddm ./bin/ddmRDP
 elif [ "$Type" = "RTD" ]
 then
     mv ./ddm ./bin/ddmRTD
