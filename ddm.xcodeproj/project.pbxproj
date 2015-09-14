@@ -46,6 +46,7 @@
 		A26E72F41B21B7F600CC4075 /* makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; name = makefile; path = ddm/makefile; sourceTree = "<group>"; };
 		A26E72F81B21F77100CC4075 /* debugmain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = debugmain.cpp; sourceTree = "<group>"; };
 		A275AEE61B4A8F3300EC7F86 /* ISFRTDP.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ISFRTDP.cpp; sourceTree = "<group>"; };
+		A27857CD1BA68F0A00569D86 /* protocol.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; name = protocol.py; path = bin/protocol.py; sourceTree = "<group>"; };
 		A2A69D551B38136600BE49E0 /* ddm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ddm.h; sourceTree = "<group>"; };
 		A2A69D561B3815C600BE49E0 /* ddm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ddm.cpp; sourceTree = "<group>"; };
 		A2A69D581B3815DA00BE49E0 /* loadFiles.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = loadFiles.cpp; sourceTree = "<group>"; };
@@ -96,6 +97,7 @@
 		A2AD62681A073D350057D8C8 /* ddm */ = {
 			isa = PBXGroup;
 			children = (
+				A27857CD1BA68F0A00569D86 /* protocol.py */,
 				A2CE9DDC1B6112A700DDE052 /* config.sh */,
 				A2AD62691A073D350057D8C8 /* main.cpp */,
 				A2AD627A1A0742490057D8C8 /* parameters.h */,
