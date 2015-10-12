@@ -29,12 +29,13 @@ vbarGuess=13
 lambdaGuess=0.5
 ZGuess=15
 sigmaGuess=3
+TTGuess=0.05
 
 if [ $nqcurve = 1 ]
 then
-    paraList="$omp_num""\n""$nqcurve""\n""$dimx""\n""$dimy""\n""$numOfSeq""\n""$numOfDiff""\n""$dx""\n""$qmin""\n""$qstep""\n""$dt""\n""$timeWindow""\n""$maxIter""\n""$alphaGuess""\n""$DGuess""\n""$vbarGuess""\n""$lambdaGuess""\n""$ZGuess""\n""$sigmaGuess""\n"
+    paraList="$omp_num""\n""$nqcurve""\n""$dimx""\n""$dimy""\n""$numOfSeq""\n""$numOfDiff""\n""$dx""\n""$qmin""\n""$qstep""\n""$dt""\n""$timeWindow""\n""$maxIter""\n""$alphaGuess""\n""$DGuess""\n""$vbarGuess""\n""$lambdaGuess""\n""$ZGuess""\n""$sigmaGuess""\n""$TTGuess""\n"
 else
-    paraList="$omp_num""\n""$nqcurve""\n""$qincre""\n""$dimx""\n""$dimy""\n""$numOfSeq""\n""$numOfDiff""\n""$dx""\n""$qmin""\n""$qstep""\n""$dt""\n""$timeWindow""\n""$maxIter""\n""$alphaGuess""\n""$DGuess""\n""$vbarGuess""\n""$lambdaGuess""\n""$ZGuess""\n""$sigmaGuess""\n"
+    paraList="$omp_num""\n""$nqcurve""\n""$qincre""\n""$dimx""\n""$dimy""\n""$numOfSeq""\n""$numOfDiff""\n""$dx""\n""$qmin""\n""$qstep""\n""$dt""\n""$timeWindow""\n""$maxIter""\n""$alphaGuess""\n""$DGuess""\n""$vbarGuess""\n""$lambdaGuess""\n""$ZGuess""\n""$sigmaGuess""\n""$TTGuess""\n"
 fi
 
 echo $paraList > parameters.txt

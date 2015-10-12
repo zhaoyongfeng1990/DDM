@@ -34,6 +34,7 @@ vbarGuess=12.9807261538462
 lambdaGuess=0.5
 ZGuess=3
 sigmaGuess=3.25101489339998
+TTGuess=0.05
 
 #xrange=[0,q[lq-1]]
 xrange=[0,2]
@@ -51,7 +52,7 @@ exactZ=15
 exactD=0.4
 exactLambda=1
 
-paraRDP=[omp_num, 1, dimx, dimy, numOfSeq, numOfDiff, dx, qmin, qstep, dt, timeWindow, maxIter1, alphaGuess, DGuess, vbarGuess, lambdaGuess, ZGuess, sigmaGuess]
+paraRDP=[omp_num, 1, dimx, dimy, numOfSeq, numOfDiff, dx, qmin, qstep, dt, timeWindow, maxIter1, alphaGuess, DGuess, vbarGuess, lambdaGuess, ZGuess, sigmaGuess, TTGuess]
 parafile=open('parameters.txt','w')
 for i in paraRDP:
 	parafile.write(str(i))
@@ -143,7 +144,7 @@ for i in range(0,4):
 
 sigmaGuess=avePara[2]/np.sqrt(avePara[3]+1)
 
-paraRDP=[omp_num, nqcurve, qincre, dimx, dimy, numOfSeq, numOfDiff, dx, qmin, qstep, dt, timeWindow, maxIter2, avePara[0], avePara[1], avePara[2], lambdaGuess, ZGuess, sigmaGuess]
+paraRDP=[omp_num, nqcurve, qincre, dimx, dimy, numOfSeq, numOfDiff, dx, qmin, qstep, dt, timeWindow, maxIter2, avePara[0], avePara[1], avePara[2], lambdaGuess, ZGuess, sigmaGuess, TTGuess]
 parafile=open('parameters.txt','w')
 for i in paraRDP:
 	parafile.write(str(i))
@@ -239,7 +240,7 @@ for i in range(0,5):
             avePara.append(meanP)
             break
 
-paraRDP=[omp_num, nqcurve, qincre, dimx, dimy, numOfSeq, numOfDiff, dx, qmin, qstep, dt, timeWindow, maxIter2, avePara[0], avePara[4], avePara[1], avePara[3], ZGuess, avePara[2]]
+paraRDP=[omp_num, nqcurve, qincre, dimx, dimy, numOfSeq, numOfDiff, dx, qmin, qstep, dt, timeWindow, maxIter2, avePara[0], avePara[4], avePara[1], avePara[3], ZGuess, avePara[2], TTGuess]
 parafile=open('parameters.txt','w')
 for i in paraRDP:
 	parafile.write(str(i))

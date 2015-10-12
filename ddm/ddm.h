@@ -88,6 +88,7 @@ public:
     double lambdaGuess;
     double ZGuess;
     double sigmaGuess;
+    double TTGuess;
     
     int qsize;	 //Element number of q array.
     

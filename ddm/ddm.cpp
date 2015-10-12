@@ -60,6 +60,7 @@ ddm::ddm() : imageSeqk(), imagekDiff(), qabs(), tau()
     paraFile >> lambdaGuess;
     paraFile >> ZGuess;
     paraFile >> sigmaGuess;
+    paraFile >> TTGuess;
     
     imageSeqk.reserve(numOfSeq);
     imagekDiff.reserve(numOfDiff);
@@ -97,6 +98,14 @@ ddm::ddm() : imageSeqk(), imagekDiff(), qabs(), tau()
     inipara[0]=lambdaGuess;
 #endif
     
+#ifdef ISFRTDPTT
+    inipara[0]=alphaGuess;
+    inipara[1]=vbarGuess;
+    inipara[2]=sigmaGuess;
+    inipara[3]=lambdaGuess;
+    inipara[4]=DGuess;
+    inipara[5]=TTGuess;
+#endif
     omp_set_num_threads(OMP_NUM_THREADS);     //Set the number of threads
 }
 
