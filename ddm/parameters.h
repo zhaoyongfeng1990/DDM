@@ -20,11 +20,12 @@
 ///////////////////
 
 //Switches of different models
-#include "ISFtype.h"
+//#include "ISFtype.h"
 //#define ISFRDP
 //#define ISFRD
 //#define ISFRTD
 //#define ISFRTDP
+#define ISFRTDPTT
 
 #include <cmath>
 
@@ -58,6 +59,12 @@ const int numOfPara=5;
 
 #ifdef ISFRTDPfix
 const int numOfPara=1;
+#define NeedNumericalInverseLaplaceTransformation
+#define IfComplexIntegration
+#endif
+
+#ifdef ISFRTDPTT
+const int numOfPara=6;
 #define NeedNumericalInverseLaplaceTransformation
 #define IfComplexIntegration
 #endif

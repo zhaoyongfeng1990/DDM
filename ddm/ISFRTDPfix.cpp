@@ -33,7 +33,7 @@ cpx ISFs(cpx s, long double* para, long double v)
     const long double vb2sigma2=para[5];
     
     const long double qv=q*v;
-    const long double pv=exp((vb2sigma2-1)*log(v)+logfactor-v*vbsigma2);
+    const long double pv=exp((vb2sigma2-1.0l)*log(v)+logfactor-v*vbsigma2);
     
     const cpx atanterm=atan(qv/(Dq2lambda+s));
     
@@ -51,7 +51,7 @@ cpx dlambdaISFs(cpx s, long double* para, long double v)
     const long double vb2sigma2=para[5];
     
     const long double qv=q*v;
-    const long double pv=exp((vb2sigma2-1)*log(v)+logfactor-v*vbsigma2);
+    const long double pv=exp((vb2sigma2-1.0l)*log(v)+logfactor-v*vbsigma2);
     
     const long double qv2=qv*qv;
     

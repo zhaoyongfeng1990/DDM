@@ -25,10 +25,13 @@ then
         echo "#define ISFRTD" > ISFtype.h
     elif [ "$Type" = "RTDP" ]
     then
-        echo "#define ISFRTDP" > ISFtype.h
+    echo "#define ISFRTDP" > ISFtype.h
     elif [ "$Type" = "RTDPfix" ]
     then
-        echo "#define ISFRTDPfix" > ISFtype.h
+    echo "#define ISFRTDPfix" > ISFtype.h
+    elif [ "$Type" = "RTDPTT" ]
+    then
+    echo "#define ISFRTDPTT" > ISFtype.h
     fi
 fi
 
@@ -49,5 +52,8 @@ then
 elif [ "$Type" = "RTDPfix" ]
 then
     mv ./ddm ./bin/ddmRTDPfix
+elif [ "$Type" = "RTDPTT" ]
+then
+    mv ./ddm ./bin/ddmRTDPTT
 fi
 

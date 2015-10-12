@@ -65,6 +65,10 @@ void ddm::fitting()
     NILT NILT1(OMP_NUM_THREADS), NILT2(OMP_NUM_THREADS), NILT3(OMP_NUM_THREADS), NILT4(OMP_NUM_THREADS), NILT5(OMP_NUM_THREADS);
 #endif
     
+#ifdef ISFRTDPTT
+    NILT NILT1(OMP_NUM_THREADS), NILT2(OMP_NUM_THREADS), NILT3(OMP_NUM_THREADS), NILT4(OMP_NUM_THREADS), NILT5(OMP_NUM_THREADS), NILT6(OMP_NUM_THREADS);
+#endif
+    
 #ifdef ISFRTDPfix
     NILT NILT1(OMP_NUM_THREADS), NILT2(OMP_NUM_THREADS);
     
@@ -120,6 +124,15 @@ void ddm::fitting()
         sdata.dsigmaISFILT=&NILT3;
         sdata.dDISFILT=&NILT4;
         sdata.dlambdaISFILT=&NILT5;
+#endif
+        
+#ifdef ISFRTDPTT
+        sdata.ISFILT=&NILT1;
+        sdata.dvbarISFILT=&NILT2;
+        sdata.dsigmaISFILT=&NILT3;
+        sdata.dDISFILT=&NILT4;
+        sdata.dlambdaISFILT=&NILT5;
+        sdata.dTTISFILT=&NILT6;
 #endif
         
 #ifdef ISFRTDPfix

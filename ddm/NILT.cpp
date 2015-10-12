@@ -130,7 +130,7 @@ double NILT::clenshaw(long double t)
     int idx=M-1;
     for (int iter=0; iter<M; ++iter)
     {
-        if (abs(cCoeA[iter])<1e-18)
+        if (abs(cCoeA[iter])<1e-14)
         {
             idx=iter;
             break;

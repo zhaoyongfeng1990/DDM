@@ -97,9 +97,9 @@ public:
     int dimkx;   //Number of wavenumber
     int dimky;   //Number of wavenumber
     int numOfSeq;  //Number of total time points in experiment
-    int numOfDiff; //Number of tau
-    int numOfk;    //Number of q
-    int num_fit;   //Number of data points after FFTpoints used in fitting.
+    int numOfDiff; //Size of tau array
+    int numOfk;    //Number of points in q lattice
+    int num_fit;   //Number of data points used in fitting.
     int num_qCurve; //Number of q curves
     double timeWindow;  //Time window that is used in fitting
 };
@@ -126,6 +126,15 @@ typedef struct
     NILT* dsigmaISFILT;
     NILT* dDISFILT;
     NILT* dlambdaISFILT;
+#endif
+    
+#ifdef ISFRTDPTT
+    NILT* ISFILT;
+    NILT* dvbarISFILT;
+    NILT* dsigmaISFILT;
+    NILT* dDISFILT;
+    NILT* dlambdaISFILT;
+    NILT* dTTISFILT;
 #endif
     
 #ifdef ISFRTDPfix

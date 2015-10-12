@@ -16,7 +16,7 @@
 
 using namespace std;
 
-//The number of points in evaluating numerical integration in Weeks method. This also gives the number of terms in series expansion. But not all the terms in expansion is necessary.
+//The number of points in evaluating numerical integration in Weeks method. This also gives the number of terms in series expansion. But not all the terms in expansion is evaluating f(q,\tau).
 const int M=1024;
 
 typedef complex<long double> cpx;
@@ -34,8 +34,8 @@ struct warper
 };
 
 //Error tolerance and size of workspace for numerical integration.
-const double epsabs=1e-8;
-const double epsrel=1e-8;
+const double epsabs=1e-12;
+const double epsrel=1e-12;
 const int workspaceSize=100000;
 #endif
 
@@ -50,10 +50,10 @@ public:
     void NiLT_weeks(cpx (*fun)(cpx, const long double*), const long double* para);
     //Clenshaw summation for function evaluation.
     double clenshaw(long double t);
-    //Estimate parameter b by Weidemans's method, if the function is dominated by one pair of singularities \alpha1+-i\beta1. The sigma is set to be close to the singularity (sigma=alpha1+incre).
+    //Estimate parameter b by Weideman's method, if the function is dominated by one pair of singularities \alpha1+-i\beta1. The sigma is set to be close to the singularity (sigma=alpha1+incre).
     void weideman(long double alpha1, long double beta1, long double incre);
-    //Estimate parameter b by Weidemans's method, if the function is dominated by two pair of singularities \alpha1+-i\beta1. The sigma is set to be close to the singularity with largest real part, which should set to be alpha2 (sigma=alpha2+incre).
-    void weideman(long double alpha1, long double beta1, long double alpha2, long double alpha3, long double incre);
+    //Estimate parameter b by Weideman's method, if the function is dominated by two pair of singularities \alpha_{1,2}+-i\beta_{1,2}. The sigma is set to be close to the singularity with largest real part, which should set to be alpha2 (sigma=alpha2+incre).
+    void weideman(long double alpha1, long double beta1, long double alpha2, long double beta2, long double incre);
     
     //The class is usually defined outside the parallel part of the code, to avoid allocate memory at every iteration. But this will causs memory conflict in shared memory model like openMP. So everything should be kept as a list with number of elements equals to number of threads, and different thread uses different element.
     
