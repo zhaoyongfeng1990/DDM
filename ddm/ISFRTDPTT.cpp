@@ -570,35 +570,35 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
         csigmab=csigma-cb;
         
         //All the functions have the same singularities, so all the solvers have the same parameters
-        dvbarILT->sigma[tid]=csigma;
-        dsigmaILT->sigma[tid]=csigma;
+        //dvbarILT->sigma[tid]=csigma;
+        //dsigmaILT->sigma[tid]=csigma;
         dlambdaILT->sigma[tid]=csigma;
-        dDILT->sigma[tid]=csigma;
+        //dDILT->sigma[tid]=csigma;
         dTTILT->sigma[tid]=csigma;
         
-        dvbarILT->b[tid]=cb;
-        dsigmaILT->b[tid]=cb;
+        //dvbarILT->b[tid]=cb;
+        //dsigmaILT->b[tid]=cb;
         dlambdaILT->b[tid]=cb;
-        dDILT->b[tid]=cb;
+        //dDILT->b[tid]=cb;
         dTTILT->b[tid]=cb;
         
-        dvbarILT->b2[tid]=cb2;
-        dsigmaILT->b2[tid]=cb2;
+        //dvbarILT->b2[tid]=cb2;
+        //dsigmaILT->b2[tid]=cb2;
         dlambdaILT->b2[tid]=cb2;
-        dDILT->b2[tid]=cb2;
+        //dDILT->b2[tid]=cb2;
         dTTILT->b2[tid]=cb2;
         
-        dvbarILT->sigmab[tid]=csigmab;
-        dsigmaILT->sigmab[tid]=csigmab;
+        //dvbarILT->sigmab[tid]=csigmab;
+        //dsigmaILT->sigmab[tid]=csigmab;
         dlambdaILT->sigmab[tid]=csigmab;
-        dDILT->sigmab[tid]=csigmab;
+        //dDILT->sigmab[tid]=csigmab;
         dTTILT->sigmab[tid]=csigmab;
         
         //Calculate the coefficients of Laguerre polynomial series expansion.
         ILT->NiLT_weeks(paraISF);
-        dvbarILT->NiLT_weeks(paraISF);
-        dsigmaILT->NiLT_weeks(paraISF);
-        dDILT->NiLT_weeks(paraISF);
+        //dvbarILT->NiLT_weeks(paraISF);
+        //dsigmaILT->NiLT_weeks(paraISF);
+        //dDILT->NiLT_weeks(paraISF);
         dlambdaILT->NiLT_weeks(paraISF);
         dTTILT->NiLT_weeks(paraISF);
         
@@ -611,10 +611,10 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
             const long double t=tau[cidx];
             //Evaluate ISF at time t, the coefficients has been calculated.
             const double rtd=ILT->clenshaw(t);
-            const double dvbarrtd=dvbarILT->clenshaw(t);
-            const double dsigmartd=dsigmaILT->clenshaw(t);
+            //const double dvbarrtd=dvbarILT->clenshaw(t);
+            //const double dsigmartd=dsigmaILT->clenshaw(t);
             const double dlambdartd=dlambdaILT->clenshaw(t);
-            const double dDrtd=dDILT->clenshaw(t);
+            //const double dDrtd=dDILT->clenshaw(t);
             const double dTTrtd=dTTILT->clenshaw(t);
             
             const double expterm=exp(-Dq2*t);
@@ -622,11 +622,11 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
             //Actually, sqrt(weight)
             const double weight=1.0/sqrt(dataAry[cidx]);
             
-            gsl_matrix_set(J, cidx, 0, A*(expterm-rtd)*weight );
-            gsl_matrix_set(J, cidx, 1, -A*alpha*dvbarrtd*weight );
-            gsl_matrix_set(J, cidx, 2, -A*alpha*dsigmartd*weight );
+            gsl_matrix_set(J, cidx, 0, 0/*A*(expterm-rtd)*weight*/ );
+            gsl_matrix_set(J, cidx, 1, 0/*-A*alpha*dvbarrtd*weight*/ );
+            gsl_matrix_set(J, cidx, 2, 0/*-A*alpha*dsigmartd*weight*/ );
             gsl_matrix_set(J, cidx, 3, -A*alpha*dlambdartd*weight );
-            gsl_matrix_set(J, cidx, 4, A*((1.0-alpha)*expterm*q*q*t-alpha*dDrtd)*weight );
+            gsl_matrix_set(J, cidx, 4, 0/*A*((1.0-alpha)*expterm*q*q*t-alpha*dDrtd)*weight*/ );
             gsl_matrix_set(J, cidx, 5, -A*alpha*dTTrtd*weight );
             gsl_matrix_set(J, cidx, 6+2*iterqc, dA*weight );
             gsl_matrix_set(J, cidx, 7+2*iterqc, 1.0*weight );
