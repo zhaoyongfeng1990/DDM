@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 #  compile.sh
 #  ddm
@@ -25,13 +25,16 @@ then
         echo "#define ISFRTD" > ISFtype.h
     elif [ "$Type" = "RTDP" ]
     then
-    echo "#define ISFRTDP" > ISFtype.h
+        echo "#define ISFRTDP" > ISFtype.h
     elif [ "$Type" = "RTDPfix" ]
     then
-    echo "#define ISFRTDPfix" > ISFtype.h
+        echo "#define ISFRTDPfix" > ISFtype.h
     elif [ "$Type" = "RTDPTT" ]
     then
-    echo "#define ISFRTDPTT" > ISFtype.h
+        echo "#define ISFRTDPTT" > ISFtype.h
+    elif [ "$Type" = "RTDPTTfix" ]
+    then
+        echo "#define ISFRTDPTTfix" > ISFtype.h
     fi
 fi
 
@@ -55,5 +58,8 @@ then
 elif [ "$Type" = "RTDPTT" ]
 then
     mv ./ddm ./bin/ddmRTDPTT
+elif [ "$Type" = "RTDPTTfix" ]
+then
+    mv ./ddm ./bin/ddmRTDPTTfix
 fi
 

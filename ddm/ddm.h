@@ -154,6 +154,23 @@ typedef struct
     NILT* dlambdaISFILT;
 #endif
     
+#ifdef ISFRTDPTTfix
+    long double alpha;
+    long double D;
+    long double vbar;
+    long double sigma;
+    
+    long double vbsigma2;
+    long double logfactor;
+    long double vb2sigma2;
+    long double cpsiz1;
+    long double vb2sigma3;
+    
+    NILT* ISFILT;
+    NILT* dlambdaISFILT;
+    NILT* dTTISFILT;
+#endif
+    
 } dataStruct;
 
 //ISF and its Jacobian. Used in GSL fitting algorithm.

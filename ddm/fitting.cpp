@@ -18,6 +18,11 @@
 #include <gsl/gsl_sf_psi.h>
 #endif
 
+#ifdef ISFRTDPTTfix
+#include <gsl/gsl_sf_gamma.h>
+#include <gsl/gsl_sf_psi.h>
+#endif
+
 #include <omp.h>
 
 int fdISFfun(const gsl_vector* para, void* sdata, gsl_vector* y, gsl_matrix* J);
@@ -71,6 +76,20 @@ void ddm::fitting()
     
 #ifdef ISFRTDPfix
     NILT NILT1(OMP_NUM_THREADS), NILT2(OMP_NUM_THREADS);
+    
+    const long double vbar=vbarGuess;
+    const long double sigma=sigmaGuess;
+    
+    const long double vbsigma2=vbar/sigma/sigma;
+    const long double vb2sigma2=vbsigma2*vbar;
+    const long double logvbsigma2=log(vbsigma2);
+    const long double logfactor=vb2sigma2*logvbsigma2-gsl_sf_lngamma(vb2sigma2);
+    const long double cpsiz1=logvbsigma2-gsl_sf_psi(vb2sigma2);
+    const long double vb2sigma3=vb2sigma2/sigma;
+#endif
+    
+#ifdef ISFRTDPTTfix
+    NILT NILT1(OMP_NUM_THREADS), NILT2(OMP_NUM_THREADS), NILT3(OMP_NUM_THREADS);
     
     const long double vbar=vbarGuess;
     const long double sigma=sigmaGuess;
@@ -148,6 +167,22 @@ void ddm::fitting()
         sdata.vb2sigma3=vb2sigma3;
         sdata.ISFILT=&NILT1;
         sdata.dlambdaISFILT=&NILT2;
+#endif
+        
+#ifdef ISFRTDPTTfix
+        sdata.alpha=alphaGuess;
+        sdata.D=DGuess;
+        sdata.vbar=vbar;
+        sdata.sigma=sigma;
+        
+        sdata.vbsigma2=vbsigma2;
+        sdata.logfactor=logfactor;
+        sdata.vb2sigma2=vb2sigma2;
+        sdata.cpsiz1=cpsiz1;
+        sdata.vb2sigma3=vb2sigma3;
+        sdata.ISFILT=&NILT1;
+        sdata.dlambdaISFILT=&NILT2;
+        sdata.dTTISFILT=&NILT3;
 #endif
         
         //API

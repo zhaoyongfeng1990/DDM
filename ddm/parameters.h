@@ -25,7 +25,8 @@
 //#define ISFRD
 //#define ISFRTD
 //#define ISFRTDP
-#define ISFRTDPTT
+//#define ISFRTDPTT
+#define ISFRTDPTTfix
 
 #include <cmath>
 
@@ -65,6 +66,12 @@ const int numOfPara=1;
 
 #ifdef ISFRTDPTT
 const int numOfPara=6;
+#define NeedNumericalInverseLaplaceTransformation
+#define IfComplexIntegration
+#endif
+
+#ifdef ISFRTDPTTfix
+const int numOfPara=2;
 #define NeedNumericalInverseLaplaceTransformation
 #define IfComplexIntegration
 #endif

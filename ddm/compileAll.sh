@@ -29,3 +29,7 @@ mv ./ddm ./bin/ddmRTDPfix
 echo "#define ISFRTDPTT" > ISFtype.h
 make
 mv ./ddm ./bin/ddmRTDPTT
+
+echo "#define ISFRTDPTTfix" > ISFtype.h
+make
+mv ./ddm ./bin/ddmRTDPTTfix
