@@ -66,6 +66,7 @@
 		A2CE9DDA1B5D4BF600DDE052 /* compile.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = compile.sh; sourceTree = "<group>"; };
 		A2CE9DDC1B6112A700DDE052 /* config.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = config.sh; path = bin/config.sh; sourceTree = "<group>"; };
 		A2DC9C5A1BCE722A0016D35F /* ISFRTDPTTfix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ISFRTDPTTfix.cpp; sourceTree = "<group>"; };
+		A2DC9C5C1BCE76370016D35F /* protocol_TT.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; name = protocol_TT.py; path = bin/protocol_TT.py; sourceTree = "<group>"; };
 		A2E01C5C1B85A734000169BD /* compileAll.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = compileAll.sh; sourceTree = "<group>"; };
 		A2E20FC11BBA732A00A4F7A3 /* ISFRTDPTT.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ISFRTDPTT.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -126,6 +127,7 @@
 				A2E01C5C1B85A734000169BD /* compileAll.sh */,
 				A2E20FC11BBA732A00A4F7A3 /* ISFRTDPTT.cpp */,
 				A2DC9C5A1BCE722A0016D35F /* ISFRTDPTTfix.cpp */,
+				A2DC9C5C1BCE76370016D35F /* protocol_TT.py */,
 			);
 			path = ddm;
 			sourceTree = "<group>";

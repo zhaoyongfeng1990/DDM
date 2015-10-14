@@ -7,8 +7,8 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 if len(sys.argv) < 2:
-	print('Not enough arguments')
-	sys.exit()
+    print('Not enough arguments')
+        sys.exit()
 
 omp_num=16
 nqcurve=2
@@ -44,6 +44,7 @@ sigmarange=[0,10]
 Drange=[0,1]
 lambdarange=[0,10]
 Zrange=[0,20]
+TTrange=[0,0.5]
 
 exactAlpha=0.8
 exactV=13
@@ -51,19 +52,17 @@ exactSigma=3.25
 exactZ=15
 exactD=0.4
 exactLambda=1
+exactTT=0.1;
 
 paraRDP=[omp_num, 1, dimx, dimy, numOfSeq, numOfDiff, dx, qmin, qstep, dt, timeWindow, maxIter1, alphaGuess, DGuess, vbarGuess, lambdaGuess, ZGuess, sigmaGuess, TTGuess]
 parafile=open('parameters.txt','w')
 for i in paraRDP:
-	parafile.write(str(i))
-	parafile.write('\n')
+    parafile.write(str(i))
+        parafile.write('\n')
 parafile.close()
 
-#os.system("./ddmRDP "+sys.argv[1])
-#os.system("mkdir RDPfit")
-#subp.check_call("./ddmRDP "+sys.argv[1], shell=True)
+subp.check_call("./ddmRDP "+sys.argv[1], shell=True)
 subp.check_call("mkdir RDPfit", shell=True)
-
 
 
 # Begin first RDP plot
@@ -126,14 +125,13 @@ plt.tight_layout(pad=0.2, w_pad=0.1, h_pad=0.2)
 
 f.savefig('./RDPfit/RDPfit.png',dpi=300)
 
-#os.system('cp ./*.txt ./RDPfit/')
 subp.check_call('cp ./*.txt ./RDPfit/', shell=True)
 
 # extract estimation
 avePara=[]
 for i in range(0,4):
     plist=fitpara[(q>1) & (q<1.5) ,i]
-    while True:   
+    while True:
         meanP=np.mean(plist)
         stdP=np.std(plist)
         lp=plist.size
@@ -144,19 +142,17 @@ for i in range(0,4):
 
 sigmaGuess=avePara[2]/np.sqrt(avePara[3]+1)
 
-paraRTDP=[omp_num, nqcurve, qincre, dimx, dimy, numOfSeq, numOfDiff, dx, qmin, qstep, dt, timeWindow, maxIter2, avePara[0], avePara[1], avePara[2], lambdaGuess, ZGuess, sigmaGuess, TTGuess]
+paraRTDPTT=[omp_num, nqcurve, qincre, dimx, dimy, numOfSeq, numOfDiff, dx, qmin, qstep, dt, timeWindow, maxIter2, avePara[0], avePara[1], avePara[2], lambdaGuess, ZGuess, sigmaGuess, TTGuess]
 parafile=open('parameters.txt','w')
-for i in paraRTDP:
-	parafile.write(str(i))
-	parafile.write('\n')
+for i in paraRTDPTT:
+    parafile.write(str(i))
+        parafile.write('\n')
 parafile.close()
 
-#os.system("./ddmRTDP recover")
-#os.system("mkdir RTDPfit")
-subp.check_call("./ddmRTDP recover", shell=True)
-subp.check_call("mkdir RTDPfit", shell=True)
+subp.check_call("./ddmRTDPTT recover", shell=True)
+subp.check_call("mkdir RTDPTTfit", shell=True)
 
-# Begin first RTDP plot
+# Begin first RTDPTT plot
 q=np.loadtxt('q.txt')
 fitpara=np.loadtxt('fitparafile.txt')
 status=np.loadtxt('statusq.txt')
@@ -219,19 +215,36 @@ lambdaFig.set_ylim(lambdarange)
 lambdaFig.set_ylabel(r'$\lambda$ ($\mathrm{s}^{-1}$)')
 
 bigFig.set_xlabel(r'$q/\mu\mathrm{m}^{-1}$')
-bigFig.set_title('RTDP fitting result of '+sys.argv[1])
+bigFig.set_title('RTDPTT fitting result of '+sys.argv[1])
 
 plt.tight_layout(pad=0.2, w_pad=0.1, h_pad=0.2)
 
-f.savefig('./RTDPfit/RTDPfit.png',dpi=300)
-#os.system('cp ./*.txt ./RTDPfit/')
-subp.check_call('cp ./*.txt ./RTDPfit/', shell=True)
+f.savefig('./RTDPTTfit/RTDPTTfit.png',dpi=300)
+
+plt.figure()
+plt.figsize=(20,15)
+
+plt.axhline(y=exactTT,xmin=0,xmax=xrange[1],color='r')
+plt.plot(q,fitpara[:,5],'.',markersize=2)
+
+plt.tight_layout(pad=0.2, w_pad=0.1, h_pad=0.2)
+plt.xlim(xrange)
+plt.ylim(TTrange)
+plt.ylabel(r'$\delta$ ($\mathrm{s}$)')
+plt.xlabel(r'$q/\mu\mathrm{m}^{-1}$')
+plt.title(r'RTDPTT fitting result of tumbling time of '+sys.argv[1])
+
+plt.tight_layout(pad=0.2, w_pad=0.1, h_pad=0.2)
+
+plt.savefig('./RTDPTTfit/RTDPTTfit_TT.png',dpi=300)
+
+subp.check_call('cp ./*.txt ./RTDPTTfit/', shell=True)
 
 # extract estimation
 avePara=[]
-for i in range(0,5):
+for i in range(0,6):
     plist=fitpara[(q>1) & (q<1.5) ,i]
-    while True:   
+    while True:
         meanP=np.mean(plist)
         stdP=np.std(plist)
         lp=plist.size
@@ -240,19 +253,17 @@ for i in range(0,5):
             avePara.append(meanP)
             break
 
-paraRTDPfix=[omp_num, nqcurve, qincre, dimx, dimy, numOfSeq, numOfDiff, dx, qmin, qstep, dt, timeWindow, maxIter2, avePara[0], avePara[4], avePara[1], avePara[3], ZGuess, avePara[2], TTGuess]
+paraRTDPTTfix=[omp_num, nqcurve, qincre, dimx, dimy, numOfSeq, numOfDiff, dx, qmin, qstep, dt, timeWindow, maxIter2, avePara[0], avePara[4], avePara[1], avePara[3], ZGuess, avePara[2], avePara[5]]
 parafile=open('parameters.txt','w')
-for i in paraRTDPfix:
-	parafile.write(str(i))
-	parafile.write('\n')
+for i in paraRTDPTTfix:
+    parafile.write(str(i))
+        parafile.write('\n')
 parafile.close()
 
-#os.system("./ddmRTDPfix recover")
-#os.system("mkdir lambdaFit")
-subp.check_call("./ddmRTDPfix recover", shell=True)
+subp.check_call("./ddmRTDPTTfix recover", shell=True)
 subp.check_call("mkdir lambdaFit", shell=True)
 
-# Begin RTDPfix plot
+# Begin RTDPTTfix plot
 q=np.loadtxt('q.txt')
 fitpara=np.loadtxt('fitparafile.txt')
 status=np.loadtxt('statusq.txt')
@@ -276,5 +287,22 @@ plt.title(r'$\lambda$ fitting result of '+sys.argv[1])
 plt.tight_layout(pad=0.2, w_pad=0.1, h_pad=0.2)
 
 plt.savefig('./lambdaFit/lambdaFit.png',dpi=300)
-#os.system('cp ./*.txt ./lambdaFit/')
+
+plt.figure()
+plt.figsize=(20,15)
+
+plt.axhline(y=exactTT,xmin=0,xmax=xrange[1],color='r')
+plt.plot(q,fitpara[:,1],'.',markersize=2)
+
+plt.tight_layout(pad=0.2, w_pad=0.1, h_pad=0.2)
+plt.xlim(xrange)
+plt.ylim(TTrange)
+plt.ylabel(r'$\delta$ ($\mathrm{s}$)')
+plt.xlabel(r'$q/\mu\mathrm{m}^{-1}$')
+plt.title(r'$\delta$ fitting result of '+sys.argv[1])
+
+plt.tight_layout(pad=0.2, w_pad=0.1, h_pad=0.2)
+
+plt.savefig('./lambdaFit/TTfit.png',dpi=300)
+
 subp.check_call('cp ./*.txt ./lambdaFit/', shell=True)
