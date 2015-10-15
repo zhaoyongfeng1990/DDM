@@ -20,7 +20,7 @@
 ///////////////////
 
 //Switches of different models
-//#include "ISFtype.h"
+#include "ISFtype.h"
 //#define ISFRDP
 //#define ISFRD
 //#define ISFRTD
