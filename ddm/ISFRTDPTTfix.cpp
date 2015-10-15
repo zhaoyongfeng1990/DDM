@@ -408,7 +408,7 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
         //Calculate the coefficients of Laguerre polynomial series expansion.
         ILT->NiLT_weeks(paraISF);
         dlambdaILT->NiLT_weeks(paraISF);
-        //dTTILT->NiLT_weeks(paraISF);
+        dTTILT->NiLT_weeks(paraISF);
         
         //Loop over each data point of the curve
         for (int iter=0; iter<num_fit; ++iter)
@@ -420,7 +420,7 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
             //Evaluate ISF at time t, the coefficients has been calculated.
             const double rtd=ILT->clenshaw(t);
             const double dlambdartd=dlambdaILT->clenshaw(t);
-            //const double dTTrtd=dTTILT->clenshaw(t);
+            const double dTTrtd=dTTILT->clenshaw(t);
             
             const double expterm=exp(-Dq2*t);
             const double dA=(1.0-(1.0-alpha)*expterm-alpha*rtd);
@@ -428,7 +428,7 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
             const double weight=1.0/sqrt(dataAry[cidx]);
             
             gsl_matrix_set(J, cidx, 0, -A*alpha*dlambdartd*weight );
-            gsl_matrix_set(J, cidx, 1, 0/*-A*alpha*dTTrtd*weight*/ );
+            gsl_matrix_set(J, cidx, 1, -A*alpha*dTTrtd*weight );
             gsl_matrix_set(J, cidx, 2+2*iterqc, dA*weight );
             gsl_matrix_set(J, cidx, 3+2*iterqc, 1.0*weight );
         }
