@@ -26,7 +26,7 @@
 //#define ISFRTD
 //#define ISFRTDP
 //#define ISFRTDPTT
-#define ISFRTDPTTfix
+//#define ISFRTDPTTfix
 
 #include <cmath>
 
