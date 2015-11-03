@@ -37,12 +37,12 @@ int main()
     NILT dlambdaILT(1);
     NILT dDILT(1);
     NILT dTTILT(1);
-    long double q=2.5l;
+    long double q=0.2l;
     long double vbar=30.0l;//gsl_vector_get(para, 1);
-    long double sigma=3.25l;
-    long double lambda=10.0l;
-    long double D=2.4l;//gsl_vector_get(para, 3);
-    long double TT=1.0l;
+    long double sigma=6.1l;
+    long double lambda=0.001l;
+    long double D=0.1l;//gsl_vector_get(para, 3);
+    long double TT=1e-3l;
     
     const long double Dq2=D*q*q;
     const long double Dq2lambda=Dq2+lambda;
