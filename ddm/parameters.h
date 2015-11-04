@@ -76,4 +76,6 @@ const int numOfPara=2;
 #define IfComplexIntegration
 #endif
 
+const long double TTLowBound=0;
+
 #endif /* defined(__ddm__parameters__) */

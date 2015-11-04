@@ -272,9 +272,9 @@ int ISFfun(const gsl_vector* para, void* sdata, gsl_vector* y)
         punishment+=1e5*(alpha-1)*(alpha-1);
         breakFlag=true;
     }
-    if (TT<1e-3l)
+    if (TT<TTLowBound)
     {
-        punishment+=1e5*(TT-1e-3l)*(TT-1e-3l);
+        punishment+=1e5*(TT-TTLowBound)*(TT-TTLowBound);
         breakFlag=true;
     }
     
@@ -467,11 +467,11 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
         }
         breakFlag=true;
     }
-    if (TT<1e-3l)
+    if (TT<TTLowBound)
     {
         for (int iter=0; iter<tnum_fit; ++iter)
         {
-            gsl_matrix_set(J, iter, 5, 2e5*(TT-1e-3l));
+            gsl_matrix_set(J, iter, 5, 2e5*(TT-TTLowBound));
         }
         breakFlag=true;
     }
