@@ -8,7 +8,7 @@
 
 #include "NILT.h"
 #include <omp.h>
-//#include <iostream>
+#include <iostream>
 
 #ifdef IfComplexIntegration
 
@@ -42,7 +42,6 @@ void NILT::NiLT_weeks(long double* para)
     long double csigma=sigma[tid];
     long double cb=b[tid];
     long double cb2=b2[tid];
-    
     for (int iter=0; iter<M; ++iter)
     {
         cpx itheta={0.0l,pi*(2.0l*iter+1.0l)/M};
@@ -88,6 +87,151 @@ cpx NILT::invfun(cpx x, long double* para)
     gsl_integration_cquad(&pIm[tid], lowerBound, upperBound, epsabs, epsrel, workspace[tid], &imagpart, &error, &nevals);
     
     return cpx(realpart, imagpart);
+}
+
+int NILT::optimize_incre(long double alpha1, long double beta1, long double* para, long double beginTime, long double finalTime)
+{
+    const long double golden=(sqrt(5.0l)-1.0l)/2.0l;
+    long double left=0.0l;
+    long double right=abs(2.0l*alpha1);
+    long double mid=left+golden*(right-left);
+    bool ifMidRight=1;
+    bool ifNeedRecalculate=0;
+    //weideman(alpha1, beta1, left);
+    //NiLT_weeks(para);
+    //long double left_value=estimate_Err(beginTime, finalTime);
+    weideman(alpha1, beta1, mid);
+    NiLT_weeks(para);
+    long double mid_value=estimate_Err(beginTime, finalTime);
+    //weideman(alpha1, beta1, right);
+    //NiLT_weeks(para);
+    //long double right_value=estimate_Err(beginTime, finalTime);
+    while (right-left>1e-5)
+    {
+        if (ifMidRight)
+        {
+            long double test=left+(mid-left)*golden;
+            weideman(alpha1, beta1, test);
+            NiLT_weeks(para);
+            long double test_value=estimate_Err(beginTime, finalTime);
+            if (test_value>mid_value)
+            {
+                left=test;
+                //left_value=test_value;
+                ifMidRight=0;
+                ifNeedRecalculate=1;
+            }
+            else
+            {
+                right=mid;
+                //right_value=mid_value;
+                mid=test;
+                mid_value=test_value;
+            }
+        }
+        else
+        {
+            long double test=right-(right-mid)*golden;
+            weideman(alpha1, beta1, test);
+            NiLT_weeks(para);
+            long double test_value=estimate_Err(beginTime, finalTime);
+            if (test_value>mid_value)
+            {
+                right=test;
+                //right_value=test_value;
+                ifMidRight=1;
+                ifNeedRecalculate=1;
+            }
+            else
+            {
+                left=mid;
+                //left_value=mid_value;
+                mid=test;
+                mid_value=test_value;
+            }
+        }
+    }
+    if (ifNeedRecalculate)
+    {
+        weideman(alpha1, beta1, mid);
+        NiLT_weeks(para);
+    }
+    if(estimate_Err(beginTime, finalTime)>tol_NiLT)
+        return 0;
+    return 1;
+}
+
+int NILT::optimize_incre(long double alpha1, long double beta1, long double alpha2, long double beta2, long double* para, long double beginTime, long double finalTime)
+{
+    const long double golden=(sqrt(5.0l)-1.0l)/2.0l;
+    long double left=0.0l;
+    long double right=abs(2.0l*alpha2);
+    long double mid=left+golden*(right-left);
+    bool ifMidRight=1;
+    bool ifNeedRecalculate=0;
+    //weideman(alpha1, beta1, alpha2, beta2, left);
+    //NiLT_weeks(para);
+    //long double left_value=estimate_Err(beginTime, finalTime);
+    weideman(alpha1, beta1, alpha2, beta2, mid);
+    NiLT_weeks(para);
+    long double mid_value=estimate_Err(beginTime, finalTime);
+    //weideman(alpha1, beta1, alpha2, beta2, right);
+    //NiLT_weeks(para);
+    //long double right_value=estimate_Err(beginTime, finalTime);
+    while (right-left>1e-5)
+    {
+        //cout << mid << endl;
+        if (ifMidRight)
+        {
+            long double test=left+(mid-left)*golden;
+            weideman(alpha1, beta1, alpha2, beta2, test);
+            NiLT_weeks(para);
+            long double test_value=estimate_Err(beginTime, finalTime);
+            if (test_value>mid_value)
+            {
+                left=test;
+                //left_value=test_value;
+                ifMidRight=0;
+                ifNeedRecalculate=1;
+            }
+            else
+            {
+                right=mid;
+                //right_value=mid_value;
+                mid=test;
+                mid_value=test_value;
+            }
+        }
+        else
+        {
+            long double test=right-(right-mid)*golden;
+            weideman(alpha1, beta1, alpha2, beta2, test);
+            NiLT_weeks(para);
+            long double test_value=estimate_Err(beginTime, finalTime);
+            if (test_value>mid_value)
+            {
+                right=test;
+                //right_value=test_value;
+                ifMidRight=1;
+                ifNeedRecalculate=1;
+            }
+            else
+            {
+                left=mid;
+                //left_value=mid_value;
+                mid=test;
+                mid_value=test_value;
+            }
+        }
+    }
+    if (ifNeedRecalculate)
+    {
+        weideman(alpha1, beta1, alpha2, beta2, mid);
+        NiLT_weeks(para);
+    }
+    if(estimate_Err(beginTime, finalTime)>tol_NiLT)
+        return 0;
+    return 1;
 }
 
 #endif

@@ -230,11 +230,6 @@ int ISFfun(const gsl_vector* para, void* sdata, gsl_vector* y)
     
     ILT->cfun[tid].fun=ISFs;
     
-    long double& csigma=ILT->sigma[tid];
-    long double& cb=ILT->b[tid];
-    long double& cb2=ILT->b2[tid];
-    long double& csigmab=ILT->sigmab[tid];
-    
     //Loop over the curves
     for (int iterqc=0; iterqc<cnum_qCurve; ++iterqc)
     {
@@ -267,15 +262,7 @@ int ISFfun(const gsl_vector* para, void* sdata, gsl_vector* y)
         
         //Initialization of numerical inverse Laplace transformation solver
         //Set sigma and b in iLT solver, using weideman's method. (To speed up, I didn't call function weidman(). )
-        csigma=-Dq2+0.5l;
-        cb=sqrt(csigma*csigma-Dq2*Dq2+(Dq2+Dq2lambda)*(csigma+Dq2));
-        
-        //Temperary variables used for acceleration.
-        cb2=cb*2;
-        csigmab=csigma-cb;
-        
-        //Calculate the coefficients of Laguerre polynomial series expansion.
-        ILT->NiLT_weeks(paraISF);
+        ILT->optimize_incre(-Dq2, 0, -Dq2lambda, 0, paraISF, tau[0], tau[num_fit-1]);
         
         //Loop over each data point of the curve
         for (int iter = 0; iter<num_fit; ++iter)
@@ -290,6 +277,10 @@ int ISFfun(const gsl_vector* para, void* sdata, gsl_vector* y)
             //Actually, sqrt(weight)
             const double weight=1.0/sqrt(dataAry[cidx]);
             double result = (yi - dataAry[cidx])*weight;
+            if (!isfinite(result))
+            {
+                return GSL_EOVRFLW;
+            }
             gsl_vector_set(y, cidx, result);
         }
     }
@@ -429,10 +420,6 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
     dDILT->cfun[tid].fun=dDISFs;
     
     //The reference for setting the parameters of iLT solver
-    long double& csigma=ILT->sigma[tid];
-    long double& cb=ILT->b[tid];
-    long double& cb2=ILT->b2[tid];
-    long double& csigmab=ILT->sigmab[tid];
     
     //Loop over the curves
     for (int iterqc=0; iterqc<cnum_qCurve; ++iterqc)
@@ -466,39 +453,11 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
         
         //Initialization of numerical inverse Laplace transformation solver
         //Set sigma and b in iLT solver, using weideman's method. (To speed up, I didn't call function weidman(). )
-        csigma=-Dq2+0.5l;
-        cb=sqrt(csigma*csigma-Dq2*Dq2+(Dq2+Dq2lambda)*(csigma+Dq2));
-        
-        cb2=cb*2;
-        csigmab=csigma-cb;
-        
-        //All the functions have the same singularities, so all the solvers have the same parameters
-        dvbarILT->sigma[tid]=csigma;
-        dsigmaILT->sigma[tid]=csigma;
-        dlambdaILT->sigma[tid]=csigma;
-        dDILT->sigma[tid]=csigma;
-        
-        dvbarILT->b[tid]=cb;
-        dsigmaILT->b[tid]=cb;
-        dlambdaILT->b[tid]=cb;
-        dDILT->b[tid]=cb;
-        
-        dvbarILT->b2[tid]=cb2;
-        dsigmaILT->b2[tid]=cb2;
-        dlambdaILT->b2[tid]=cb2;
-        dDILT->b2[tid]=cb2;
-        
-        dvbarILT->sigmab[tid]=csigmab;
-        dsigmaILT->sigmab[tid]=csigmab;
-        dlambdaILT->sigmab[tid]=csigmab;
-        dDILT->sigmab[tid]=csigmab;
-        
-        //Calculate the coefficients of Laguerre polynomial series expansion.
-        ILT->NiLT_weeks(paraISF);
-        dvbarILT->NiLT_weeks(paraISF);
-        dsigmaILT->NiLT_weeks(paraISF);
-        dDILT->NiLT_weeks(paraISF);
-        dlambdaILT->NiLT_weeks(paraISF);
+        ILT->optimize_incre(-Dq2, 0, -Dq2lambda, 0, paraISF, tau[0], tau[num_fit-1]);
+        dvbarILT->optimize_incre(-Dq2, 0, -Dq2lambda, 0, paraISF, tau[0], tau[num_fit-1]);
+        dsigmaILT->optimize_incre(-Dq2, 0, -Dq2lambda, 0, paraISF, tau[0], tau[num_fit-1]);
+        dlambdaILT->optimize_incre(-Dq2, 0, -Dq2lambda, 0, paraISF, tau[0], tau[num_fit-1]);
+        dDILT->optimize_incre(-Dq2, 0, -Dq2lambda, 0, paraISF, tau[0], tau[num_fit-1]);
         
         //Loop over each data point of the curve
         for (int iter=0; iter<num_fit; ++iter)
@@ -518,6 +477,27 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
             const double dA=(1.0-(1.0-alpha)*expterm-alpha*rtd);
             //Actually, sqrt(weight)
             const double weight=1.0/sqrt(dataAry[cidx]);
+            
+            if (!isfinite(rtd))
+            {
+                return GSL_EOVRFLW;
+            }
+            if (!isfinite(dvbarrtd))
+            {
+                return GSL_EOVRFLW;
+            }
+            if (!isfinite(dsigmartd))
+            {
+                return GSL_EOVRFLW;
+            }
+            if (!isfinite(dlambdartd))
+            {
+                return GSL_EOVRFLW;
+            }
+            if (!isfinite(dDrtd))
+            {
+                return GSL_EOVRFLW;
+            }
             
             gsl_matrix_set(J, cidx, 0, A*(expterm-rtd)*weight );
             gsl_matrix_set(J, cidx, 1, -A*alpha*dvbarrtd*weight );

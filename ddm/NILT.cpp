@@ -8,6 +8,7 @@
 
 #include "NILT.h"
 #include <omp.h>
+#include <limits>
 //#include <iostream>
 
 NILT::NILT(int omp_num)
@@ -22,6 +23,7 @@ NILT::NILT(int omp_num)
     b2=new long double[omp_num];
     sigma=new long double[omp_num];
     sigmab=new long double[omp_num];
+    increments=new long double[omp_num];
     
     CoeA=new vector<long double> [OMP_NUM_THREADS];
     
@@ -73,6 +75,7 @@ NILT::~NILT()
     delete [] sigma;
     delete [] sigmab;
     delete [] CoeA;
+    delete [] increments;
 #ifdef IfComplexIntegration
     delete [] workspace;
     delete [] pRe;
@@ -164,6 +167,7 @@ void NILT::weideman(long double alpha1, long double beta1, long double incre)
         b[iter]=eb;
         b2[iter]=eb2;
         sigmab[iter]=esigmab;
+        increments[iter]=incre;
     }
 }
 
@@ -180,5 +184,32 @@ void NILT::weideman(long double alpha1, long double beta1, long double alpha2, l
         b[iter]=eb;
         b2[iter]=eb2;
         sigmab[iter]=esigmab;
+        increments[iter]=incre;
     }
+}
+
+long double NILT::estimate_Err(long double beginTime, long double finalTime)
+{
+    int tid=omp_get_thread_num();
+    vector<long double>& cCoeA=CoeA[tid];
+    long double precision=numeric_limits<long double>::epsilon();
+    long double error=0;
+    for (int i=M/2-1; i>-1; --i)
+    {
+        error+=abs(cCoeA[i]);
+    }
+    error*=precision;
+    for (int i=M-1; i>M/2-1; --i)
+    {
+        error+=abs(cCoeA[i]);
+    }
+    if (sigma[tid]>0)
+    {
+        error*=exp(sigma[tid]*finalTime);
+    }
+    else
+    {
+        error*=exp(sigma[tid]*beginTime);
+    }
+    return error;
 }
