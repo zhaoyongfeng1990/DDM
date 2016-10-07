@@ -1,4 +1,4 @@
-CXX = g++-5
+CXX = g++-6
 CXXFLAGS = -fopenmp -O3 -std=c++11 -I/usr/local/include -DHAVE_INLINE
 LFLAGS = -L/usr/local/lib -lm -lgsl -lgslcblas -O3 -lfftw3 -lfftw3l -fopenmp -std=c++11
 

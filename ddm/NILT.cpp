@@ -157,35 +157,37 @@ double NILT::clenshaw(long double t)
 //Estimate parameter b by Weidemans's method, if the function is dominated by one pair of singularities \alpha1+-i\beta1. The sigma is set to be close to the singularity (sigma=alpha1+incre).
 void NILT::weideman(long double alpha1, long double beta1, long double incre)
 {
+    int tid=omp_get_thread_num();
     long double esigma=alpha1+incre;
     long double eb=sqrt(beta1*beta1+incre*incre);
     long double eb2=eb*2;
     long double esigmab=esigma-eb;
-    for (int iter=0; iter<OMP_NUM_THREADS; ++iter)
-    {
-        sigma[iter]=esigma;
-        b[iter]=eb;
-        b2[iter]=eb2;
-        sigmab[iter]=esigmab;
-        increments[iter]=incre;
-    }
+    //for (int iter=0; iter<OMP_NUM_THREADS; ++iter)
+    //{
+        sigma[tid]=esigma;
+        b[tid]=eb;
+        b2[tid]=eb2;
+        sigmab[tid]=esigmab;
+        increments[tid]=incre;
+    //}
 }
 
 //Estimate parameter b by Weidemans's method, if the function is dominated by two pair of singularities \alpha1+-i\beta1. The sigma is set to be close to the singularity with largest real part, which should set to be alpha2 (sigma=alpha2+incre).
 void NILT::weideman(long double alpha1, long double beta1, long double alpha2, long double beta2, long double incre)
 {
+    int tid=omp_get_thread_num();
     long double esigma=alpha2+incre;
     long double eb=sqrt(esigma*esigma-((esigma-alpha1)*(alpha2*alpha2+beta2*beta2)-incre*(alpha1*alpha1+beta1*beta1))/(alpha2-alpha1));
     long double eb2=eb*2;
     long double esigmab=esigma-eb;
-    for (int iter=0; iter<OMP_NUM_THREADS; ++iter)
-    {
-        sigma[iter]=esigma;
-        b[iter]=eb;
-        b2[iter]=eb2;
-        sigmab[iter]=esigmab;
-        increments[iter]=incre;
-    }
+    //for (int iter=0; iter<OMP_NUM_THREADS; ++iter)
+    //{
+        sigma[tid]=esigma;
+        b[tid]=eb;
+        b2[tid]=eb2;
+        sigmab[tid]=esigmab;
+        increments[tid]=incre;
+    //}
 }
 
 long double NILT::estimate_Err(long double beginTime, long double finalTime)

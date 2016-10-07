@@ -232,11 +232,11 @@ void ddm::fitting()
             cstatus = norm0_rel_test(solver->dx, solver->x, 1e-7, 1e-7);  //Test the exiting criteria
             
             //For debugging and monitering the iterations
-//            for (int iterpara=0; iterpara<cnumOfPara; ++iterpara)
-//            {
-//                cout << gsl_vector_get(solver->x, iterpara) << '\n';
-//            }
-//            cout << '\n';
+            //for (int iterpara=0; iterpara<cnumOfPara; ++iterpara)
+            //{
+            //    cout << gsl_vector_get(solver->x, iterpara) << '\n';
+            //}
+            //cout << '\n';
             
             //If to use other exiting criteria
             //gsl_multifit_gradient(solver->J,solver->f, g);

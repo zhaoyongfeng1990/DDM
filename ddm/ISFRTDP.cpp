@@ -262,7 +262,7 @@ int ISFfun(const gsl_vector* para, void* sdata, gsl_vector* y)
         
         //Initialization of numerical inverse Laplace transformation solver
         //Set sigma and b in iLT solver, using weideman's method. (To speed up, I didn't call function weidman(). )
-        ILT->optimize_incre(-Dq2, 0, -Dq2lambda, 0, paraISF, tau[0], tau[num_fit-1]);
+        ILT->optimize_incre(-Dq2lambda, 0, -Dq2, 0, paraISF, tau[0], tau[num_fit-1]);
         
         //Loop over each data point of the curve
         for (int iter = 0; iter<num_fit; ++iter)
@@ -453,11 +453,11 @@ int dISFfun(const gsl_vector* para, void* sdata, gsl_matrix* J)
         
         //Initialization of numerical inverse Laplace transformation solver
         //Set sigma and b in iLT solver, using weideman's method. (To speed up, I didn't call function weidman(). )
-        ILT->optimize_incre(-Dq2, 0, -Dq2lambda, 0, paraISF, tau[0], tau[num_fit-1]);
-        dvbarILT->optimize_incre(-Dq2, 0, -Dq2lambda, 0, paraISF, tau[0], tau[num_fit-1]);
-        dsigmaILT->optimize_incre(-Dq2, 0, -Dq2lambda, 0, paraISF, tau[0], tau[num_fit-1]);
-        dlambdaILT->optimize_incre(-Dq2, 0, -Dq2lambda, 0, paraISF, tau[0], tau[num_fit-1]);
-        dDILT->optimize_incre(-Dq2, 0, -Dq2lambda, 0, paraISF, tau[0], tau[num_fit-1]);
+        ILT->optimize_incre(-Dq2lambda, 0, -Dq2, 0, paraISF, tau[0], tau[num_fit-1]);
+        dvbarILT->optimize_incre(-Dq2lambda, 0, -Dq2, 0, paraISF, tau[0], tau[num_fit-1]);
+        dsigmaILT->optimize_incre(-Dq2lambda, 0, -Dq2, 0, paraISF, tau[0], tau[num_fit-1]);
+        dlambdaILT->optimize_incre(-Dq2lambda, 0, -Dq2, 0, paraISF, tau[0], tau[num_fit-1]);
+        dDILT->optimize_incre(-Dq2lambda, 0, -Dq2, 0, paraISF, tau[0], tau[num_fit-1]);
         
         //Loop over each data point of the curve
         for (int iter=0; iter<num_fit; ++iter)

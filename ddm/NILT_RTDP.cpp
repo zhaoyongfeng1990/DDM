@@ -229,8 +229,9 @@ int NILT::optimize_incre(long double alpha1, long double beta1, long double alph
         weideman(alpha1, beta1, alpha2, beta2, mid);
         NiLT_weeks(para);
     }
-    if(estimate_Err(beginTime, finalTime)>tol_NiLT)
-        return 0;
+    //cout << mid << '\n';
+    //if(estimate_Err(beginTime, finalTime)>tol_NiLT)
+    //    return 0;
     return 1;
 }
 
