@@ -275,6 +275,7 @@ void ddm::fitting()
         delete [] datafit;
         delete [] qList;
         delete [] localinipara;
+        delete [] time;
     }
 }
 
