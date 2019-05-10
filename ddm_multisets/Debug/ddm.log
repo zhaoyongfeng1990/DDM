@@ -1,0 +1,101 @@
+﻿  ISFRD.cpp
+d:\documents\bacterialpattern\ddm\c\ddm\isfrd.cpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\documents\bacterialpattern\ddm\c\ddm\ddm.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\documents\bacterialpattern\ddm\c\ddm\parameters.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\documents\bacterialpattern\ddm\c\ddm\nilt.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+  正在生成代码...
+  正在编译...
+  print.cpp
+d:\documents\bacterialpattern\ddm\c\ddm\print.cpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\documents\bacterialpattern\ddm\c\ddm\ddm.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\documents\bacterialpattern\ddm\c\ddm\parameters.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\documents\bacterialpattern\ddm\c\ddm\nilt.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\documents\bacterialpattern\ddm\c\ddm\print.cpp(102): warning C4018: “<”: 有符号/无符号不匹配
+d:\documents\bacterialpattern\ddm\c\ddm\print.cpp(104): warning C4018: “<”: 有符号/无符号不匹配
+  main.cpp
+d:\documents\bacterialpattern\ddm\c\ddm\main.cpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\documents\bacterialpattern\ddm\c\ddm\ddm.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\documents\bacterialpattern\ddm\c\ddm\parameters.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\documents\bacterialpattern\ddm\c\ddm\nilt.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+  loadFiles.cpp
+d:\documents\bacterialpattern\ddm\c\ddm\loadfiles.cpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\documents\bacterialpattern\ddm\c\ddm\ddm.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\documents\bacterialpattern\ddm\c\ddm\parameters.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\documents\bacterialpattern\ddm\c\ddm\nilt.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+  fitting.cpp
+d:\documents\bacterialpattern\ddm\c\ddm\fitting.cpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\documents\bacterialpattern\ddm\c\ddm\ddm.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\documents\bacterialpattern\ddm\c\ddm\parameters.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\documents\bacterialpattern\ddm\c\ddm\nilt.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\documents\bacterialpattern\ddm\c\ddm\fitting.cpp(38): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
+  ddm.cpp
+d:\documents\bacterialpattern\ddm\c\ddm\ddm.cpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\documents\bacterialpattern\ddm\c\ddm\ddm.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\documents\bacterialpattern\ddm\c\ddm\parameters.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\documents\bacterialpattern\ddm\c\ddm\nilt.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+  clean.cpp
+d:\documents\bacterialpattern\ddm\c\ddm\clean.cpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\documents\bacterialpattern\ddm\c\ddm\ddm.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\documents\bacterialpattern\ddm\c\ddm\parameters.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\documents\bacterialpattern\ddm\c\ddm\nilt.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\documents\bacterialpattern\ddm\c\ddm\clean.cpp(16): warning C4018: “<”: 有符号/无符号不匹配
+d:\documents\bacterialpattern\ddm\c\ddm\clean.cpp(26): warning C4018: “<”: 有符号/无符号不匹配
+  averSqrModTau.cpp
+d:\documents\bacterialpattern\ddm\c\ddm\aversqrmodtau.cpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\documents\bacterialpattern\ddm\c\ddm\ddm.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\documents\bacterialpattern\ddm\c\ddm\parameters.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\documents\bacterialpattern\ddm\c\ddm\nilt.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+  aveQ.cpp
+d:\documents\bacterialpattern\ddm\c\ddm\aveq.cpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\documents\bacterialpattern\ddm\c\ddm\ddm.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\documents\bacterialpattern\ddm\c\ddm\parameters.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\documents\bacterialpattern\ddm\c\ddm\nilt.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\documents\bacterialpattern\ddm\c\ddm\aveq.cpp(31): warning C4244: “参数”: 从“double”转换到“unsigned int”，可能丢失数据
+d:\documents\bacterialpattern\ddm\c\ddm\aveq.cpp(36): warning C4244: “参数”: 从“double”转换到“const std::size_t”，可能丢失数据
+d:\documents\bacterialpattern\ddm\c\ddm\aveq.cpp(37): warning C4244: “参数”: 从“double”转换到“const std::size_t”，可能丢失数据
+d:\documents\bacterialpattern\ddm\c\ddm\aveq.cpp(64): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
+d:\documents\bacterialpattern\ddm\c\ddm\aveq.cpp(65): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
+d:\documents\bacterialpattern\ddm\c\ddm\aveq.cpp(145): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
+d:\documents\bacterialpattern\ddm\c\ddm\aveq.cpp(150): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
+d:\documents\bacterialpattern\ddm\c\ddm\aveq.cpp(178): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
+d:\documents\bacterialpattern\ddm\c\ddm\aveq.cpp(179): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
+  NILT_RTDP.cpp
+d:\documents\bacterialpattern\ddm\c\ddm\nilt_rtdp.cpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\documents\bacterialpattern\ddm\c\ddm\nilt.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\documents\bacterialpattern\ddm\c\ddm\parameters.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+  NILT.cpp
+d:\documents\bacterialpattern\ddm\c\ddm\nilt.cpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\documents\bacterialpattern\ddm\c\ddm\nilt.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\documents\bacterialpattern\ddm\c\ddm\parameters.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+  ISFRTDPfix.cpp
+d:\documents\bacterialpattern\ddm\c\ddm\isfrtdpfix.cpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\documents\bacterialpattern\ddm\c\ddm\ddm.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\documents\bacterialpattern\ddm\c\ddm\parameters.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\documents\bacterialpattern\ddm\c\ddm\nilt.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+  ISFRTDPTTfix.cpp
+d:\documents\bacterialpattern\ddm\c\ddm\isfrtdpttfix.cpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\documents\bacterialpattern\ddm\c\ddm\ddm.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\documents\bacterialpattern\ddm\c\ddm\parameters.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\documents\bacterialpattern\ddm\c\ddm\nilt.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+  ISFRTDPTT.cpp
+d:\documents\bacterialpattern\ddm\c\ddm\isfrtdptt.cpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\documents\bacterialpattern\ddm\c\ddm\ddm.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\documents\bacterialpattern\ddm\c\ddm\parameters.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\documents\bacterialpattern\ddm\c\ddm\nilt.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+  ISFRTDP.cpp
+d:\documents\bacterialpattern\ddm\c\ddm\isfrtdp.cpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\documents\bacterialpattern\ddm\c\ddm\ddm.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\documents\bacterialpattern\ddm\c\ddm\parameters.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\documents\bacterialpattern\ddm\c\ddm\nilt.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+  ISFRTD.cpp
+d:\documents\bacterialpattern\ddm\c\ddm\isfrtd.cpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\documents\bacterialpattern\ddm\c\ddm\ddm.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\documents\bacterialpattern\ddm\c\ddm\parameters.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\documents\bacterialpattern\ddm\c\ddm\nilt.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+  ISFRDP.cpp
+d:\documents\bacterialpattern\ddm\c\ddm\isfrdp.cpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\documents\bacterialpattern\ddm\c\ddm\ddm.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\documents\bacterialpattern\ddm\c\ddm\parameters.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\documents\bacterialpattern\ddm\c\ddm\nilt.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+  正在生成代码...
+LINK : fatal error LNK1104: 无法打开文件“libfftw3-3.dll.a”
